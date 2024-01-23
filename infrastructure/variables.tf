@@ -14,3 +14,13 @@ variable "common_tags" {
   type = map(string)
 }
 
+# Private DNS zone configuration (for postgres)
+variable "dns_resource_group" {
+  default = "core-infra-intsvc-rg"
+}
+
+variable "private_dns_zone" {
+  default = "private.postgres.database.azure.com"
+}
+
+

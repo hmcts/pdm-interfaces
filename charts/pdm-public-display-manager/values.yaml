@@ -1,0 +1,5 @@
+java:
+  applicationPort: 4550
+  image: 'sdshmctspublic.azurecr.io/pdm/public-display-manager:latest'
+  environment:
+    A_KEY: 'a value'
