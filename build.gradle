@@ -154,7 +154,7 @@ dependencies {
     implementation 'org.springframework:spring-tx:6.0.14'
     implementation 'org.dbunit:dbunit:2.7.3'
     implementation 'joda-time:joda-time:2.12.5'
-    implementation 'org.owasp:csrfguard:4.3.0-jakarta'
+    implementation 'org.owasp:csrfguard:4.3.0'
     implementation 'org.springframework.security:spring-security-taglibs:6.1.6'
     implementation 'org.springframework.security:spring-security-web:6.1.6'
     implementation 'org.quartz-scheduler:quartz:2.5.0-rc1'
