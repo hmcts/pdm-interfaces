@@ -25,6 +25,10 @@ package uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite;
 
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +47,7 @@ import uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy.XhbDispMgrLocalPr
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy.XhbDispMgrLocalProxyRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrschedule.XhbDispMgrScheduleDao;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
+import uk.gov.hmcts.pdm.publicdisplay.initialization.InitializationService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CourtSite;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.LocalProxy;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.Schedule;
@@ -56,11 +61,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -107,9 +107,9 @@ class XhbDispMgrCourtSiteRepositoryTest extends AbstractJUnit {
      */
     @BeforeEach
     public void setup() {
+        InitializationService.getInstance().setEntityManagerFactory(mockEntityManagerFactory);
         mockEntityManager = Mockito.mock(EntityManager.class);
         classUnderTest = new XhbDispMgrCourtSiteRepository(mockEntityManager);
-        Mockito.mockStatic(Persistence.class);
         Mockito.mockStatic(EntityManagerUtil.class);
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrLocalProxyRepository",
@@ -131,8 +131,6 @@ class XhbDispMgrCourtSiteRepositoryTest extends AbstractJUnit {
      */
     @Test
     void testFindByCourtSiteId() {
-        Mockito.when(Persistence.createEntityManagerFactory("PDM"))
-            .thenReturn(mockEntityManagerFactory);
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
         Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockTransaction);
 
@@ -167,8 +165,6 @@ class XhbDispMgrCourtSiteRepositoryTest extends AbstractJUnit {
      */
     @Test
     void testFindByXhibitCourtSiteId() {
-        Mockito.when(Persistence.createEntityManagerFactory("PDM"))
-            .thenReturn(mockEntityManagerFactory);
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
         Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockTransaction);
 
@@ -199,8 +195,6 @@ class XhbDispMgrCourtSiteRepositoryTest extends AbstractJUnit {
      */
     @Test
     void testUpdateDaoFromBasicValue() {
-        Mockito.when(Persistence.createEntityManagerFactory("PDM"))
-            .thenReturn(mockEntityManagerFactory);
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
         Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockTransaction);
 

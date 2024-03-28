@@ -1,11 +1,11 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrhousekeeping;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 
 public class XhbDispMgrHousekeepingRepository extends AbstractRepository<XhbDispMgrHousekeepingDao> {

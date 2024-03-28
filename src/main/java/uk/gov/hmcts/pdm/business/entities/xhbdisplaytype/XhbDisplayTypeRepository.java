@@ -1,8 +1,8 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdisplaytype;
 
+import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
 
-import javax.persistence.EntityManager;
 
 public class XhbDisplayTypeRepository extends AbstractRepository<XhbDisplayTypeDao> {
 

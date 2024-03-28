@@ -191,7 +191,7 @@ public class ApplicationConfiguration {
     public String getRagStatusReloadInterval() {
         return propertyService.getPropertyValueByName("rag.status.reload.interval");
     }
-    
+
     /**
      * Gets the housekeeping job cron.
      *

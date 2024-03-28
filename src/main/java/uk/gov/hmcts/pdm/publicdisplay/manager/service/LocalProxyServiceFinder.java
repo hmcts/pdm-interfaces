@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.ScheduleDto;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)

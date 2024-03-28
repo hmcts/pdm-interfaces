@@ -1,13 +1,13 @@
 package uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
 
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class XhbRefSystemCodeRepository extends AbstractRepository<XhbRefSystemCodeDao> {
 

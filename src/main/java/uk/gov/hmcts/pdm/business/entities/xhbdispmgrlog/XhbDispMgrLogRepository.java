@@ -1,12 +1,13 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrlog;
 
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class XhbDispMgrLogRepository extends AbstractRepository<XhbDispMgrLogDao> {
 

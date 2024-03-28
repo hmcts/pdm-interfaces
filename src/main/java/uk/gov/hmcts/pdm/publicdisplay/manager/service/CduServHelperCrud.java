@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
-import org.apache.openjpa.lib.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.publicdisplay.common.json.CduJson;
@@ -14,6 +13,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.UrlDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class CduServHelperCrud extends CduServHelperRepos {

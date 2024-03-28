@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdm.business.entities.xhbcourtsitewelsh;
 
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
@@ -7,7 +8,6 @@ import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.XhibitCourtSiteWelsh;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IXhibitCourtSiteWelsh;
 
-import javax.persistence.EntityManager;
 
 public class XhbCourtSiteWelshRepository extends AbstractRepository<XhbCourtSiteWelshDao> {
 

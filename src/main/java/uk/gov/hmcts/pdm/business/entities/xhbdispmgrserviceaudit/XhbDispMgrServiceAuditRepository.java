@@ -1,11 +1,12 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrserviceaudit;
 
+
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IServiceAudit;
 
-import javax.persistence.EntityManager;
 
 public class XhbDispMgrServiceAuditRepository
     extends AbstractRepository<XhbDispMgrServiceAuditDao> {

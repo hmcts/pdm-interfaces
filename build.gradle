@@ -14,7 +14,6 @@ plugins {
 	id 'checkstyle'
   id 'pmd'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.9.1'
 }
 
 group = 'uk.gov.hmcts'
@@ -142,9 +141,11 @@ ext['snakeyaml.version'] = '2.0'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:3.1.8'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.8'
+    implementation 'org.springframework.data:spring-data-commons:3.1.8'
+    implementation 'org.springframework.data:spring-data-jpa:3.1.8'
     implementation 'org.hibernate:hibernate-entitymanager:5.6.15.Final'
-    implementation 'org.apache.openjpa:openjpa-persistence-jdbc:3.2.2'
-    implementation 'org.postgresql:postgresql:42.6.0'
+    implementation 'org.postgresql:postgresql:42.6.2'
     implementation 'org.springframework.security:spring-security-core:6.1.6'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.1.2.RELEASE'
     implementation ('org.apache.httpcomponents:httpclient:4.5.14') {
@@ -203,21 +204,3 @@ bootJar {
     attributes('Implementation-Version': project.version.toString())
   }
 }
-
-flyway {
-  url = System.getenv('FLYWAY_URL')
-  user = System.getenv('FLYWAY_USER')
-  password = System.getenv('FLYWAY_PASSWORD')
-  baselineOnMigrate = true
-  baselineVersion = '000'
-  schemas = ['pdda']
-  locations = ["database", "database/data", "database/packages"]
-}
-
-task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-  baselineOnMigrate = true
-  if (project.hasProperty("dburl")) {
-    url = "jdbc:postgresql://${dburl}"
-  }
-}
-

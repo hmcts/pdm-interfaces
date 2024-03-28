@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrschedule;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
@@ -8,8 +10,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ISchedule;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class XhbDispMgrScheduleRepository extends AbstractRepository<XhbDispMgrScheduleDao> {
 

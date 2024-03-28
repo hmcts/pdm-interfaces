@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu;
 
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
@@ -8,7 +9,6 @@ import uk.gov.hmcts.pdm.business.entities.xhbdispmgrmapping.XhbDispMgrMappingRep
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CduModel;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICduModel;
 
-import javax.persistence.EntityManager;
 
 public abstract class CduUtility extends AbstractRepository<XhbDispMgrCduDao> {
 

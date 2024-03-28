@@ -1,8 +1,8 @@
 package uk.gov.hmcts.pdm.business.entities.xhbcourt;
 
+import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
 
-import javax.persistence.EntityManager;
 
 public class XhbCourtRepository extends AbstractRepository<XhbCourtDao> {
 

@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrproperty;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
@@ -8,8 +10,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IProperty;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import java.util.Optional;
 
 public class XhbDispMgrPropertyRepository extends AbstractRepository<XhbDispMgrPropertyDao> {
 
@@ -58,6 +59,14 @@ public class XhbDispMgrPropertyRepository extends AbstractRepository<XhbDispMgrP
             LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
             return null;
         }
+    }
+    
+    @Override
+    public void delete(Optional<XhbDispMgrPropertyDao> dao) {
+        final String methodName = "delete";
+        LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
+        super.delete(dao);
+        LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
     }
 
     /**

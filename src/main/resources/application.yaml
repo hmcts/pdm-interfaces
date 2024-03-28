@@ -1,0 +1,23 @@
+server:
+  port: 5432
+
+spring:
+  application:
+    name: pdm-public-display-data-aggregator
+  config:
+    import: "optional:configtree:/mnt/secrets/pdda/"
+  datasource:
+     driver-class-name: org.postgresql.Driver
+     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS:}
+     username: ${DB_USER_NAME}
+     password: ${DB_PASSWORD}
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+         

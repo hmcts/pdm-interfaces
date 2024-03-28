@@ -1,5 +1,8 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy;
 
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -11,8 +14,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.LocalProxy;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ILocalProxy;
 
 import java.time.LocalDateTime;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class XhbDispMgrLocalProxyRepository extends AbstractRepository<XhbDispMgrLocalProxyDao> {
 

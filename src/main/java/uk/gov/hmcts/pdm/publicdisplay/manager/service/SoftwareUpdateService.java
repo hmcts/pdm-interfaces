@@ -25,7 +25,6 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.openjpa.lib.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**

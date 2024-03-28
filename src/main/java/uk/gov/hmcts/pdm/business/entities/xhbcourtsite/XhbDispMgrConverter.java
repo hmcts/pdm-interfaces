@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdm.business.entities.xhbcourtsite;
 
+
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
@@ -24,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.EntityManager;
 
 
 public abstract class XhbDispMgrConverter extends AbstractRepository<XhbCourtSiteDao> {

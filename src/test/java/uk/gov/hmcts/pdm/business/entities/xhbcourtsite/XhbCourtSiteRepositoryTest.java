@@ -23,6 +23,7 @@
 
 package uk.gov.hmcts.pdm.business.entities.xhbcourtsite;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +44,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICourtSite;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IXhibitCourtSite;
 
 import java.time.LocalDateTime;
-import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -24,6 +24,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -35,8 +36,6 @@ import uk.gov.hmcts.pdm.publicdisplay.common.rest.JsonWebTokenType;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.ServiceAudit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IServiceAudit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IServiceAuditService;
-
-import javax.persistence.EntityManager;
 
 /**
  * The Class ServiceAuditService.

@@ -21,36 +21,28 @@
  * the possibility of such damage.
  */
 
-package uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy;
+package uk.gov.hmcts.pdm.business.entities.xhbdispmgrproperty;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite.XhbDispMgrCourtSiteDao;
-import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite.XhbDispMgrCourtSiteRepository;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
-import uk.gov.hmcts.pdm.publicdisplay.initialization.InitializationService;
-import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CourtSite;
-import uk.gov.hmcts.pdm.publicdisplay.manager.domain.LocalProxy;
-import uk.gov.hmcts.pdm.publicdisplay.manager.domain.XhibitCourtSite;
-import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICourtSite;
-import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ILocalProxy;
-import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IXhibitCourtSite;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IProperty;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -60,25 +52,17 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {
+class XhbDispMgrPropertyRepositoryTest extends AbstractJUnit {
 
-    private static final String TRUE = "Result is not True";
+    private static final String EQUALS = "Results not equal";
 
-    @Mock
-    private EntityManagerFactory mockEntityManagerFactory;
-
-    @Mock
     private EntityManager mockEntityManager;
 
-    @Mock
+    private Query mockQuery;
+
     private EntityTransaction mockTransaction;
 
-    @Mock
-    private XhbDispMgrCourtSiteRepository mockXhbDispMgrCourtSiteRepository;
-
-    @InjectMocks
-    private final XhbDispMgrLocalProxyRepository classUnderTest =
-        new XhbDispMgrLocalProxyRepository(mockEntityManager, mockXhbDispMgrCourtSiteRepository);
+    private XhbDispMgrPropertyRepository classUnderTest;
 
     /**
      * Setup.
@@ -86,7 +70,10 @@ class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {
     @BeforeEach
     public void setup() {
         Mockito.mockStatic(EntityManagerUtil.class);
-        InitializationService.getInstance().setEntityManagerFactory(mockEntityManagerFactory);
+        mockEntityManager = Mockito.mock(EntityManager.class);
+        mockQuery = Mockito.mock(Query.class);
+        mockTransaction = Mockito.mock(EntityTransaction.class);
+        classUnderTest = new XhbDispMgrPropertyRepository(mockEntityManager);
     }
 
     /**
@@ -98,47 +85,46 @@ class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {
     }
 
     /**
-     * Test saveDaoFromBasicValue.
+     * Test findAllProperties.
      */
     @Test
-    void testsaveDaoFromBasicValue() {
+    void testFindAllProperties() {
+        // Setup
+        List<XhbDispMgrPropertyDao> dummyProperties = new ArrayList<>();
+        dummyProperties.add(getDummyXhbDispMgrPropertyDao());
+        // Expects
+        Mockito.when(mockEntityManager.createQuery(Mockito.isA(String.class)))
+            .thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(dummyProperties);
+        // Run
+        List<IProperty> results = classUnderTest.findAllProperties();
+        // Checks
+        assertEquals(results.size(), dummyProperties.size(), EQUALS);
+    }
+
+    /**
+     * Test delete.
+     */
+    @Test
+    void testDelete() {
+        // Setup
+        XhbDispMgrPropertyDao dummyProperty = getDummyXhbDispMgrPropertyDao();
+        // Expects
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
         Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockTransaction);
-
-        // Setup
-        ILocalProxy localProxy = getDummyLocalProxy();
-        XhbDispMgrCourtSiteDao xhbDispMgrCourtSiteDao = new XhbDispMgrCourtSiteDao();
-        xhbDispMgrCourtSiteDao.setId(Integer.valueOf(2));
-
-        // Expects
-        Mockito
-            .when(mockXhbDispMgrCourtSiteRepository.findDaoByXhibitCourtSiteId(
-                localProxy.getCourtSite().getXhibitCourtSite().getId().intValue()))
-            .thenReturn(xhbDispMgrCourtSiteDao);
-
-        // Perform the test
-        boolean result = false;
+        // Run
         try {
-            classUnderTest.saveDaoFromBasicValue(localProxy);
-            result = true;
+            classUnderTest.delete(Optional.of(dummyProperty));
         } catch (Exception exception) {
             fail(exception);
         }
-
-        // Verify
-        assertTrue(result, TRUE);
     }
 
-    private ILocalProxy getDummyLocalProxy() {
-        IXhibitCourtSite xhibitCourtSite = new XhibitCourtSite();
-        xhibitCourtSite.setId(Long.valueOf(1));
-
-        ICourtSite courtSite = new CourtSite();
-        courtSite.setXhibitCourtSite(xhibitCourtSite);
-
-        ILocalProxy localProxy = new LocalProxy();
-        localProxy.setCourtSite(courtSite);
-        localProxy.setRagStatusDate(LocalDateTime.now());
-        return localProxy;
+    private XhbDispMgrPropertyDao getDummyXhbDispMgrPropertyDao() {
+        XhbDispMgrPropertyDao property = new XhbDispMgrPropertyDao();
+        property.setId(Integer.valueOf(1));
+        property.setPropertyName("Name");
+        property.setPropertyValue("Value");
+        return property;
     }
 }

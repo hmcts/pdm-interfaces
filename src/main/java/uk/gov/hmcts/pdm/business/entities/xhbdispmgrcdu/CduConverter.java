@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu;
 
+
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
@@ -20,7 +22,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IXhibitCourtSite;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
 
 public abstract class CduConverter extends CduUtility {
 

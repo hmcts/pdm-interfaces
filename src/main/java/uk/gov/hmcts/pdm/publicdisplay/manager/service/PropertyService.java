@@ -24,8 +24,11 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +37,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IProperty;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IPropertyService;
 
 import java.util.List;
-import javax.persistence.EntityManager;
 
 /**
  * The Class PropertyService.
@@ -47,6 +49,9 @@ public class PropertyService implements IPropertyService {
     /** The LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyService.class);
 
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
+    
     private EntityManager entityManager;
 
     private XhbDispMgrPropertyRepository xhbDispMgrPropertyRepository;
