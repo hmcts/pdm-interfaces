@@ -93,8 +93,12 @@ class UrlServiceTest extends AbstractJUnit {
         final Long xhibitCourtSiteId = 1L;
 
         // Add the mock calls to child classes
+        expect(mockUrlRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockUrlRepo.findByCourtSiteId(xhibitCourtSiteId.intValue())).andReturn(urls);
+        
         replay(mockUrlRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<UrlDto> results = classUnderTest.getUrlsByXhibitCourtSiteId(xhibitCourtSiteId);
@@ -105,6 +109,7 @@ class UrlServiceTest extends AbstractJUnit {
 
         // Verify the expected mocks were called
         verify(mockUrlRepo);
+        verify(mockEntityManager);
     }
 
     @Test
@@ -127,16 +132,21 @@ class UrlServiceTest extends AbstractJUnit {
 
     @Test
     void testGetXhbDispMgrUrlRepository() {
-        ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrUrlRepository", null);
-        ReflectionTestUtils.setField(classUnderTest, "entityManager", mockEntityManager);
-        expect(mockEntityManager.isOpen()).andReturn(true);
+        expect(mockUrlRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        replay(mockUrlRepo);
         replay(mockEntityManager);
+        
         XhbDispMgrUrlRepository result = classUnderTest.getXhbDispMgrUrlRepository();
         assertNotNull(result, NOTNULL);
 
         ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrUrlRepository", mockUrlRepo);
         result = classUnderTest.getXhbDispMgrUrlRepository();
         assertNotNull(result, NOTNULL);
+        
+        verify(mockUrlRepo);
+        verify(mockEntityManager);
     }
 
     /**

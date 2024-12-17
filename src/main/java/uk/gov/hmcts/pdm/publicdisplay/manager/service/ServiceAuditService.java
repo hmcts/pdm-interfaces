@@ -24,6 +24,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import com.pdm.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,14 +89,14 @@ public class ServiceAuditService implements IServiceAuditService {
     }
 
     private EntityManager getEntityManager() {
-        if (entityManager == null || !entityManager.isOpen()) {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
     }
 
     protected XhbDispMgrServiceAuditRepository getXhbDispMgrServiceAuditRepository() {
-        if (xhbDispMgrServiceAuditRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrServiceAuditRepository)) {
             xhbDispMgrServiceAuditRepository =
                 new XhbDispMgrServiceAuditRepository(getEntityManager());
         }

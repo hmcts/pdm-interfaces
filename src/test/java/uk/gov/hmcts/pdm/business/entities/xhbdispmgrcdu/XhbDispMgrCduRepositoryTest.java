@@ -108,6 +108,7 @@ class XhbDispMgrCduRepositoryTest extends AbstractJUnit {
         }
         expectedResults.add(IPADDRESS + "200");
         // Expects
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockEntityManager.createNamedQuery("XHB_DISP_MGR_CDU.getNextIpHost"))
             .thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(expectedResults);

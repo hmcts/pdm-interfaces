@@ -220,7 +220,7 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
         method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public RefSystemCodeDto loadJudgeType(
-        @PathVariable @EncryptedFormat final Integer refSystemCodeId) {
+        @PathVariable("refSystemCodeId") @EncryptedFormat final Integer refSystemCodeId) {
         final String methodName = "loadJudgeType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         RefSystemCodeDto result = null;

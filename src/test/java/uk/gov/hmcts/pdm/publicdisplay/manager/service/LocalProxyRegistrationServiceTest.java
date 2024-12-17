@@ -38,15 +38,21 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         final ICourtSite courtSite = courtSitesWithLocalProxies.get(0).getCourtSite();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockLocalProxyRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtSiteId(courtSite.getId().intValue()))
             .andReturn(courtSite);
-        replay(mockCourtSiteRepo);
         mockLocalProxyRepo.deleteDaoFromBasicValue(courtSite.getLocalProxy());
         expectLastCall();
-        replay(mockLocalProxyRepo);
         mockCduRepo.deleteDaoFromBasicValue(isA(ICduModel.class));
         expectLastCall().times(courtSite.getCdus().size());
+        
+        replay(mockCourtSiteRepo);
+        replay(mockLocalProxyRepo);
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.unregisterLocalProxy(courtSite.getId());
@@ -55,6 +61,7 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         verify(mockCourtSiteRepo);
         verify(mockLocalProxyRepo);
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -66,8 +73,12 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         final ICourtSite courtSite = courtSitesWithLocalProxies.get(0).getCourtSite();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtSiteId(courtSite.getId().intValue())).andReturn(null);
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -77,6 +88,7 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         } finally {
             // Verify the expected mocks were called
             verify(mockCourtSiteRepo);
+            verify(mockEntityManager);
         }
     }
 
@@ -90,9 +102,13 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         courtSite.setLocalProxy(null);
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtSiteId(courtSite.getId().intValue()))
             .andReturn(courtSite);
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -102,6 +118,7 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         } finally {
             // Verify the expected mocks were called
             verify(mockCourtSiteRepo);
+            verify(mockEntityManager);
         }
     }
 
@@ -112,7 +129,6 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
     void testRegisterLocalProxyCourtSiteNotExists() {
         // Local variables
         final IXhibitCourtSite xhibitCourtSite = courtSitesWithLocalProxies.get(0);
-        final ICourtSite courtSite = xhibitCourtSite.getCourtSite();
         final LocalProxyRegisterCommand localProxyRegisterCommand =
             getTestLocalProxyRegisterCommand(xhibitCourtSite.getId());
         final ISchedule schedule = getTestSchedule(localProxyRegisterCommand.getScheduleId());
@@ -123,29 +139,29 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         final Capture<LocalProxy> capturedLocalProxy = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockScheduleRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockLocalProxyRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(
             mockCourtSiteRepo.findCourtSiteByXhibitCourtSiteId(xhibitCourtSite.getId().intValue()))
                 .andReturn(null);
-        expect(mockDispMgrCourtSiteRepo.findByXhibitCourtSiteId(xhibitCourtSite.getId().intValue()))
-            .andReturn(courtSite);
         mockCourtSiteRepo.updateDaoFromBasicValue(capture(capturedCourtSite));
         expectLastCall();
-        replay(mockCourtSiteRepo);
-        replay(mockDispMgrCourtSiteRepo);
-
         expect(
             mockScheduleRepo.findByScheduleId(localProxyRegisterCommand.getScheduleId().intValue()))
                 .andReturn(schedule);
-        replay(mockScheduleRepo);
-
         expect(mockLocalProxyRestClient.saveLocalProxy(capture(capturedLocalProxy), eq(true)))
             .andReturn(testHostname);
         expectLastCall();
-        replay(mockLocalProxyRestClient);
-
         mockLocalProxyRepo.saveDaoFromBasicValue(capture(capturedLocalProxy));
         expectLastCall();
+        
+        replay(mockCourtSiteRepo);
+        replay(mockScheduleRepo);
+        replay(mockLocalProxyRestClient);
         replay(mockLocalProxyRepo);
+        replay(mockEntityManager);
 
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
@@ -168,8 +184,9 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
         verify(mockScheduleRepo);
-        verify(mockLocalProxyRepo);
         verify(mockLocalProxyRestClient);
+        verify(mockLocalProxyRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -189,25 +206,29 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         final Capture<LocalProxy> capturedLocalProxy = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockScheduleRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockLocalProxyRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(
             mockCourtSiteRepo.findCourtSiteByXhibitCourtSiteId(xhibitCourtSite.getId().intValue()))
                 .andReturn(courtSite);
         mockCourtSiteRepo.updateDaoFromBasicValue(courtSite);
         expectLastCall();
-        replay(mockCourtSiteRepo);
-
         expect(
             mockScheduleRepo.findByScheduleId(localProxyRegisterCommand.getScheduleId().intValue()))
                 .andReturn(schedule);
-        replay(mockScheduleRepo);
-
         expect(mockLocalProxyRestClient.saveLocalProxy(capture(capturedLocalProxy), eq(true)))
             .andReturn(testHostname);
-        replay(mockLocalProxyRestClient);
-
         mockLocalProxyRepo.saveDaoFromBasicValue(capture(capturedLocalProxy));
         expectLastCall();
+        
+        
+        replay(mockCourtSiteRepo);
+        replay(mockScheduleRepo);
+        replay(mockLocalProxyRestClient);
         replay(mockLocalProxyRepo);
+        replay(mockEntityManager);
 
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
@@ -230,6 +251,7 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
         verify(mockScheduleRepo);
         verify(mockLocalProxyRepo);
         verify(mockLocalProxyRestClient);
+        verify(mockEntityManager);
     }
 
     /**
@@ -238,8 +260,12 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
     @Test
     void isLocalProxyWithIpAddress() {
         // Add the mock calls to child classes
+        expect(mockLocalProxyRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockLocalProxyRepo.isLocalProxyWithIpAddress(IPADDRESS)).andReturn(true);
+        
         replay(mockLocalProxyRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final boolean result = classUnderTest.isLocalProxyWithIpAddress(IPADDRESS);
@@ -249,6 +275,7 @@ abstract class LocalProxyRegistrationServiceTest extends LocalProxyCourtSiteServ
 
         // Verify the expected mocks were called
         verify(mockLocalProxyRepo);
+        verify(mockEntityManager);
     }
 
     /**

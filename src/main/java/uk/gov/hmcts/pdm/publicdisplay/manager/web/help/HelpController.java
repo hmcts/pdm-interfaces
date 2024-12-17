@@ -66,7 +66,7 @@ public class HelpController {
      * @throws NoSuchRequestHandlingMethodException thrown when invalid page name is supplied
      */
     @RequestMapping(value = "/{page}", method = RequestMethod.GET)
-    public String help(@PathVariable final String page) throws NoHandlerFoundException {
+    public String help(@PathVariable("page") final String page) throws NoHandlerFoundException {
         LOGGER.debug("help({})", page);
         // Throw 404 exception if page is invalid
         if (!isValidPage(page)) {

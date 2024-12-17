@@ -24,6 +24,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import com.pdm.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,14 +88,14 @@ public class UrlService implements IUrlService {
     }
 
     protected EntityManager getEntityManager() {
-        if (entityManager == null || !entityManager.isOpen()) {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
     }
 
     protected XhbDispMgrUrlRepository getXhbDispMgrUrlRepository() {
-        if (xhbDispMgrUrlRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrUrlRepository)) {
             xhbDispMgrUrlRepository = new XhbDispMgrUrlRepository(getEntityManager());
         }
         return xhbDispMgrUrlRepository;

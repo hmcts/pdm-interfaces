@@ -71,6 +71,9 @@ class EntityManagerUtilTest extends AbstractJUnit {
                 .thenReturn(mockEntityManagerFactory);
             Mockito.when(mockEntityManagerFactory.createEntityManager())
                 .thenReturn(Mockito.mock(EntityManager.class));
+            try (EntityManager mockEntityManager = Mockito.mock(EntityManager.class)) {
+                Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+            }
             // Run
             try (EntityManager result = EntityManagerUtil.getEntityManager()) {
                 assertNotNull(result, NOTNULL);

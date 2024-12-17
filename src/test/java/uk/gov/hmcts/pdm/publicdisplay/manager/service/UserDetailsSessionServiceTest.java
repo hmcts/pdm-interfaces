@@ -80,6 +80,8 @@ class UserDetailsSessionServiceTest extends LoadUserDetailsServiceTest {
         // Define a mock version of the called methods via private method
         mockGetSessionUserName(true);
         // Define a mock version of the other called methods
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.isUserDetailsWithUserName(capturedUserName.capture()))
             .thenReturn(true);
 

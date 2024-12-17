@@ -132,7 +132,7 @@ public class DashboardController {
         method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public DashboardCourtSiteDto courtSite(
-        @PathVariable @EncryptedFormat final Long xhibitCourtSiteId,
+        @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId,
         @RequestParam(value = "refresh", defaultValue = "false") final boolean refreshStatus) {
         // Refresh the rag statuses of the court site
         if (refreshStatus) {

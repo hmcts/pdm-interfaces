@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import com.pdm.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import uk.gov.hmcts.pdm.business.entities.xhbrefhearingtype.XhbRefHearingTypeRep
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+@SuppressWarnings("PMD.NullAssignment")
 public class HearingTypeServiceFinder extends HearingTypeServiceCreator {
 
     private EntityManager entityManager;
@@ -25,23 +27,29 @@ public class HearingTypeServiceFinder extends HearingTypeServiceCreator {
      * Set up our logger.
      */
     protected static final Logger LOGGER = LoggerFactory.getLogger(HearingTypeServiceFinder.class);
+    
+    protected void clearRepositories() {
+        xhbCourtSiteRepository = null;
+        xhbRefHearingTypeRepository = null;
+    }
 
     protected EntityManager getEntityManager() {
-        if (entityManager == null || !entityManager.isOpen()) {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
     }
 
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtSiteRepository)) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
     }
     
     protected XhbRefHearingTypeRepository getXhbRefHearingTypeRepository() {
-        if (xhbRefHearingTypeRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbRefHearingTypeRepository)) {
             xhbRefHearingTypeRepository = new XhbRefHearingTypeRepository(getEntityManager());
         }
         return xhbRefHearingTypeRepository;

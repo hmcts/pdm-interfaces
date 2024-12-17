@@ -13,54 +13,49 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
-import uk.gov.hmcts.pdm.business.entities.xhbdisplay.XhbDisplayRepository;
-import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
-import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
-import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu.XhbDispMgrCduRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite.XhbDispMgrCourtSiteRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy.XhbDispMgrLocalProxyRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrschedule.XhbDispMgrScheduleRepository;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * The Class DisplayServiceFinder.
+ * The Class LocalProxyServiceFinderTest.
  *
- * @author harrism
+ * @author Luke Gittins
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("PMD.LawOfDemeter")
-class DisplayServiceFinderTest extends AbstractJUnit {
-
+class LocalProxyServiceFinderTest extends AbstractJUnit {
 
     private static final String NOTNULL = "Result is Null";
-    
+
     @Mock
     private EntityManager mockEntityManager;
 
     @Mock
-    private XhbDisplayRepository mockXhbDisplayRepository;
-    
-    @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
     
     @Mock
-    private XhbDisplayTypeRepository mockXhbDisplayTypeRepository;
+    private XhbDispMgrCourtSiteRepository mockXhbDispMgrCourtSiteRepository;
     
     @Mock
-    private XhbDisplayLocationRepository mockXhbDisplayLocationRepository;
+    private XhbDispMgrScheduleRepository mockXhbDispMgrScheduleRepository;
     
     @Mock
-    private XhbRotationSetsRepository mockXhbRotationSetsRepository;
+    private XhbDispMgrLocalProxyRepository mockXhbDispMgrLocalProxyRepository;
     
-    private DisplayServiceFinder classUnderTest;
+    @Mock
+    private XhbDispMgrCduRepository mockXhbDispMgrCduRepository;
 
+    private LocalProxyServiceFinder classUnderTest;
 
-    /**
-     * Setup.
-     */
     @BeforeEach
     public void setup() {
-        classUnderTest = new DisplayServiceFinder();
+        classUnderTest = new LocalProxyServiceFinder();
     }
 
     @AfterEach
@@ -73,56 +68,61 @@ class DisplayServiceFinderTest extends AbstractJUnit {
         expectEntityManager();
         XhbCourtSiteRepository result = classUnderTest.getXhbCourtSiteRepository();
         assertNotNull(result, NOTNULL);
-        
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteRepository", mockXhbCourtSiteRepository);
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteRepository",
+            mockXhbCourtSiteRepository);
         result = classUnderTest.getXhbCourtSiteRepository();
         assertNotNull(result, NOTNULL);
     }
     
     @Test
-    void testGetXhbDisplayRepository() {
+    void testGetXhbDispMgrCourtSiteRepository() {
         expectEntityManager();
-        XhbDisplayRepository result = classUnderTest.getXhbDisplayRepository();
+        XhbDispMgrCourtSiteRepository result = classUnderTest.getXhbDispMgrCourtSiteRepository();
         assertNotNull(result, NOTNULL);
-        
-        ReflectionTestUtils.setField(classUnderTest, "xhbDisplayRepository", mockXhbDisplayRepository);
-        result = classUnderTest.getXhbDisplayRepository();
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrCourtSiteRepository",
+            mockXhbDispMgrCourtSiteRepository);
+        result = classUnderTest.getXhbDispMgrCourtSiteRepository();
         assertNotNull(result, NOTNULL);
     }
     
     @Test
-    void testGetXhbDisplayTypeRepository() {
+    void testGetXhbDispMgrScheduleRepository() {
         expectEntityManager();
-        XhbDisplayTypeRepository result = classUnderTest.getXhbDisplayTypeRepository();
+        XhbDispMgrScheduleRepository result = classUnderTest.getXhbDispMgrScheduleRepository();
         assertNotNull(result, NOTNULL);
-        
-        ReflectionTestUtils.setField(classUnderTest, "xhbDisplayTypeRepository", mockXhbDisplayTypeRepository);
-        result = classUnderTest.getXhbDisplayTypeRepository();
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrScheduleRepository",
+            mockXhbDispMgrScheduleRepository);
+        result = classUnderTest.getXhbDispMgrScheduleRepository();
         assertNotNull(result, NOTNULL);
     }
     
     @Test
-    void testGetXhbDisplayLocationRepository() {
+    void testGetXhbDispMgrLocalProxyRepository() {
         expectEntityManager();
-        XhbDisplayLocationRepository result = classUnderTest.getXhbDisplayLocationRepository();
+        XhbDispMgrLocalProxyRepository result = classUnderTest.getXhbDispMgrLocalProxyRepository();
         assertNotNull(result, NOTNULL);
-        
-        ReflectionTestUtils.setField(classUnderTest, "xhbDisplayLocationRepository", mockXhbDisplayLocationRepository);
-        result = classUnderTest.getXhbDisplayLocationRepository();
-        assertNotNull(result, NOTNULL);
-    }
-   
-    @Test
-    void testGetXhbRotationSetsRepository() {
-        expectEntityManager();
-        XhbRotationSetsRepository result = classUnderTest.getXhbRotationSetsRepository();
-        assertNotNull(result, NOTNULL);
-        
-        ReflectionTestUtils.setField(classUnderTest, "xhbRotationSetsRepository", mockXhbRotationSetsRepository);
-        result = classUnderTest.getXhbRotationSetsRepository();
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrLocalProxyRepository",
+            mockXhbDispMgrLocalProxyRepository);
+        result = classUnderTest.getXhbDispMgrLocalProxyRepository();
         assertNotNull(result, NOTNULL);
     }
     
+    @Test
+    void testGetXhbDispMgrCduRepository() {
+        expectEntityManager();
+        XhbDispMgrCduRepository result = classUnderTest.getXhbDispMgrCduRepository();
+        assertNotNull(result, NOTNULL);
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrCduRepository",
+            mockXhbDispMgrCduRepository);
+        result = classUnderTest.getXhbDispMgrCduRepository();
+        assertNotNull(result, NOTNULL);
+    }
+
     @Test
     void testNullEntityManager() {
         Mockito.mockStatic(EntityManagerUtil.class);
@@ -130,10 +130,9 @@ class DisplayServiceFinderTest extends AbstractJUnit {
         XhbCourtSiteRepository result = classUnderTest.getXhbCourtSiteRepository();
         assertNotNull(result, NOTNULL);
     }
-    
+
     private void expectEntityManager() {
         ReflectionTestUtils.setField(classUnderTest, "entityManager", mockEntityManager);
         Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
     }
-
 }

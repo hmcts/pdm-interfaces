@@ -46,6 +46,10 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         final String testHostname = TEST_HOSTNAME;
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockScheduleRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtSiteId(courtSiteDto.getId().intValue()))
             .andReturn(courtSite);
         expect(mockScheduleRepo.findByScheduleId(localProxyAmendCommand.getScheduleId().intValue()))
@@ -63,6 +67,7 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         replay(mockScheduleRepo);
         replay(mockLocalProxyRestClient);
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
@@ -91,6 +96,7 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         verify(mockScheduleRepo);
         verify(mockLocalProxyRestClient);
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -108,6 +114,9 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         final String testHostname = TEST_HOSTNAME;
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockScheduleRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtSiteId(courtSiteDto.getId().intValue()))
             .andReturn(courtSite);
         expect(mockScheduleRepo.findByScheduleId(localProxyAmendCommand.getScheduleId().intValue()))
@@ -122,7 +131,7 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         replay(mockCourtSiteRepo);
         replay(mockScheduleRepo);
         replay(mockLocalProxyRestClient);
-        replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
@@ -149,7 +158,7 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         verify(mockCourtSiteRepo);
         verify(mockScheduleRepo);
         verify(mockLocalProxyRestClient);
-        verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -165,6 +174,9 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         final CourtSiteDto courtSiteDto = getCourtSiteDto();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockScheduleRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtSiteId(courtSiteDto.getId().intValue()))
             .andReturn(courtSite);
         expect(mockScheduleRepo.findByScheduleId(localProxyAmendCommand.getScheduleId().intValue()))
@@ -172,6 +184,7 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
 
         replay(mockCourtSiteRepo);
         replay(mockScheduleRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -182,6 +195,7 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
             // Verify the expected mocks were called
             verify(mockCourtSiteRepo);
             verify(mockScheduleRepo);
+            verify(mockEntityManager);
         }
     }
 
@@ -197,10 +211,13 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         final CourtSiteDto courtSiteDto = getCourtSiteDto();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtSiteId(courtSiteDto.getId().intValue()))
             .andReturn(null);
 
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -210,6 +227,7 @@ class LocalProxyUpdateServiceTest extends LocalProxyRegistrationServiceTest {
         } finally {
             // Verify the expected mocks were called
             verify(mockCourtSiteRepo);
+            verify(mockEntityManager);
         }
     }
 

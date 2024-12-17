@@ -32,9 +32,13 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
     @Test
     void testGetXhibitCourtSitesWithLocalProxyValid() {
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findCourtSitesWithLocalProxy())
             .andReturn(courtSitesWithLocalProxies);
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<XhibitCourtSiteDto> results = classUnderTest.getXhibitCourtSitesWithLocalProxy();
@@ -46,6 +50,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -56,8 +61,12 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
         final List<IXhibitCourtSite> emptyCourtSiteList = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findCourtSitesWithLocalProxy()).andReturn(emptyCourtSiteList);
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<XhibitCourtSiteDto> results = classUnderTest.getXhibitCourtSitesWithLocalProxy();
@@ -68,6 +77,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -76,9 +86,13 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
     @Test
     void testGetXhibitCourtSitesWithoutLocalProxyValid() {
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findCourtSitesWithoutLocalProxy())
             .andReturn(courtSitesWithoutLocalProxies);
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<XhibitCourtSiteDto> results =
@@ -91,6 +105,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -101,8 +116,12 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
         final List<IXhibitCourtSite> emptyCourtSiteList = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findCourtSitesWithoutLocalProxy()).andReturn(emptyCourtSiteList);
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<XhibitCourtSiteDto> results =
@@ -114,6 +133,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -122,9 +142,13 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
     @Test
     void testGetXhibitCourtSitesOrderedByRagStatusValid() {
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findXhibitCourtSitesOrderedByRagStatus())
             .andReturn(courtSitesWithLocalProxies);
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<XhibitCourtSiteDto> results =
@@ -136,6 +160,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -144,10 +169,14 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
     @Test
     void testGetCourtSiteByXhibitCourtSiteIdValid() {
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo
             .findCourtSiteByXhibitCourtSiteId(courtSitesWithLocalProxies.get(0).getId().intValue()))
                 .andReturn(courtSitesWithLocalProxies.get(0).getCourtSite());
+        
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final CourtSiteDto results = classUnderTest
@@ -165,6 +194,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -173,10 +203,14 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
     @Test
     void testGetDashboardCourtSiteByXhibitCourtSiteIdValid() {
         // Add the mock calls to child classes
+        expect(mockDispMgrCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDispMgrCourtSiteRepo
             .findByXhibitCourtSiteId(courtSitesWithLocalProxies.get(0).getId().intValue()))
                 .andReturn(courtSitesWithLocalProxies.get(0).getCourtSite());
+        
         replay(mockDispMgrCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final DashboardCourtSiteDto results = classUnderTest
@@ -191,6 +225,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockDispMgrCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -212,8 +247,12 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
     @Test
     void testGetPowerSaveSchedules() {
         // Add the mock calls to child classes
+        expect(mockScheduleRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockScheduleRepo.findPowerSaveSchedules()).andReturn(powerSaveSchedules);
+        
         replay(mockScheduleRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<ScheduleDto> schedules = classUnderTest.getPowerSaveSchedules();
@@ -228,6 +267,7 @@ abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase 
 
         // Verify the expected mocks were called
         verify(mockScheduleRepo);
+        verify(mockEntityManager);
     }
 
 }

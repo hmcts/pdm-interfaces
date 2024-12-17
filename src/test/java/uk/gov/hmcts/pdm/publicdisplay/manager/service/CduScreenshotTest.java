@@ -38,11 +38,15 @@ abstract class CduScreenshotTest extends CduNumberTest {
         final ICourtSite courtSite = cdus.get(0).getCourtSite();
 
         // Add the mock calls to child classes
+        expect(mockDispMgrCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDispMgrCourtSiteRepo.findByCourtSiteId(courtSite.getId().intValue()))
             .andReturn(courtSite);
-        replay(mockDispMgrCourtSiteRepo);
         expect(mockLocalProxyRestClient.getCduScreenshot(courtSite.getLocalProxy(),
             cduDto.getIpAddress())).andReturn(cduScreenshot);
+        
+        replay(mockDispMgrCourtSiteRepo);
+        replay(mockEntityManager);
         replay(mockLocalProxyRestClient);
 
         // Set the class variables
@@ -56,6 +60,7 @@ abstract class CduScreenshotTest extends CduNumberTest {
 
         // Verify the expected mocks were called
         verify(mockDispMgrCourtSiteRepo);
+        verify(mockEntityManager);
         verify(mockLocalProxyRestClient);
     }
 

@@ -12,22 +12,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
-import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
-import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrhousekeeping.XhbDispMgrHousekeepingRepository;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * The Class RefJudgeTypeServiceFinder.
+ * The Class HousekeepingRepositoryTest.
  *
- * @author harrism
+ * @author Luke Gittins
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("PMD.LawOfDemeter")
-class RefJudgeTypeServiceFinderTest extends AbstractJUnit {
-
+class HousekeepingRepositoryTest extends AbstractJUnit {
 
     private static final String NOTNULL = "Result is Null";
 
@@ -35,21 +33,13 @@ class RefJudgeTypeServiceFinderTest extends AbstractJUnit {
     private EntityManager mockEntityManager;
 
     @Mock
-    private XhbRefSystemCodeRepository mockXhbRefSystemCodeRepository;
+    private XhbDispMgrHousekeepingRepository mockXhbDispMgrHousekeepingRepository;
 
-    @Mock
-    private XhbCourtSiteRepository mockXhbCourtSiteRepository;
+    private HousekeepingRepository classUnderTest;
 
-
-    private RefJudgeTypeServiceFinder classUnderTest;
-
-
-    /**
-     * Setup.
-     */
     @BeforeEach
     public void setup() {
-        classUnderTest = new RefJudgeTypeServiceFinder();
+        classUnderTest = new HousekeepingRepository();
     }
 
     @AfterEach
@@ -58,34 +48,23 @@ class RefJudgeTypeServiceFinderTest extends AbstractJUnit {
     }
 
     @Test
-    void testGetXhbCourtSiteRepository() {
+    void testGetXhbDispMgrHousekeepingRepository() {
         expectEntityManager();
-        XhbCourtSiteRepository result = classUnderTest.getXhbCourtSiteRepository();
+        XhbDispMgrHousekeepingRepository result =
+            classUnderTest.getXhbDispMgrHousekeepingRepository();
         assertNotNull(result, NOTNULL);
 
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteRepository",
-            mockXhbCourtSiteRepository);
-        result = classUnderTest.getXhbCourtSiteRepository();
+        ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrHousekeepingRepository",
+            mockXhbDispMgrHousekeepingRepository);
+        result = classUnderTest.getXhbDispMgrHousekeepingRepository();
         assertNotNull(result, NOTNULL);
     }
-    
-    @Test
-    void testGetXhbRefSystemCodeRepository() {
-        expectEntityManager();
-        XhbRefSystemCodeRepository result = classUnderTest.getXhbRefSystemCodeRepository();
-        assertNotNull(result, NOTNULL);
 
-        ReflectionTestUtils.setField(classUnderTest, "xhbRefSystemCodeRepository",
-            mockXhbRefSystemCodeRepository);
-        result = classUnderTest.getXhbRefSystemCodeRepository();
-        assertNotNull(result, NOTNULL);
-    }
-    
     @Test
     void testNullEntityManager() {
         Mockito.mockStatic(EntityManagerUtil.class);
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
-        XhbCourtSiteRepository result = classUnderTest.getXhbCourtSiteRepository();
+        XhbDispMgrHousekeepingRepository result = classUnderTest.getXhbDispMgrHousekeepingRepository();
         assertNotNull(result, NOTNULL);
     }
 

@@ -64,7 +64,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
 
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_HEARING = "hearing";
-    
+
     /**
      * View Hearing.
      */
@@ -79,7 +79,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
      * Amend Hearing.
      */
     private static final String MAPPING_AMEND_HEARING = "/amend_hearing";
-    
+
     /**
      * Amend Hearing View.
      */
@@ -89,13 +89,13 @@ public class HearingTypeController extends HearingTypePageStateSetter {
      * Create Hearing.
      */
     private static final String MAPPING_CREATE_HEARING = "/create_hearing";
-    
+
     /**
      * Create Hearing View.
      */
     private static final String VIEW_NAME_CREATE_HEARING = FOLDER_HEARING + MAPPING_CREATE_HEARING;
 
-    
+
     /**
      * The hearing type selected validator.
      */
@@ -107,7 +107,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
      */
     @Autowired
     private HearingTypeAmendValidator hearingTypeAmendValidator;
-    
+
     /**
      * The hearing type create validator.
      */
@@ -153,7 +153,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-    
+
 
     /**
      * Show amend hearing.
@@ -164,8 +164,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
      * @return the model and view
      */
     @RequestMapping(value = MAPPING_VIEW_HEARING, method = RequestMethod.POST, params = "btnAmend")
-    public ModelAndView showAmendHearing(@Valid final HearingTypeSearchCommand hearingTypeSearchCommand,
-        final BindingResult result, final ModelAndView model) {
+    public ModelAndView showAmendHearing(
+        @Valid final HearingTypeSearchCommand hearingTypeSearchCommand, final BindingResult result,
+        final ModelAndView model) {
         final String methodName = "showAmendHearing";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
@@ -192,7 +193,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
 
             // Populate the relevant fields
             final HearingTypeAmendCommand hearingTypeCommand = new HearingTypeAmendCommand();
-            
+
             // Populate the model objects
             model.addObject(COURTSITE_LIST, hearingTypePageStateHolder.getSites());
             model.addObject(HEARINGTYPE_LIST, hearingTypePageStateHolder.getHearingTypes());
@@ -208,7 +209,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-    
+
     /**
      * Load hearing type.
      *
@@ -218,7 +219,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
     @RequestMapping(value = MAPPING_AMEND_HEARING + "/{refHearingTypeId}",
         method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public HearingTypeDto loadHearingType(@PathVariable @EncryptedFormat final Integer refHearingTypeId) {
+    public HearingTypeDto loadHearingType(
+        @PathVariable("refHearingTypeId") @EncryptedFormat final Integer refHearingTypeId) {
         final String methodName = "loadHearingType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         HearingTypeDto result = null;
@@ -231,7 +233,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
     }
-    
+
 
     /**
      * Update Hearing Type.
@@ -243,8 +245,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
      */
     @RequestMapping(value = MAPPING_AMEND_HEARING, method = RequestMethod.POST,
         params = "btnUpdateConfirm")
-    public ModelAndView updateHearingType(@Valid final HearingTypeAmendCommand hearingTypeAmendCommand,
-        final BindingResult result, final ModelAndView model) {
+    public ModelAndView updateHearingType(
+        @Valid final HearingTypeAmendCommand hearingTypeAmendCommand, final BindingResult result,
+        final ModelAndView model) {
         final String methodName = "updateHearingType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
@@ -252,9 +255,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         if (result.hasErrors()) {
             // Default is to return to the amend hearing type page to show errors
             model.setViewName(VIEW_NAME_AMEND_HEARING);
-            
+
             XhibitCourtSiteDto courtSite = hearingTypePageStateHolder.getCourtSite();
-            
+
             model.addObject(COURTSITE_LIST, hearingTypePageStateHolder.getSites());
             model.addObject(HEARINGTYPE_LIST, hearingTypePageStateHolder.getHearingTypes());
             model.addObject(CATEGORIES_LIST, hearingTypeService.getAllCategories());
@@ -274,7 +277,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 return viewHearing(model, true);
             } catch (final DataAccessException | XpdmException ex) {
                 XhibitCourtSiteDto courtSite = hearingTypePageStateHolder.getCourtSite();
-                
+
                 model.addObject(COURTSITE_LIST, hearingTypePageStateHolder.getSites());
                 model.addObject(HEARINGTYPE_LIST, hearingTypePageStateHolder.getHearingTypes());
                 model.addObject(CATEGORIES_LIST, hearingTypeService.getAllCategories());
@@ -282,14 +285,15 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 // Log the error
                 LOGGER.error("{}{} Unable to update Hearing Type ", METHOD, methodName, ex);
                 // Reject
-                result.reject("hearingTypeErrors", "Unable to update Hearing Type: " + ex.getMessage());
+                result.reject("hearingTypeErrors",
+                    "Unable to update Hearing Type: " + ex.getMessage());
             }
         }
         model.addObject(COMMAND, hearingTypeAmendCommand);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-    
+
     /**
      * Show create hearing type.
      *
@@ -299,8 +303,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
      * @return the model and view
      */
     @RequestMapping(value = MAPPING_VIEW_HEARING, method = RequestMethod.POST, params = "btnAdd")
-    public ModelAndView showCreateHearing(@Valid final HearingTypeSearchCommand hearingTypeSearchCommand,
-        final BindingResult result, final ModelAndView model) {
+    public ModelAndView showCreateHearing(
+        @Valid final HearingTypeSearchCommand hearingTypeSearchCommand, final BindingResult result,
+        final ModelAndView model) {
         final String methodName = "showCreateHearing";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
@@ -325,10 +330,11 @@ public class HearingTypeController extends HearingTypePageStateSetter {
 
             // Populate the amend lists
             setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
-            
+
             // Populate the relevant fields
-            final HearingTypeCreateCommand hearingTypeCreateCommand = new HearingTypeCreateCommand();
-            
+            final HearingTypeCreateCommand hearingTypeCreateCommand =
+                new HearingTypeCreateCommand();
+
             // Populate the model objects
             model.addObject(COURTSITE_LIST, hearingTypePageStateHolder.getSites());
             model.addObject(HEARINGTYPE_LIST, hearingTypePageStateHolder.getHearingTypes());
@@ -345,7 +351,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-    
+
 
     /**
      * Create Hearing Type.
@@ -357,8 +363,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
      */
     @RequestMapping(value = MAPPING_CREATE_HEARING, method = RequestMethod.POST,
         params = "btnCreateConfirm")
-    public ModelAndView createHearingType(@Valid final HearingTypeCreateCommand hearingTypeCreateCommand,
-        final BindingResult result, final ModelAndView model) {
+    public ModelAndView createHearingType(
+        @Valid final HearingTypeCreateCommand hearingTypeCreateCommand, final BindingResult result,
+        final ModelAndView model) {
         final String methodName = "createHearingType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
@@ -369,7 +376,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             hearingTypePageStateHolder.getHearingTypes());
         if (result.hasErrors()) {
             XhibitCourtSiteDto courtSite = hearingTypePageStateHolder.getCourtSite();
-            
+
             model.addObject(COURTSITE_LIST, hearingTypePageStateHolder.getSites());
             model.addObject(HEARINGTYPE_LIST, hearingTypePageStateHolder.getHearingTypes());
             model.addObject(CATEGORIES_LIST, hearingTypeService.getAllCategories());
@@ -384,12 +391,13 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 // Add successMessage to model to show on page
                 model.addObject(SUCCESS_MESSAGE, "Hearing Type has been created successfully.");
 
-                // Successfully registered so redirect to the hearing type page which needs a new model
+                // Successfully registered so redirect to the hearing type page which needs a new
+                // model
                 LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
                 return viewHearing(model, false);
             } catch (final Exception ex) {
                 XhibitCourtSiteDto courtSite = hearingTypePageStateHolder.getCourtSite();
-                
+
                 model.addObject(COURTSITE_LIST, hearingTypePageStateHolder.getSites());
                 model.addObject(HEARINGTYPE_LIST, hearingTypePageStateHolder.getHearingTypes());
                 model.addObject(CATEGORIES_LIST, hearingTypeService.getAllCategories());
@@ -397,7 +405,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 // Log the error
                 LOGGER.error("{}{} Unable to create Hearing Type ", METHOD, methodName, ex);
                 // Reject
-                result.reject("hearingTypeErrors", "Unable to create Hearing Type: " + ex.getMessage());
+                result.reject("hearingTypeErrors",
+                    "Unable to create Hearing Type: " + ex.getMessage());
             }
         }
         model.addObject(COMMAND, hearingTypeCreateCommand);

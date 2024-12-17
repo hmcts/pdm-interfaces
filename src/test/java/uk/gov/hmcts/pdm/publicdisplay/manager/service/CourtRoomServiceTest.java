@@ -44,9 +44,12 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         courtDaoList.add(courtDao);
 
         // Add the mock calls to child classes
+        expect(mockCourtRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtRepo.findAll()).andReturn(courtDaoList);
 
         replay(mockCourtRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<CourtDto> courtDtoList = classUnderTest.getCourts();
@@ -56,7 +59,7 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
 
         // Verify the expected mocks were called
         verify(mockCourtRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -68,9 +71,12 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         courtSiteDaoList.add(xhbCourtSiteDao);
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findByCourtId(1)).andReturn(courtSiteDaoList);
 
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<XhibitCourtSiteDto> courtSiteDtoList = classUnderTest.getCourtSites(1);
@@ -80,6 +86,7 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
 
     }
 
@@ -92,9 +99,12 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         courtSiteDaoList.add(xhbCourtSiteDao);
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findAll()).andReturn(courtSiteDaoList);
 
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<XhibitCourtSiteDto> courtSiteDtoList = classUnderTest.getCourtSites(null);
@@ -104,6 +114,7 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
 
     }
 
@@ -120,9 +131,12 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         courtRoomDaoList.add(courtRoomDao);
 
         // Add the mock calls to child classes
+        expect(mockCourtRoomRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtRoomRepo.findByCourtSiteId(1)).andReturn(courtRoomDaoList);
 
         replay(mockCourtRoomRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<CourtRoomDto> courtSiteDtoList = classUnderTest.getCourtRooms(1L);
@@ -132,7 +146,7 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
 
         // Verify the expected mocks were called
         verify(mockCourtRoomRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -147,9 +161,13 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         final Capture<XhbCourtRoomDao> courtRoomDaoCapture = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCourtRoomRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         mockCourtRoomRepo.saveDao(capture(courtRoomDaoCapture));
         expectLastCall();
+        
         replay(mockCourtRoomRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.createCourtRoom(courtRoomCreateCommand, new ArrayList<>());
@@ -166,6 +184,7 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
 
         // Verify the expected mocks were called
         verify(mockCourtRoomRepo);
+        verify(mockEntityManager);
 
     }
 
@@ -177,18 +196,21 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         XhbCourtRoomDao xhbCourtRoomDao = new XhbCourtRoomDao();
         Optional<XhbCourtRoomDao> courtRoomDao = Optional.of(xhbCourtRoomDao);
 
+        expect(mockCourtRoomRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtRoomRepo.findById(courtRoomAmendCommand.getCourtRoomId())).andReturn(courtRoomDao);
 
         // Add the mock calls to child classes
         expect(mockCourtRoomRepo.updateDao(courtRoomDao.get())).andReturn(courtRoomDao);
         replay(mockCourtRoomRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.updateCourtRoom(courtRoomAmendCommand, new ArrayList<>());
 
         // Verify the expected mocks were called
         verify(mockCourtRoomRepo);
-
+        verify(mockEntityManager);
     }
     
     @Test

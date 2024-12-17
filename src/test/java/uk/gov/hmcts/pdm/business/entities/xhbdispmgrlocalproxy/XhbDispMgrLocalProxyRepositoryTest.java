@@ -108,6 +108,7 @@ class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {
         xhbDispMgrCourtSiteDao.setId(2);
 
         // Expects
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito
             .when(mockXhbDispMgrCourtSiteRepository.findDaoByXhibitCourtSiteId(
                 localProxy.getCourtSite().getXhibitCourtSite().getId().intValue()))

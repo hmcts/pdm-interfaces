@@ -37,19 +37,28 @@ abstract class CduMappingTest extends CduMacAddressTest {
         final Capture<IUrlModel> capturedUrl = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockUrlRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockDispMgrMappingRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         expect(mockCduRepo.findByCduId(mappingCommand.getCduId().intValue()))
             .andReturn(cdus.get(1));
         expectLastCall();
-        replay(mockCduRepo);
         expect(mockUrlRepo.findByUrlId(mappingCommand.getUrlId().intValue()))
             .andReturn(urls.get(2));
-        replay(mockUrlRepo);
+        mockDispMgrMappingRepo.addMappingForCdu(capture(capturedCdu), capture(capturedUrl));
         mockLocalProxyRestClient.saveUrl(capture(capturedUrl));
         expectLastCall();
         mockLocalProxyRestClient.saveMapping(capture(capturedCdu), capture(capturedUrl));
         expectLastCall();
+        
+        replay(mockCduRepo);
+        replay(mockUrlRepo);
+        replay(mockDispMgrMappingRepo);
+        replay(mockEntityManager);
         replay(mockLocalProxyRestClient);
-
+        
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
 
@@ -63,6 +72,8 @@ abstract class CduMappingTest extends CduMacAddressTest {
         // Verify the expected mocks were called
         verify(mockCduRepo);
         verify(mockUrlRepo);
+        verify(mockDispMgrMappingRepo);
+        verify(mockEntityManager);
         verify(mockLocalProxyRestClient);
     }
 
@@ -79,18 +90,24 @@ abstract class CduMappingTest extends CduMacAddressTest {
         final Capture<IUrlModel> capturedUrl = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockUrlRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockDispMgrMappingRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByCduId(mappingCommand.getCduId().intValue()))
             .andReturn(cdus.get(1));
-        // mockCduRepo.saveDaoFromBasicValue(capture(capturedCdu));
         expectLastCall();
-        replay(mockCduRepo);
         expect(mockUrlRepo.findByUrlId(mappingCommand.getUrlId().intValue()))
             .andReturn(urls.get(1));
-        replay(mockUrlRepo);
         mockDispMgrMappingRepo.deleteMappingForCdu(capture(capturedCdu), capture(capturedUrl));
         expectLastCall();
         mockLocalProxyRestClient.deleteMapping(capture(capturedCdu), capture(capturedUrl));
         expectLastCall();
+        
+        replay(mockCduRepo);
+        replay(mockUrlRepo);
+        replay(mockDispMgrMappingRepo);
+        replay(mockEntityManager);
         replay(mockLocalProxyRestClient);
 
         // Set the class variables
@@ -106,6 +123,8 @@ abstract class CduMappingTest extends CduMacAddressTest {
         // Verify the expected mocks were called
         verify(mockCduRepo);
         verify(mockUrlRepo);
+        verify(mockDispMgrMappingRepo);
+        verify(mockEntityManager);
         verify(mockLocalProxyRestClient);
     }
 

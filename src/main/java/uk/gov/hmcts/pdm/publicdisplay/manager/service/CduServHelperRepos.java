@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import com.pdm.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,14 +63,14 @@ public class CduServHelperRepos {
     }
     
     protected XhbDispMgrCduRepository getXhbDispMgrCduRepository() {
-        if (xhbDispMgrCduRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrCduRepository)) {
             xhbDispMgrCduRepository = new XhbDispMgrCduRepository(getEntityManager());
         }
         return xhbDispMgrCduRepository;
     }
 
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtSiteRepository)) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
@@ -84,21 +85,21 @@ public class CduServHelperRepos {
     }
 
     protected XhbDispMgrUrlRepository getXhbDispMgrUrlRepository() {
-        if (xhbDispMgrUrlRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrUrlRepository)) {
             xhbDispMgrUrlRepository = new XhbDispMgrUrlRepository(getEntityManager());
         }
         return xhbDispMgrUrlRepository;
     }
 
     protected XhbDispMgrCourtSiteRepository getXhbDispMgrCourtSiteRepository() {
-        if (xhbDispMgrCourtSiteRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrCourtSiteRepository)) {
             xhbDispMgrCourtSiteRepository = new XhbDispMgrCourtSiteRepository(getEntityManager());
         }
         return xhbDispMgrCourtSiteRepository;
     }
 
     protected XhbDispMgrMappingRepository getXhbDispMgrMappingRepository() {
-        if (xhbDispMgrMappingRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrMappingRepository)) {
             xhbDispMgrMappingRepository = new XhbDispMgrMappingRepository(getEntityManager());
         }
         return xhbDispMgrMappingRepository;

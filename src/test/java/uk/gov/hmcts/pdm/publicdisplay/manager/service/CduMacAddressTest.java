@@ -33,8 +33,12 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
         final Capture<String> capturedMacAddress = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.isCduWithMacAddress(capture(capturedMacAddress))).andReturn(true);
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final boolean result = classUnderTest.isCduWithMacAddress(cdus.get(0).getMacAddress());
@@ -45,6 +49,7 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -58,8 +63,12 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
         final Capture<String> capturedMacAddress = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.isCduWithMacAddress(capture(capturedMacAddress))).andReturn(false);
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final boolean result = classUnderTest.isCduWithMacAddress(cdus.get(0).getMacAddress());
@@ -70,6 +79,7 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -78,8 +88,12 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
     @Test
     void testGetCduByMacAddressValid() {
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddress(cdus.get(0).getMacAddress())).andReturn(cdus.get(0));
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final CduDto result = classUnderTest.getCduByMacAddress(cdus.get(0).getMacAddress());
@@ -96,6 +110,7 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -104,8 +119,12 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
     @Test
     void testGetCduByMacAddressWithLikeValid() {
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddressWithLike(MACADDRESS)).andReturn(cdus);
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final List<CduDto> results = classUnderTest.getCduByMacAddressWithLike(MACADDRESS);
@@ -116,6 +135,7 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
 }

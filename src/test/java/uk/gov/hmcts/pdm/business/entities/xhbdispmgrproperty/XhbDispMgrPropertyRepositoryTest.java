@@ -93,6 +93,8 @@ class XhbDispMgrPropertyRepositoryTest extends AbstractJUnit {
         List<XhbDispMgrPropertyDao> dummyProperties = new ArrayList<>();
         dummyProperties.add(getDummyXhbDispMgrPropertyDao());
         // Expects
+        Mockito.when(classUnderTest.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockEntityManager.createQuery(Mockito.isA(String.class)))
             .thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(dummyProperties);

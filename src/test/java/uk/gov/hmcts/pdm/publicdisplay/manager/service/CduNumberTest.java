@@ -19,8 +19,12 @@ abstract class CduNumberTest extends CduMappingTest {
     @Test
     void testIsCduWithCduNumberSuccess() {
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.isCduWithCduNumber(cdus.get(0).getCduNumber())).andReturn(true);
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final boolean result = classUnderTest.isCduWithCduNumber(cdus.get(0).getCduNumber());
@@ -30,6 +34,7 @@ abstract class CduNumberTest extends CduMappingTest {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -39,8 +44,12 @@ abstract class CduNumberTest extends CduMappingTest {
     @Test
     void testIsCduWithCduNumberFailure() {
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.isCduWithCduNumber(cdus.get(0).getCduNumber())).andReturn(false);
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         final boolean result = classUnderTest.isCduWithCduNumber(cdus.get(0).getCduNumber());
@@ -50,6 +59,7 @@ abstract class CduNumberTest extends CduMappingTest {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
 }

@@ -272,7 +272,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
         method = RequestMethod.GET, produces = APPLICATION_JSON)
     @ResponseBody
     public DynamicDropdownList loadCourtRoomsForAmend(
-        @PathVariable @EncryptedFormat final Long xhibitCourtSiteId) {
+        @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId) {
         final String methodName = "loadCourtRoomsForAmend";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         DynamicDropdownList result = createDynamicDropdownList();
@@ -296,7 +296,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
         method = RequestMethod.GET, produces = APPLICATION_JSON)
     @ResponseBody
     public CourtRoomDto loadSelectedCourtRoomForAmend(
-        @PathVariable @EncryptedFormat final Long courtRoomId) {
+        @PathVariable("courtRoomId") @EncryptedFormat final Long courtRoomId) {
         final String methodName = "loadSelectedCourtRoomForAmend";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         CourtRoomDto result = null;
@@ -320,7 +320,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
         method = RequestMethod.GET, produces = APPLICATION_JSON)
     @ResponseBody
     public DynamicDropdownList loadCourtRoomsForDelete(
-        @PathVariable @EncryptedFormat final Long xhibitCourtSiteId) {
+        @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId) {
         final String methodName = "loadCourtRoomsForDelete";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         DynamicDropdownList result = createDynamicDropdownList();
@@ -344,7 +344,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
         method = RequestMethod.GET, produces = APPLICATION_JSON)
     @ResponseBody
     public CourtRoomDto loadSelectedCourtRoomForDelete(
-        @PathVariable @EncryptedFormat final Long courtRoomId) {
+        @PathVariable("courtRoomId") @EncryptedFormat final Long courtRoomId) {
         final String methodName = "loadSelectedCourtRoomForDelete";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         CourtRoomDto result = null;

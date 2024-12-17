@@ -36,9 +36,12 @@ class DisplayServiceTest extends DisplayCrudTest {
         List<XhbRotationSetsDao> rotationSetsDaos = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockRotationSetsRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRotationSetsRepo.findByCourtId(1)).andReturn(rotationSetsDaos);
 
         replay(mockRotationSetsRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<RotationSetsDto> rotationSetsDtos = classUnderTest.getRotationSets(1);
@@ -48,7 +51,7 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockRotationSetsRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -62,9 +65,12 @@ class DisplayServiceTest extends DisplayCrudTest {
         displayTypeDaoList.add(displayTypeDao);
 
         // Add the mock calls to child classes
+        expect(mockDisplayTypeRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayTypeRepository.findAll()).andReturn(displayTypeDaoList);
 
         replay(mockDisplayTypeRepository);
+        replay(mockEntityManager);
 
         // Perform the test
         List<DisplayTypeDto> displayTypeDtoList = classUnderTest.getDisplayTypes();
@@ -75,7 +81,7 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockDisplayTypeRepository);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -84,9 +90,12 @@ class DisplayServiceTest extends DisplayCrudTest {
         List<XhbDisplayTypeDao> displayTypeDaoList = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockDisplayTypeRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayTypeRepository.findAll()).andReturn(displayTypeDaoList);
 
         replay(mockDisplayTypeRepository);
+        replay(mockEntityManager);
 
         // Perform the test
         List<DisplayTypeDto> displayTypeDtoList = classUnderTest.getDisplayTypes();
@@ -96,7 +105,7 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockDisplayTypeRepository);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -107,16 +116,19 @@ class DisplayServiceTest extends DisplayCrudTest {
         List<XhbDisplayDao> displayDaoList = new ArrayList<>();
         displayDaoList.add(xhbDisplayDao);
 
-        List<DisplayTypeDto> displayTypeDtoList = createDisplayTypeDtoList();
+        final List<DisplayTypeDto> displayTypeDtoList = createDisplayTypeDtoList();
 
-        List<XhibitCourtSiteDto> courtSiteDtoList = createCourtSiteDtoList();
+        final List<XhibitCourtSiteDto> courtSiteDtoList = createCourtSiteDtoList();
 
-        List<RotationSetsDto> rotationSetsDtoList = createRotationSetsDtoList();
+        final List<RotationSetsDto> rotationSetsDtoList = createRotationSetsDtoList();
 
         // Add the mock calls to child classes
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayRepo.findByCourtSiteId(1)).andReturn(displayDaoList);
 
         replay(mockDisplayRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<DisplayDto> displayDtos = classUnderTest
@@ -133,24 +145,27 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockDisplayRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
     void emptyDisplaysTest() {
 
-        List<DisplayTypeDto> displayTypeDtoList = createDisplayTypeDtoList();
+        final List<DisplayTypeDto> displayTypeDtoList = createDisplayTypeDtoList();
 
-        List<XhibitCourtSiteDto> courtSiteDtoList = createCourtSiteDtoList();
+        final List<XhibitCourtSiteDto> courtSiteDtoList = createCourtSiteDtoList();
 
-        List<RotationSetsDto> rotationSetsDtoList = createRotationSetsDtoList();
+        final List<RotationSetsDto> rotationSetsDtoList = createRotationSetsDtoList();
 
-        List<XhbDisplayDao> displayDaoList = new ArrayList<>();
+        final List<XhbDisplayDao> displayDaoList = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayRepo.findByCourtSiteId(1)).andReturn(displayDaoList);
 
         replay(mockDisplayRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<DisplayDto> displayDtos = classUnderTest
@@ -161,6 +176,7 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockDisplayRepo);
+        verify(mockEntityManager);
 
     }
 
@@ -173,9 +189,12 @@ class DisplayServiceTest extends DisplayCrudTest {
         displayDaoList.add(xhbDisplayDao);
 
         // Add the mock calls to child classes
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayRepo.findByCourtSiteId(1)).andReturn(displayDaoList);
 
         replay(mockDisplayRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<DisplayDto> displayDtos = classUnderTest.getDisplays(1L, null, null, null);
@@ -185,7 +204,7 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockDisplayRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -202,9 +221,12 @@ class DisplayServiceTest extends DisplayCrudTest {
         courtSiteDaoList.add(courtSiteDao);
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findAll()).andReturn(courtSiteDaoList);
 
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<XhibitCourtSiteDto> courtSiteDtos = classUnderTest.getCourtSites();
@@ -217,7 +239,7 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
-
+        verify(mockEntityManager);
     }
 
 
@@ -227,9 +249,12 @@ class DisplayServiceTest extends DisplayCrudTest {
         List<XhbCourtSiteDao> courtSiteDaoList = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findAll()).andReturn(courtSiteDaoList);
 
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<XhibitCourtSiteDto> courtSiteDtos = classUnderTest.getCourtSites();
@@ -239,6 +264,7 @@ class DisplayServiceTest extends DisplayCrudTest {
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
 
     }
     

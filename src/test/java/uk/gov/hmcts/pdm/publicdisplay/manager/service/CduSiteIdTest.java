@@ -37,11 +37,15 @@ class CduSiteIdTest extends CduUpdateTest {
         testCduJsons.add(getTestCduJson(11L));
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo
             .findCourtSiteByXhibitCourtSiteId(courtSite.getXhibitCourtSite().getId().intValue()))
                 .andReturn(courtSite);
-        replay(mockCourtSiteRepo);
         expect(mockLocalProxyRestClient.getCdus(courtSite.getLocalProxy())).andReturn(testCduJsons);
+        
+        replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
         replay(mockLocalProxyRestClient);
 
         // Set the class variables
@@ -58,6 +62,7 @@ class CduSiteIdTest extends CduUpdateTest {
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
         verify(mockLocalProxyRestClient);
     }
 

@@ -50,6 +50,8 @@ abstract class LoadUserDetailsServiceTest extends UserDetailsServiceTest {
         // Define a mock version of the called methods, to retrieve user details via a passed in
         // user
         // name
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.findUserDetailsByUserName(capturedUserName.capture()))
             .thenReturn(userDetails);
 
@@ -82,6 +84,8 @@ abstract class LoadUserDetailsServiceTest extends UserDetailsServiceTest {
         final ArgumentCaptor<String> capturedUserName = ArgumentCaptor.forClass(String.class);
 
         // Define a mock version of method calls with exception handling
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.findUserDetailsByUserName(Mockito.isA(String.class)))
             .thenThrow(dataRetrievalFailureException);
 
@@ -110,6 +114,8 @@ abstract class LoadUserDetailsServiceTest extends UserDetailsServiceTest {
         final ArgumentCaptor<String> capturedUserName = ArgumentCaptor.forClass(String.class);
 
         // Define a mock version of the called methods with invalid/null user name
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.findUserDetailsByUserName(capturedUserName.capture()))
             .thenReturn(null);
 
@@ -128,6 +134,8 @@ abstract class LoadUserDetailsServiceTest extends UserDetailsServiceTest {
     @Test
     void testGetUsersValid() {
         // Define a mock version of the called methods
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.getUserDetails()).thenReturn(userDetailsList);
 
         // Perform the test
@@ -147,6 +155,8 @@ abstract class LoadUserDetailsServiceTest extends UserDetailsServiceTest {
         final ArgumentCaptor<String> capturedUserName = ArgumentCaptor.forClass(String.class);
 
         // Define a mock version of the called methods
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.findUserDetailsByUserName(capturedUserName.capture()))
             .thenReturn(userDetails);
         mockUserDetailsRepo.deleteDaoFromBasicValue(userDetails);

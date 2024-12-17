@@ -236,7 +236,7 @@ public class DisplayController extends DisplayPageStateSetter {
     @RequestMapping(value = MAPPING_AMEND_DISPLAY + "/{displayId}", method = RequestMethod.GET,
         produces = "application/json")
     @ResponseBody
-    public DisplayDto loadDisplay(@PathVariable @EncryptedFormat final Integer displayId) {
+    public DisplayDto loadDisplay(@PathVariable("displayId") @EncryptedFormat final Integer displayId) {
         final String methodName = "loadDisplay";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         DisplayDto result = null;

@@ -233,7 +233,7 @@ public class JudgeController extends JudgePageStateSetter {
     @RequestMapping(value = MAPPING_AMEND_JUDGE + "/{refJudgeId}", method = RequestMethod.GET,
         produces = "application/json")
     @ResponseBody
-    public RefJudgeDto loadJudge(@PathVariable @EncryptedFormat final Integer refJudgeId) {
+    public RefJudgeDto loadJudge(@PathVariable("refJudgeId") @EncryptedFormat final Integer refJudgeId) {
         final String methodName = "loadJudge";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         RefJudgeDto result = null;

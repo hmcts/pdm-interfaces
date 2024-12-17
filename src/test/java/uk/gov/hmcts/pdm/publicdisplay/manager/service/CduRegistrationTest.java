@@ -41,11 +41,14 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         final Capture<ICduModel> capturedCdu = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddress(cduDto.getMacAddress())).andReturn(cdus.get(0));
         expect(mockCduRepo.isCduWithCduNumber(cduCommand.getCduNumber())).andReturn(true);
         mockCduRepo.saveDaoFromBasicValue(capture(capturedCdu));
         expectLastCall();
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
@@ -59,6 +62,7 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -71,11 +75,14 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         final CduRegisterCommand cduCommand = getTestCduRegisterCommand(cduDto.getId());
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddress(cduDto.getMacAddress())).andReturn(null);
         expect(mockCduRepo.getNextIpHost(cduDto.getCourtSiteId().intValue(), CDU_IP_HOST_MIN,
             CDU_IP_HOST_MAX)).andReturn(null);
         expect(mockCduRepo.hostExists(cduDto.getCourtSiteId().intValue())).andReturn(true);
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -85,6 +92,7 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         } finally {
             // Verify the expected mocks were called
             verify(mockCduRepo);
+            verify(mockEntityManager);
         }
     }
 
@@ -98,10 +106,12 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         final CduRegisterCommand cduCommand = getTestCduRegisterCommand(cduDto.getId());
         cduCommand.setCduNumber("Invalid");
 
-        // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddress(cduDto.getMacAddress())).andReturn(cdus.get(0));
         expect(mockCduRepo.isCduWithCduNumber(cduCommand.getCduNumber())).andReturn(true);
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -111,6 +121,7 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         } finally {
             // Verify the expected mocks were called
             verify(mockCduRepo);
+            verify(mockEntityManager);
         }
     }
 
@@ -128,6 +139,9 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         final Capture<ICduModel> capturedCdu = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockDispMgrCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddress(cduDto.getMacAddress())).andReturn(null);
         expect(mockCduRepo.getNextIpHost(cduDto.getCourtSiteId().intValue(), CDU_IP_HOST_MIN,
             CDU_IP_HOST_MAX)).andReturn(1);
@@ -137,6 +151,7 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         expect(mockDispMgrCourtSiteRepo.findByCourtSiteId(courtSite.getId().intValue()))
             .andReturn(courtSite);
         replay(mockDispMgrCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
@@ -151,6 +166,7 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         // Verify the expected mocks were called
         verify(mockCduRepo);
         verify(mockDispMgrCourtSiteRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -162,10 +178,13 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         final Capture<ICduModel> capturedCdu = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByCduId(CDU_IDS[0].intValue())).andReturn(cdus.get(0));
         mockCduRepo.deleteDaoFromBasicValue(cdus.get(0));
         expectLastCall();
         replay(mockCduRepo);
+        replay(mockEntityManager);
         mockLocalProxyRestClient.deleteCdu(capture(capturedCdu));
         expectLastCall();
         replay(mockLocalProxyRestClient);
@@ -181,6 +200,7 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
         verify(mockLocalProxyRestClient);
     }
 
@@ -190,8 +210,11 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
     @Test
     void testUnregisterCduDataError() {
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByCduId(1)).andReturn(null);
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -201,6 +224,7 @@ abstract class CduRegistrationTest extends CduServiceTestBase {
         } finally {
             // Verify the expected mocks were called
             verify(mockCduRepo);
+            verify(mockEntityManager);
         }
     }
     

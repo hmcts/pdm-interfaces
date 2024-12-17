@@ -73,9 +73,12 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         courtSiteDaoList.add(xhbCourtSiteDao);
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findAll()).andReturn(courtSiteDaoList);
 
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<XhibitCourtSiteDto> courtSiteDtoList = classUnderTest.getCourtSites();
@@ -85,7 +88,7 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -94,9 +97,12 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         List<XhbCourtSiteDao> courtSiteDaoList = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCourtSiteRepo.findAll()).andReturn(courtSiteDaoList);
 
         replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<XhibitCourtSiteDto> courtSiteDtoList = classUnderTest.getCourtSites();
@@ -105,7 +111,7 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         assertTrue(courtSiteDtoList.isEmpty(), NOT_EMPTY);
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -117,9 +123,12 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         refJudgeDaoList.add(refJudgeDao);
 
         // Add the mock calls to child classes
+        expect(mockRefJudgeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRefJudgeRepo.findByCourtSiteId(1)).andReturn(refJudgeDaoList);
 
         replay(mockRefJudgeRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<RefJudgeDto> refJudgeDtoList = classUnderTest.getJudges(1L);
@@ -129,6 +138,7 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
         // Verify the expected mocks were called
         verify(mockRefJudgeRepo);
+        verify(mockEntityManager);
 
     }
 
@@ -138,9 +148,12 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         List<XhbRefJudgeDao> refJudgeDaoList = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockRefJudgeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRefJudgeRepo.findByCourtSiteId(1)).andReturn(refJudgeDaoList);
 
         replay(mockRefJudgeRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<RefJudgeDto> refJudgeDtoList = classUnderTest.getJudges(1L);
@@ -150,7 +163,7 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
         // Verify the expected mocks were called
         verify(mockRefJudgeRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -159,9 +172,12 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         List<XhbRefSystemCodeDao> refSystemCodeDaos = createRefSystemCodeDao();
 
         // Add the mock calls to child classes
+        expect(mockRefSystemCodeRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRefSystemCodeRepository.findJudgeTypeByCourtSiteId(1)).andReturn(refSystemCodeDaos);
 
         replay(mockRefSystemCodeRepository);
+        replay(mockEntityManager);
 
         // Perform the test
         List<RefSystemCodeDto> refSystemCodeDtoList = classUnderTest.getJudgeTypes(1L);
@@ -172,7 +188,7 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
         // Verify the expected mocks were called
         verify(mockRefSystemCodeRepository);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -181,10 +197,13 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         List<XhbRefSystemCodeDao> refSystemCodeDaos = new ArrayList<>();
 
         // Add the mock calls to child classes
+        expect(mockRefSystemCodeRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRefSystemCodeRepository.findJudgeTypeByCourtSiteId(1)).andReturn(refSystemCodeDaos);
 
         replay(mockRefSystemCodeRepository);
-
+        replay(mockEntityManager);
+        
         // Perform the test
         List<RefSystemCodeDto> refSystemCodeDtoList = classUnderTest.getJudgeTypes(1L);
 
@@ -193,20 +212,22 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
         // Verify the expected mocks were called
         verify(mockRefSystemCodeRepository);
-
+        verify(mockEntityManager);
     }
 
     @Test
     void updateJudgeTest() {
 
-
         Optional<XhbRefJudgeDao> xhbRefJudgeDao = Optional.of(new XhbRefJudgeDao());
 
         // Add the mock calls to child classes
+        expect(mockRefJudgeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRefJudgeRepo.findById(1)).andReturn(xhbRefJudgeDao);
         expect(mockRefJudgeRepo.updateDao(xhbRefJudgeDao.get())).andReturn(xhbRefJudgeDao);
 
         replay(mockRefJudgeRepo);
+        replay(mockEntityManager);
 
         JudgeAmendCommand judgeAmendCommand = createJudgeAmendCommand();
 
@@ -215,7 +236,7 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
         // Verify the expected mocks were called
         verify(mockRefJudgeRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -227,16 +248,19 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         Optional<XhbRefJudgeDao> xhbRefJudgeDao = Optional.empty();
 
         // Add the mock calls to child classes
+        expect(mockRefJudgeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRefJudgeRepo.findById(1)).andReturn(xhbRefJudgeDao);
 
         replay(mockRefJudgeRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.updateJudge(judgeAmendCommand);
 
         // Verify the expected mocks were called
         verify(mockRefJudgeRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -245,10 +269,13 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         Capture<XhbRefJudgeDao> capturedRefJudgeDao = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockRefJudgeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         mockRefJudgeRepo.saveDao(capture(capturedRefJudgeDao));
         expectLastCall();
 
         replay(mockRefJudgeRepo);
+        replay(mockEntityManager);
 
         JudgeCreateCommand judgeCreateCommand = createJudgeCreateCommand();
 
@@ -260,7 +287,7 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
         // Verify the expected mocks were called
         verify(mockRefJudgeRepo);
-
+        verify(mockEntityManager);
     }
     
     @Test

@@ -104,9 +104,12 @@ abstract class DisplayCrudTest extends AbstractJUnit {
         rotationSetsDaos.add(xhbRotationSetsDao);
 
         // Add the mock calls to child classes
+        expect(mockRotationSetsRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockRotationSetsRepo.findByCourtId(1)).andReturn(rotationSetsDaos);
 
         replay(mockRotationSetsRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         List<RotationSetsDto> rotationSetsDtos = classUnderTest.getRotationSets(1);
@@ -117,7 +120,7 @@ abstract class DisplayCrudTest extends AbstractJUnit {
 
         // Verify the expected mocks were called
         verify(mockRotationSetsRepo);
-
+        verify(mockEntityManager);
     }
 
     @Test
@@ -145,12 +148,17 @@ abstract class DisplayCrudTest extends AbstractJUnit {
         final Capture<XhbDisplayDao> capturedDisplayDao = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockDispLocationRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDispLocationRepo
             .findByCourtSiteId(displayCreateCommand.getXhibitCourtSiteId().intValue()))
                 .andReturn(xhbDisplayLocationDao);
-        replay(mockDispLocationRepo);
         mockDisplayRepo.saveDao(capture(capturedDisplayDao));
         expectLastCall();
+        
+        replay(mockDispLocationRepo);
+        replay(mockEntityManager);
         replay(mockDisplayRepo);
 
         // Perform the test
@@ -171,6 +179,7 @@ abstract class DisplayCrudTest extends AbstractJUnit {
 
         // Verify the expected mocks were called
         verify(mockDispLocationRepo);
+        verify(mockEntityManager);
         verify(mockDisplayRepo);
 
     }
@@ -189,11 +198,15 @@ abstract class DisplayCrudTest extends AbstractJUnit {
         final Capture<Optional<XhbDisplayDao>> capturedDisplayDao = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayRepo.findById(displayDeleteCommand.getDisplayId()))
             .andReturn(displayDaoOptional);
         mockDisplayRepo.deleteDao(capture(capturedDisplayDao));
         expectLastCall();
+        
         replay(mockDisplayRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.deleteDisplay(displayDeleteCommand);
@@ -204,6 +217,7 @@ abstract class DisplayCrudTest extends AbstractJUnit {
 
         // Verify the expected mocks were called
         verify(mockDisplayRepo);
+        verify(mockEntityManager);
 
     }
 
@@ -216,16 +230,20 @@ abstract class DisplayCrudTest extends AbstractJUnit {
         Optional<XhbDisplayDao> displayDaoOptional = Optional.empty();
 
         // Add the mock calls to child classes
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayRepo.findById(displayDeleteCommand.getDisplayId()))
             .andReturn(displayDaoOptional);
 
         replay(mockDisplayRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.deleteDisplay(displayDeleteCommand);
 
         // Verify the expected mocks were called
         verify(mockDisplayRepo);
+        verify(mockEntityManager);
 
     }
 
@@ -246,21 +264,29 @@ abstract class DisplayCrudTest extends AbstractJUnit {
         Optional<XhbDisplayDao> xhbDisplayDao = Optional.of(displayDao);
 
         // Add the mock calls to child classes
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockDispLocationRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayRepo.findById(displayAmendCommand.getDisplayId()))
             .andReturn(xhbDisplayDao);
         expect(mockDispLocationRepo
             .findByCourtSiteId(displayAmendCommand.getXhibitCourtSiteId().intValue()))
                 .andReturn(xhbDisplayLocationDao);
-        replay(mockDispLocationRepo);
         expect(mockDisplayRepo.updateDao(displayDao)).andReturn(xhbDisplayDao);
+        
         replay(mockDisplayRepo);
+        replay(mockEntityManager);
+        replay(mockDispLocationRepo);
+        
 
         // Perform the test
         classUnderTest.updateDisplay(displayAmendCommand);
 
         // Verify the expected mocks were called
-        verify(mockDispLocationRepo);
         verify(mockDisplayRepo);
+        verify(mockEntityManager);
+        verify(mockDispLocationRepo);
+        
 
     }
 
@@ -272,16 +298,20 @@ abstract class DisplayCrudTest extends AbstractJUnit {
         Optional<XhbDisplayDao> xhbDisplayDao = Optional.empty();
 
         // Add the mock calls to child classes
+        expect(mockDisplayRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDisplayRepo.findById(displayAmendCommand.getDisplayId()))
             .andReturn(xhbDisplayDao);
 
         replay(mockDisplayRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.updateDisplay(displayAmendCommand);
 
         // Verify the expected mocks were called
         verify(mockDisplayRepo);
+        verify(mockEntityManager);
 
     }
 

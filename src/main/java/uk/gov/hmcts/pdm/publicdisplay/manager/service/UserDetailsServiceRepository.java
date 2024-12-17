@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import com.pdm.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgruserdetails.XhbDispMgrUserDetailsRepository;
 
@@ -12,14 +13,14 @@ public class UserDetailsServiceRepository {
     private XhbDispMgrUserDetailsRepository xhbDispMgrUserDetailsRepository;
 
     protected EntityManager getEntityManager() {
-        if (entityManager == null || !entityManager.isOpen()) {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
     }
 
     protected XhbDispMgrUserDetailsRepository getXhbDispMgrUserDetailsRepository() {
-        if (xhbDispMgrUserDetailsRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrUserDetailsRepository)) {
             xhbDispMgrUserDetailsRepository =
                 new XhbDispMgrUserDetailsRepository(getEntityManager());
         }

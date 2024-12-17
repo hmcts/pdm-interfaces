@@ -32,7 +32,7 @@ public class CourtController extends CourtPageStateSetter {
     private static final String COMMAND = "command";
     private static final String COURT = "court";
     private static final String SUCCESS_MESSAGE = "successMessage";
-    
+
     /** The Constant for the JSP Folder. */
     protected static final String FOLDER_COURT = "court";
 
@@ -45,7 +45,7 @@ public class CourtController extends CourtPageStateSetter {
      * Create Court.
      */
     private static final String MAPPING_CREATE_COURT = "/create_court";
-    
+
     /**
      * Amend Display.
      */
@@ -83,7 +83,7 @@ public class CourtController extends CourtPageStateSetter {
      */
     @Autowired
     private CourtAmendValidator courtAmendValidator;
-    
+
     /**
      * View Court.
      *
@@ -154,8 +154,8 @@ public class CourtController extends CourtPageStateSetter {
         } else {
 
             // Get the selected Court
-            final CourtDto court = populateSelectedCourtInPageStateHolder(
-                courtSearchCommand.getCourtId());
+            final CourtDto court =
+                populateSelectedCourtInPageStateHolder(courtSearchCommand.getCourtId());
             courtPageStateHolder.setCourt(court);
 
             // Populate the relevant fields
@@ -254,8 +254,8 @@ public class CourtController extends CourtPageStateSetter {
 
         } else {
             // Get the selected Court
-            final CourtDto court = populateSelectedCourtInPageStateHolder(
-                courtSearchCommand.getCourtId());
+            final CourtDto court =
+                populateSelectedCourtInPageStateHolder(courtSearchCommand.getCourtId());
             courtPageStateHolder.setCourt(court);
 
             // Populate the amend lists
@@ -284,10 +284,11 @@ public class CourtController extends CourtPageStateSetter {
      * @param xhibitCourtSiteId the court site id
      * @return the selected XhibitCourtSiteDto
      */
-    @RequestMapping(value = MAPPING_AMEND_COURT + "/{xhibitCourtSiteId}", method = RequestMethod.GET,
-        produces = "application/json")
+    @RequestMapping(value = MAPPING_AMEND_COURT + "/{xhibitCourtSiteId}",
+        method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public XhibitCourtSiteDto loadCourtSite(@PathVariable @EncryptedFormat final Long xhibitCourtSiteId) {
+    public XhibitCourtSiteDto loadCourtSite(
+        @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId) {
         final String methodName = "loadCourtSite";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         XhibitCourtSiteDto result = null;
@@ -300,7 +301,7 @@ public class CourtController extends CourtPageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
     }
-    
+
     /**
      * Update court.
      *

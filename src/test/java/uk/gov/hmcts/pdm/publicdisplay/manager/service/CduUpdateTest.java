@@ -43,11 +43,15 @@ abstract class CduUpdateTest extends CduScreenshotTest {
         }
 
         // Add the mock calls to child classes
+        expect(mockDispMgrCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockDispMgrCourtSiteRepo.findByCourtSiteId(courtSite.getId().intValue()))
             .andReturn(courtSite);
-        replay(mockDispMgrCourtSiteRepo);
         mockLocalProxyRestClient.restartCdu(courtSite.getLocalProxy(), ipAddresses);
         expectLastCall();
+        
+        replay(mockDispMgrCourtSiteRepo);
+        replay(mockEntityManager);
         replay(mockLocalProxyRestClient);
 
         // Set the class variables
@@ -58,6 +62,8 @@ abstract class CduUpdateTest extends CduScreenshotTest {
 
         // Verify the expected mocks were called
         verify(mockDispMgrCourtSiteRepo);
+        verify(mockEntityManager);
+        verify(mockLocalProxyRestClient);
     }
 
     /**
@@ -73,10 +79,14 @@ abstract class CduUpdateTest extends CduScreenshotTest {
         cduCommand.setOfflineIndicator(AppConstants.YES_CHAR);
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddress(cduDto.getMacAddress())).andReturn(cdu);
         mockCduRepo.updateDaoFromBasicValue(capture(capturedCdu));
         expectLastCall();
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, LOCAL_PROXY_COMM_ENABLED, true);
@@ -90,6 +100,7 @@ abstract class CduUpdateTest extends CduScreenshotTest {
 
         // Verify the expected mocks were called
         verify(mockCduRepo);
+        verify(mockEntityManager);
     }
 
     /**
@@ -102,8 +113,12 @@ abstract class CduUpdateTest extends CduScreenshotTest {
         cduCommand.setOfflineIndicator(AppConstants.YES_CHAR);
 
         // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         expect(mockCduRepo.findByMacAddress(cduDto.getMacAddress())).andReturn(null);
+        
         replay(mockCduRepo);
+        replay(mockEntityManager);
 
         try {
             // Perform the test
@@ -114,6 +129,7 @@ abstract class CduUpdateTest extends CduScreenshotTest {
 
             // Verify the expected mocks were called
             verify(mockCduRepo);
+            verify(mockEntityManager);
         }
     }
 

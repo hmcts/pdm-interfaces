@@ -42,6 +42,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ISoftwareUpdateService
 import java.io.File;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
 /**
  * The Class SoftwareController.
  *
@@ -71,8 +72,8 @@ public class SoftwareController {
     @RequestMapping(value = "/checksum/{filename:.+}", method = RequestMethod.GET,
         produces = "text/plain")
     @ResponseBody
-    public String checksum(@PathVariable final String filename, final HttpServletResponse response)
-        throws NoHandlerFoundException {
+    public String checksum(@PathVariable("filename:.+") final String filename,
+        final HttpServletResponse response) throws NoHandlerFoundException {
         LOGGER.info("Checksum requested for {}", filename);
         final String checksum = softwareUpdateService.getChecksum(filename);
 
@@ -103,7 +104,8 @@ public class SoftwareController {
     @RequestMapping(value = "/download/{filename:.+}", method = RequestMethod.GET,
         produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     // CHECKSTYLE:ON
-    public ResponseEntity<FileSystemResource> download(@PathVariable final String filename)
+    public ResponseEntity<FileSystemResource> download(
+        @PathVariable("filename:.+") final String filename)
         throws NoHandlerFoundException, IOException {
         LOGGER.info("Download requested for {}", filename);
         final File file = softwareUpdateService.getFile(filename, false);

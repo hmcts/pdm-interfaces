@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import com.pdm.hb.jpa.EntityManagerUtil;
+import com.pdm.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+@SuppressWarnings("PMD.NullAssignment")
 public class LocalProxyServiceFinder extends LocalProxyServiceCreator {
 
     private EntityManager entityManager;
@@ -40,6 +42,14 @@ public class LocalProxyServiceFinder extends LocalProxyServiceCreator {
      * Set up our logger.
      */
     protected static final Logger LOGGER = LoggerFactory.getLogger(LocalProxyServiceFinder.class);
+    
+    protected void clearRepositories() {
+        xhbCourtSiteRepository = null;     
+        xhbDispMgrCourtSiteRepository = null;
+        xhbDispMgrScheduleRepository = null;
+        xhbDispMgrLocalProxyRepository = null;
+        xhbDispMgrCduRepository = null;
+    }
 
 
     /**
@@ -96,42 +106,43 @@ public class LocalProxyServiceFinder extends LocalProxyServiceCreator {
     }
 
     protected EntityManager getEntityManager() {
-        if (entityManager == null || !entityManager.isOpen()) {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
     }
 
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtSiteRepository)) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
     }
 
     protected XhbDispMgrCourtSiteRepository getXhbDispMgrCourtSiteRepository() {
-        if (xhbDispMgrCourtSiteRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrCourtSiteRepository)) {
             xhbDispMgrCourtSiteRepository = new XhbDispMgrCourtSiteRepository(getEntityManager());
         }
         return xhbDispMgrCourtSiteRepository;
     }
 
     protected XhbDispMgrScheduleRepository getXhbDispMgrScheduleRepository() {
-        if (xhbDispMgrScheduleRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrScheduleRepository)) {
             xhbDispMgrScheduleRepository = new XhbDispMgrScheduleRepository(getEntityManager());
         }
         return xhbDispMgrScheduleRepository;
     }
 
     protected XhbDispMgrLocalProxyRepository getXhbDispMgrLocalProxyRepository() {
-        if (xhbDispMgrLocalProxyRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrLocalProxyRepository)) {
             xhbDispMgrLocalProxyRepository = new XhbDispMgrLocalProxyRepository(getEntityManager());
         }
         return xhbDispMgrLocalProxyRepository;
     }
 
     protected XhbDispMgrCduRepository getXhbDispMgrCduRepository() {
-        if (xhbDispMgrCduRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrCduRepository)) {
             xhbDispMgrCduRepository = new XhbDispMgrCduRepository(getEntityManager());
         }
         return xhbDispMgrCduRepository;

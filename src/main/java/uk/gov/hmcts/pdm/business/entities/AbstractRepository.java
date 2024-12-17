@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdm.business.entities;
 
+import com.pdm.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -16,7 +17,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     private static final String ERROR = "Error: {}";
 
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     protected AbstractRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -132,6 +133,9 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * Main EntityManager for reads, etc
      */
     public EntityManager getEntityManager() {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            entityManager = EntityManagerUtil.getEntityManager();
+        }
         return entityManager;
     }
 

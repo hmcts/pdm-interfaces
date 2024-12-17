@@ -118,9 +118,13 @@ class ServiceAuditServiceTest extends AbstractJUnit {
 
         // Add the mock calls to child classes
         mockJsonRequestProperties();
+        expect(mockServiceAuditRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         mockServiceAuditRepo.saveDao(capture(capturedServiceAudit));
         expectLastCall();
+        
         replay(mockServiceAuditRepo);
+        replay(mockEntityManager);
 
         // Perform the test
         classUnderTest.auditService(TEST_SERVICE, mockJsonRequest);
@@ -141,12 +145,13 @@ class ServiceAuditServiceTest extends AbstractJUnit {
         // Verify the expected mocks were called
         verify(mockServiceAuditRepo);
         verify(mockJsonRequest);
+        verify(mockEntityManager);
     }
     
     @Test
     void testGetXhbDispMgrServiceAuditRepository() {
         ReflectionTestUtils.setField(classUnderTest, "entityManager", mockEntityManager);
-        expect(mockEntityManager.isOpen()).andReturn(true);
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         replay(mockEntityManager);
         XhbDispMgrServiceAuditRepository result = classUnderTest.getXhbDispMgrServiceAuditRepository();
         assertNotNull(result, NOT_NULL);
@@ -155,6 +160,9 @@ class ServiceAuditServiceTest extends AbstractJUnit {
             mockXhbDispMgrServiceAuditRepository);
         result = classUnderTest.getXhbDispMgrServiceAuditRepository();
         assertNotNull(result, NOT_NULL);
+        
+        // Verify the expected mocks were called
+        verify(mockEntityManager);
     }
 
     /**

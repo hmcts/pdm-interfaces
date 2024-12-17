@@ -106,7 +106,7 @@ abstract class UserDetailsServiceTest extends AbstractJUnit {
     protected OAuth2User mockOAuth2User;
     
     @Mock
-    private EntityManager mockEntityManager;
+    protected EntityManager mockEntityManager;
 
     /**
      * Setup.
@@ -130,9 +130,13 @@ abstract class UserDetailsServiceTest extends AbstractJUnit {
     @Test
     void testAddUserValid() {
         // Capture the UserDetails
-        ArgumentCaptor<IUserDetails> capturedUserDetails =
+        final ArgumentCaptor<IUserDetails> capturedUserDetails =
             ArgumentCaptor.forClass(IUserDetails.class);
-
+        
+        // Mock the entityManager
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
         // Perform the test
         classUnderTest.addUser(userAddCommand);
 
@@ -155,6 +159,8 @@ abstract class UserDetailsServiceTest extends AbstractJUnit {
         final ArgumentCaptor<String> capturedUserName = ArgumentCaptor.forClass(String.class);
 
         // Define a mock version of the called methods
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.findUserDetailsByUserName(capturedUserName.capture()))
             .thenReturn(null);
         try {
@@ -177,6 +183,8 @@ abstract class UserDetailsServiceTest extends AbstractJUnit {
         final ArgumentCaptor<String> capturedUserName = ArgumentCaptor.forClass(String.class);
 
         // Define a mock version of the called methods
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.isUserDetailsWithUserName(capturedUserName.capture()))
             .thenReturn(true);
 
@@ -197,6 +205,8 @@ abstract class UserDetailsServiceTest extends AbstractJUnit {
         final ArgumentCaptor<String> capturedUserName = ArgumentCaptor.forClass(String.class);
 
         // Define a mock version of the called methods
+        Mockito.when(mockUserDetailsRepo.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockUserDetailsRepo.isUserDetailsWithUserName(Mockito.isA(String.class)))
             .thenReturn(false);
 
