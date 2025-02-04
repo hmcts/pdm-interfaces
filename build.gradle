@@ -230,7 +230,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.5'
     testImplementation 'org.easymock:easymock:5.5.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.14.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.3.5'
     implementation group: 'io.rest-assured', name: 'rest-assured'
