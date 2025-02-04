@@ -53,7 +53,7 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
         expectLastCall();
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(3);
         mockJudgePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
         expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos);
@@ -137,7 +137,7 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
         expectLastCall();
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(3);
         mockJudgePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
         expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos);
@@ -225,7 +225,7 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
         expectLastCall();
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
         mockJudgePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
         expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos);
