@@ -192,7 +192,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'org.springframework:spring-tx:6.1.14'
     implementation 'org.dbunit:dbunit:2.8.0'
-    implementation 'joda-time:joda-time:2.13.0'
+    implementation 'joda-time:joda-time:2.13.1'
     implementation 'org.springframework.security:spring-security-taglibs:6.4.1'
     implementation 'org.springframework.security:spring-security-web:6.4.1'
     implementation 'org.quartz-scheduler:quartz:2.5.0'
