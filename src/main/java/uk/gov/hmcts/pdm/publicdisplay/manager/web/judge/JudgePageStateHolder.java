@@ -23,6 +23,8 @@
 
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.judge;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefJudgeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
@@ -39,6 +41,10 @@ import java.util.List;
 
 @Component
 public class JudgePageStateHolder implements Serializable {
+    
+    /** The Constant LOGGER. */
+    protected static final Logger LOGGER = LoggerFactory.getLogger(JudgePageStateHolder.class);
+    
     /**
      * Default serialVersionUID.
      */
@@ -73,6 +79,7 @@ public class JudgePageStateHolder implements Serializable {
      * Reset all the variables.
      */
     public void reset() {
+        LOGGER.info("JudgePageStateHolder.reset() called. Resetting all variables.");
         setJudgeSearchCommand(null);
         setCourtSite(null);
         setSites(null);
