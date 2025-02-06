@@ -86,7 +86,7 @@ public class JudgePageStateSetter {
         
         XhibitCourtSiteDto selectedCourtSite = null;
         List<XhibitCourtSiteDto> courtSites = judgePageStateHolder.getSites();
-        LOGGER.info(THREE_PARAMS, "JudgePageStateHolder returned: ", courtSites.size(), " courtsites.");
+        LOGGER.info(THREE_PARAMS, "JudgePageStateHolder returned: ", courtSites.size(), " courtSites.");
         
         for (XhibitCourtSiteDto courtSite : courtSites) {
             if (courtSite.getId().equals(xhibitCourtSiteId)) {
