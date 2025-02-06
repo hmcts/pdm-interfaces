@@ -197,7 +197,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-web:6.4.2'
     implementation 'org.quartz-scheduler:quartz:2.5.0'
     implementation 'org.apache.cxf:cxf-spring-boot-starter-jaxrs:4.0.5'
-    implementation 'com.github.hmcts.java-logging:logging:6.1.7'
+    implementation 'com.github.hmcts.java-logging:logging:6.1.8'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
     implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
     implementation 'javax.servlet:servlet-api:3.0-alpha-1'
