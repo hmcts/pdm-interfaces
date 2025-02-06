@@ -84,21 +84,17 @@ public class JudgePageStateSetter {
         final String methodName = "populateSelectedCourtSiteInPageStateHolder ";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         
-        // Set the list of court sites again if the list is currently null
-        if (judgePageStateHolder.getSites() != null) {
-            LOGGER.info("No sites present, setting a new list of sites.");
-            setViewPageStateSelectionLists();
-            LOGGER.info("No. of sites after setting new list: {}", judgePageStateHolder.getSites().size());
-        }
-        
         XhibitCourtSiteDto selectedCourtSite = null;
         List<XhibitCourtSiteDto> courtSites = judgePageStateHolder.getSites();
+        LOGGER.info(THREE_PARAMS, "JudgePageStateHolder returned: ", courtSites.size(), " courtSites.");
+        
         for (XhibitCourtSiteDto courtSite : courtSites) {
             if (courtSite.getId().equals(xhibitCourtSiteId)) {
                 selectedCourtSite = courtSite;
                 break;
             }
         }
+        
         judgePageStateHolder.setCourtSite(selectedCourtSite);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return selectedCourtSite;

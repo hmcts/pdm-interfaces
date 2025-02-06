@@ -48,6 +48,12 @@ spring:
     password: ${DB_PASSWORD:password}
     schema: ${DB_SCHEMA:pdda}
     type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimumIdle: 2
+      maximumPoolSize: 100
+      idleTimeout: 1000
+      maxLifetime: 7200000
+      connectionTimeout: 30000
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
