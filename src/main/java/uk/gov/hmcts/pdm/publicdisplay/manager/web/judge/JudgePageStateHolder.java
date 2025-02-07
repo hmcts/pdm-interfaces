@@ -31,6 +31,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,9 +83,9 @@ public class JudgePageStateHolder implements Serializable {
         LOGGER.info("JudgePageStateHolder.reset() called. Resetting all variables.");
         setJudgeSearchCommand(null);
         setCourtSite(null);
-        setSites(null);
-        setJudges(null);
-        setJudgeTypes(null);
+        setSites(new ArrayList<>());
+        setJudges(new ArrayList<>());
+        setJudgeTypes(new ArrayList<>());
     }
 
     /**

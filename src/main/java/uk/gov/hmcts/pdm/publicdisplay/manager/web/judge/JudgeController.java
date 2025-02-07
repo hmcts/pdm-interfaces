@@ -50,7 +50,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
 @Controller
 @RequestMapping("/judge")
-@SuppressWarnings("squid:S2259")
 public class JudgeController extends JudgePageStateSetter {
 
     /** The Constant LOGGER. */
@@ -184,12 +183,6 @@ public class JudgeController extends JudgePageStateSetter {
         final BindingResult result, final ModelAndView model) {
         final String methodName = "showAmendJudge";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-        
-        if (judgePageStateHolder == null) {
-            LOGGER.info("1. JudgePageStateHolder is null");
-        } else {
-            LOGGER.info("1. JudgePageStateHolder is not null");
-        }
         
         // Ensure the search command is the latest
         judgePageStateHolder.setJudgeSearchCommand(judgeSearchCommand);
