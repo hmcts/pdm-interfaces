@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.easymock.EasyMock.createMock;
@@ -72,8 +73,8 @@ class HearingTypePageStateHolderTest extends AbstractJUnit {
     void resetTest() {
         classUnderTest.reset();
         assertNull(classUnderTest.getHearingSearchCommand(), NOT_NULL);
-        assertNull(classUnderTest.getHearingTypes(), NOT_NULL);
-        assertNull(classUnderTest.getSites(), NOT_NULL);
+        assertEquals(classUnderTest.getHearingTypes(), new ArrayList<>(), NOT_EQUAL);
+        assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);
         assertNull(classUnderTest.getCourtSite(), NOT_NULL);
     }
 }

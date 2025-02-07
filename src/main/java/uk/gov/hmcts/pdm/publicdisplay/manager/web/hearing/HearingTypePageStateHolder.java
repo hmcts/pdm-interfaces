@@ -28,6 +28,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,8 +71,8 @@ public class HearingTypePageStateHolder implements Serializable {
     public void reset() {
         setHearingSearchCommand(null);
         setCourtSite(null);
-        setSites(null);
-        setHearingTypes(null);
+        setSites(new ArrayList<>());
+        setHearingTypes(new ArrayList<>());
     }
 
     /**
