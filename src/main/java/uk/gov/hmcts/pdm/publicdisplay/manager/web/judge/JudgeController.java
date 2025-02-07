@@ -183,7 +183,13 @@ public class JudgeController extends JudgePageStateSetter {
         final BindingResult result, final ModelAndView model) {
         final String methodName = "showAmendJudge";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-
+        
+        if (judgePageStateHolder == null) {
+            LOGGER.info("1. JudgePageStateHolder is null");
+        } else {
+            LOGGER.info("1. JudgePageStateHolder is not null");
+        }
+        
         // Ensure the search command is the latest
         judgePageStateHolder.setJudgeSearchCommand(judgeSearchCommand);
 

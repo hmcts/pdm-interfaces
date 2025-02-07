@@ -84,6 +84,12 @@ public class JudgePageStateSetter {
         final String methodName = "populateSelectedCourtSiteInPageStateHolder ";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         
+        if (judgePageStateHolder == null) {
+            LOGGER.info("2. JudgePageStateHolder is null");
+        } else {
+            LOGGER.info("2. JudgePageStateHolder is not null");
+        }
+        
         XhibitCourtSiteDto selectedCourtSite = null;
         List<XhibitCourtSiteDto> courtSites = judgePageStateHolder.getSites();
         LOGGER.info(THREE_PARAMS, "JudgePageStateHolder returned: ", courtSites.size(), " courtSites.");
