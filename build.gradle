@@ -197,7 +197,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-web:6.4.2'
     implementation 'org.quartz-scheduler:quartz:2.5.0'
     implementation 'org.apache.cxf:cxf-spring-boot-starter-jaxrs:4.0.5'
-    implementation 'com.github.hmcts.java-logging:logging:6.1.7'
+    implementation 'com.github.hmcts.java-logging:logging:6.1.8'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
     implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
     implementation 'javax.servlet:servlet-api:3.0-alpha-1'
@@ -222,7 +222,7 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.springframework.boot:spring-boot-starter-security:3.3.5'
     implementation 'org.owasp.antisamy:antisamy:1.7.7'
-    implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:5.18.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:5.19.0'
     implementation 'org.springframework.security:spring-security-oauth2-jose:6.4.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
