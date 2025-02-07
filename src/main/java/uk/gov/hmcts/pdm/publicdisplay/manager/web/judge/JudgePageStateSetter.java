@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IRefJudgeService;
 
 import java.util.List;
 
+@SuppressWarnings("squid:S2259")
 public class JudgePageStateSetter {
 
     /** The Constant LOGGER. */

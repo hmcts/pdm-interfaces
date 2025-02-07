@@ -50,6 +50,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
 @Controller
 @RequestMapping("/judge")
+@SuppressWarnings("squid:S2259")
 public class JudgeController extends JudgePageStateSetter {
 
     /** The Constant LOGGER. */
