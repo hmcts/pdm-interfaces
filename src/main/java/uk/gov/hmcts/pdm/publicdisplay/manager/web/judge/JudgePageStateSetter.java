@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IRefJudgeService;
 
 import java.util.List;
 
+@SuppressWarnings("squid:S2259")
 public class JudgePageStateSetter {
 
     /** The Constant LOGGER. */
@@ -83,6 +84,12 @@ public class JudgePageStateSetter {
         final Long xhibitCourtSiteId) {
         final String methodName = "populateSelectedCourtSiteInPageStateHolder ";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        
+        if (judgePageStateHolder == null) {
+            LOGGER.info("2. JudgePageStateHolder is null");
+        } else {
+            LOGGER.info("2. JudgePageStateHolder is not null");
+        }
         
         XhibitCourtSiteDto selectedCourtSite = null;
         List<XhibitCourtSiteDto> courtSites = judgePageStateHolder.getSites();
