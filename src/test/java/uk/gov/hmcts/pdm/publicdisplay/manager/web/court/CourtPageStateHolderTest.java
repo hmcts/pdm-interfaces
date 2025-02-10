@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.easymock.EasyMock.createMock;
@@ -75,7 +76,7 @@ class CourtPageStateHolderTest extends AbstractJUnit {
         classUnderTest.reset();
         assertNull(classUnderTest.getCourtSearchCommand(), NOT_NULL);
         assertNull(classUnderTest.getCourt(), NOT_NULL);
-        assertNull(classUnderTest.getCourts(), NOT_NULL);
-        assertNull(classUnderTest.getSites(), NOT_NULL);
+        assertEquals(classUnderTest.getCourts(), new ArrayList<>(), NOT_EQUAL);
+        assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);
     }
 }

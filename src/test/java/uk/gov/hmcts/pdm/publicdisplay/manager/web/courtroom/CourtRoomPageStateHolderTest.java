@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtRoomDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.easymock.EasyMock.createMock;
@@ -76,8 +77,9 @@ class CourtRoomPageStateHolderTest {
         classUnderTest.reset();
         assertNull(classUnderTest.getCourtRoomSearchCommand(), NOT_NULL);
         assertNull(classUnderTest.getCourt(), NOT_NULL);
-        assertNull(classUnderTest.getCourts(), NOT_NULL);
-        assertNull(classUnderTest.getSites(), NOT_NULL);
+        assertEquals(classUnderTest.getCourts(), new ArrayList<>(), NOT_EQUAL);
+        assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);
+        assertEquals(classUnderTest.getCourtRoomsList(), new ArrayList<>(), NOT_EQUAL);
     }
 
 }
