@@ -209,11 +209,6 @@ public class JudgeController extends JudgePageStateSetter {
             final JudgeAmendCommand judgeCommand = new JudgeAmendCommand();
 
             // Populate the model objects
-            LOGGER.info("Court site added to model: {}", courtSite.getCourtSiteName());
-            LOGGER.info("No. of court sites added to model: {}", judgePageStateHolder.getSites().size());
-            LOGGER.info("No. of judges added to model: {}", judgePageStateHolder.getJudges().size());
-            LOGGER.info("No. of judge types added to model: {}", judgePageStateHolder.getJudgeTypes().size());
-            
             model.addObject(COURTSITE_LIST, judgePageStateHolder.getSites());
             model.addObject(JUDGE_LIST, judgePageStateHolder.getJudges());
             model.addObject(JUDGE_TYPE_LIST, judgePageStateHolder.getJudgeTypes());
