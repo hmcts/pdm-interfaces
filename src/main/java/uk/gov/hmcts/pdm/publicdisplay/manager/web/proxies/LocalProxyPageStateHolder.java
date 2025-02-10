@@ -29,6 +29,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.ScheduleDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,12 +54,12 @@ public class LocalProxyPageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<XhibitCourtSiteDto> sitesList;
+    private List<XhibitCourtSiteDto> sitesList = new ArrayList<>();
 
     /**
      * list of ScheduleDto objects.
      */
-    private List<ScheduleDto> schedulesList;
+    private List<ScheduleDto> schedulesList = new ArrayList<>();
 
     /**
      * The local proxy search command.
@@ -71,8 +72,8 @@ public class LocalProxyPageStateHolder implements Serializable {
     public void reset() {
         setLocalProxySearchCommand(null);
         setCourtSite(null);
-        setSites(null);
-        setSchedules(null);
+        setSites(new ArrayList<>());
+        setSchedules(new ArrayList<>());
     }
 
     /**
