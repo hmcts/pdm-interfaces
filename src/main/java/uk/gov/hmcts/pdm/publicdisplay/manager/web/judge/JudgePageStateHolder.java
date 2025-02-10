@@ -59,17 +59,17 @@ public class JudgePageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<XhibitCourtSiteDto> sitesList;
+    private List<XhibitCourtSiteDto> sitesList = new ArrayList<>();
     
     /**
      * list of RefJudgeDto objects.
      */
-    private List<RefJudgeDto> judgeList;
+    private List<RefJudgeDto> judgeList = new ArrayList<>();
     
     /**
      * list of RefSystemCodeDto objects.
      */
-    private List<RefSystemCodeDto> judgeTypeList;
+    private List<RefSystemCodeDto> judgeTypeList = new ArrayList<>();
     
     /**
      * The judge search command.
