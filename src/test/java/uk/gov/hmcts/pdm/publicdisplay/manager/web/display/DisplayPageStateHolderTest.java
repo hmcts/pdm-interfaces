@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.easymock.EasyMock.createMock;
@@ -99,9 +100,9 @@ class DisplayPageStateHolderTest extends AbstractJUnit {
     void resetTest() {
         classUnderTest.reset();
         assertNull(classUnderTest.getDisplaySearchCommand(), NOT_NULL);
-        assertNull(classUnderTest.getRotationSets(), NOT_NULL);
-        assertNull(classUnderTest.getDisplayTypes(), NOT_NULL);
-        assertNull(classUnderTest.getSites(), NOT_NULL);
+        assertEquals(classUnderTest.getRotationSets(), new ArrayList<>(), NOT_EQUAL);
+        assertEquals(classUnderTest.getDisplayTypes(), new ArrayList<>(), NOT_EQUAL);
+        assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);
         assertNull(classUnderTest.getCourtSite(), NOT_NULL);
     }
 }
