@@ -28,6 +28,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,12 +52,12 @@ public class JudgeTypePageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<XhibitCourtSiteDto> sitesList;
+    private List<XhibitCourtSiteDto> sitesList = new ArrayList<>();
     
     /**
      * list of RefSystemCodeDto objects.
      */
-    private List<RefSystemCodeDto> judgeTypeList;
+    private List<RefSystemCodeDto> judgeTypeList = new ArrayList<>();
     
     /**
      * The judge type search command.
@@ -69,7 +70,8 @@ public class JudgeTypePageStateHolder implements Serializable {
     public void reset() {
         setJudgeTypeSearchCommand(null);
         setCourtSite(null);
-        setSites(null);
+        setSites(new ArrayList<>());
+        setJudgeTypes(new ArrayList<>());
     }
 
     /**

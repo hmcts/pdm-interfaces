@@ -6,6 +6,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtRoomDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -24,12 +25,12 @@ public class CourtRoomPageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<XhibitCourtSiteDto> sitesList;
+    private List<XhibitCourtSiteDto> sitesList = new ArrayList<>();
 
     /**
      * list of CourtRoomDto objects.
      */
-    private List<CourtRoomDto> courtRoomsList;
+    private List<CourtRoomDto> courtRoomsList = new ArrayList<>();
     
     /**
      * The court room search command.
@@ -44,7 +45,7 @@ public class CourtRoomPageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<CourtDto> courtsList;
+    private List<CourtDto> courtsList = new ArrayList<>();
 
     /**
      * Reset all the variables.
@@ -52,10 +53,10 @@ public class CourtRoomPageStateHolder implements Serializable {
     public void reset() {
         setCourtRoomSearchCommand(null);
         setCourtSite(null);
-        setSites(null);
+        setSites(new ArrayList<>());
         setCourt(null);
-        setCourts(null);
-
+        setCourts(new ArrayList<>());
+        setCourtRoomsList(new ArrayList<>());
     }
 
     /**
