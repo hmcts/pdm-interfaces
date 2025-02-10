@@ -32,7 +32,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
  *
  */
 public class UrlDto {
-    
     /**
      * The id of the Url.
      */
