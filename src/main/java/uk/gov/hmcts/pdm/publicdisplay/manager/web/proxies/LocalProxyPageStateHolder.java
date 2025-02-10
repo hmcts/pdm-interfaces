@@ -40,6 +40,7 @@ import java.util.List;
  */
 
 @Component
+@SuppressWarnings("squid:S1948")
 public class LocalProxyPageStateHolder implements Serializable {
     /**
      * Default serialVersionUID.

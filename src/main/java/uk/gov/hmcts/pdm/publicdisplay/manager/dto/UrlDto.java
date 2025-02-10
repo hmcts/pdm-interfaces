@@ -25,19 +25,14 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.dto;
 
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
-import java.io.Serializable;
-
 /**
  * UrlDto.
  * 
  * @author scullionm
  *
  */
-public class UrlDto implements Serializable {
+public class UrlDto {
     
-    /** The Default Serial Version UID. */
-    private static final long serialVersionUID = 1L;
-
     /**
      * The id of the Url.
      */
