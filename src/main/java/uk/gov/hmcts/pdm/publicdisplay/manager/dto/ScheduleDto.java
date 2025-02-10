@@ -25,13 +25,18 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.dto;
 
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
+import java.io.Serializable;
+
 /**
  * Simple transfer object used to move schedule details around.
  * 
  * @author groenm
  *
  */
-public class ScheduleDto {
+public class ScheduleDto implements Serializable {
+
+    /** The Default Serial Version UID. */
+    private static final long serialVersionUID = 1L;
 
     /** Id of the schedule. */
     @EncryptedFormat
