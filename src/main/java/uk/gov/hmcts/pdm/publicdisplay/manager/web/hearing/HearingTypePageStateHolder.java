@@ -53,12 +53,12 @@ public class HearingTypePageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<XhibitCourtSiteDto> sitesList;
+    private List<XhibitCourtSiteDto> sitesList = new ArrayList<>();
 
     /**
      * list of HearingTypeDto objects.
      */
-    private List<HearingTypeDto> hearingTypeList;
+    private List<HearingTypeDto> hearingTypeList = new ArrayList<>();
 
     /**
      * The display search command.

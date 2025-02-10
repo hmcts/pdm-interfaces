@@ -56,22 +56,22 @@ public class DisplayPageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<XhibitCourtSiteDto> sitesList;
+    private List<XhibitCourtSiteDto> sitesList = new ArrayList<>();
 
     /**
      * list of DisplayDto objects.
      */
-    private List<DisplayDto> displayList;
+    private List<DisplayDto> displayList = new ArrayList<>();
 
     /**
      * list of DisplayTypeDto objects.
      */
-    private List<DisplayTypeDto> displayTypeList;
+    private List<DisplayTypeDto> displayTypeList = new ArrayList<>();
 
     /**
      * list of RotationSetDto objects.
      */
-    private List<RotationSetsDto> rotationSetsList;
+    private List<RotationSetsDto> rotationSetsList = new ArrayList<>();
 
     /**
      * The display search command.
@@ -84,10 +84,10 @@ public class DisplayPageStateHolder implements Serializable {
     public void reset() {
         setDisplaySearchCommand(null);
         setCourtSite(null);
-        setSites(null);
-        setDisplays(null);
-        setDisplayTypes(null);
-        setRotationSets(null);
+        setSites(new ArrayList<>());
+        setDisplays(new ArrayList<>());
+        setDisplayTypes(new ArrayList<>());
+        setRotationSets(new ArrayList<>());
     }
 
     /**
