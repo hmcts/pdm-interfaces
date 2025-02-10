@@ -29,6 +29,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.UrlDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,12 +48,12 @@ public class CduPageStateHolder implements Serializable {
     /**
      * list of XhibitCourtSiteDto objects.
      */
-    private List<XhibitCourtSiteDto> sites;
+    private List<XhibitCourtSiteDto> sites = new ArrayList<>();
 
     /**
      * list of ICdu objects.
      */
-    private List<CduDto> cdus;
+    private List<CduDto> cdus = new ArrayList<>();
 
     /**
      * The cdu.
@@ -62,7 +63,7 @@ public class CduPageStateHolder implements Serializable {
     /**
      * List of available urls.
      */
-    private List<UrlDto> availableUrls;
+    private List<UrlDto> availableUrls = new ArrayList<>();
 
     /**
      * Search criteria.
@@ -73,10 +74,10 @@ public class CduPageStateHolder implements Serializable {
      * Reset all the variables.
      */
     public void reset() {
-        setSites(null);
-        setCdus(null);
+        setSites(new ArrayList<>());
+        setCdus(new ArrayList<>());
         setCdu(null);
-        setAvailableUrls(null);
+        setAvailableUrls(new ArrayList<>());
         setCduSearchCommand(null);
     }
 
