@@ -51,6 +51,7 @@ $(document).ready(function () {
 				.fail(function(jqXHR, textStatus, error)
 				{
 					console.log('loadHearingType failure');
+					console.log(error);
 					resetHearingValues();
 				});
 		} else {
