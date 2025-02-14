@@ -44,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @SuppressWarnings({"PMD.SignatureDeclareThrowsException", "PMD.LawOfDemeter", "removal",
-    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "squid:S4502", "squid:S5122"})
+    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "squid:S4502"})
 public class WebSecurityConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebSecurityConfig.class);
@@ -103,9 +103,10 @@ public class WebSecurityConfig {
             
     protected CorsConfiguration getCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        List<String> allowed = Arrays.asList("*");
+        configuration.setAllowedOrigins(allowed); // Sensitive
+        configuration.setAllowedMethods(allowed);
+        configuration.setAllowedHeaders(allowed);
         return configuration;
     }
 
