@@ -103,10 +103,9 @@ public class WebSecurityConfig {
             
     protected CorsConfiguration getCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
-        List<String> allowed = Arrays.asList("*");
-        configuration.setAllowedOrigins(allowed); // Sensitive
-        configuration.setAllowedMethods(allowed);
-        configuration.setAllowedHeaders(allowed);
+        configuration.addAllowedOrigin("*"); // Sensitive
+        configuration.addAllowedMethod("*"); // Sensitive
+        configuration.addAllowedHeader("*"); // Sensitive
         return configuration;
     }
 
