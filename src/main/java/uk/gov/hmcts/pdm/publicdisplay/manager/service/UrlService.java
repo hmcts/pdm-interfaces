@@ -47,6 +47,7 @@ import java.util.List;
  */
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+@SuppressWarnings("PMD.NullAssignment")
 public class UrlService implements IUrlService {
 
     /** The Constant LOGGER. */
@@ -56,6 +57,11 @@ public class UrlService implements IUrlService {
 
     private XhbDispMgrUrlRepository xhbDispMgrUrlRepository;
 
+    
+    protected void clearRepositories() {
+        xhbDispMgrUrlRepository = null;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -89,6 +95,7 @@ public class UrlService implements IUrlService {
 
     protected EntityManager getEntityManager() {
         if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;

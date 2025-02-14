@@ -6,14 +6,21 @@ import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgruserdetails.XhbDispMgrUserDetailsRepository;
 
 
+@SuppressWarnings("PMD.NullAssignment")
 public class UserDetailsServiceRepository {
 
     private EntityManager entityManager;
 
     private XhbDispMgrUserDetailsRepository xhbDispMgrUserDetailsRepository;
 
+    
+    protected void clearRepositories() {
+        xhbDispMgrUserDetailsRepository = null;
+    }
+    
     protected EntityManager getEntityManager() {
         if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;

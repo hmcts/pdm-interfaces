@@ -46,6 +46,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IServiceAuditService;
  */
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+@SuppressWarnings("PMD.NullAssignment")
 public class ServiceAuditService implements IServiceAuditService {
     /** Logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceAuditService.class);
@@ -57,7 +58,11 @@ public class ServiceAuditService implements IServiceAuditService {
     private static final JsonWebTokenType DISPLAYMANAGER = JsonWebTokenType.DISPLAY_MANAGER;
     private static final JsonWebTokenType JSONWEBTOKENTYPE = JsonWebTokenType.LOCAL_PROXY;
 
-
+    
+    protected void clearRepositories() {
+        xhbDispMgrServiceAuditRepository = null;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -90,6 +95,7 @@ public class ServiceAuditService implements IServiceAuditService {
 
     private EntityManager getEntityManager() {
         if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;

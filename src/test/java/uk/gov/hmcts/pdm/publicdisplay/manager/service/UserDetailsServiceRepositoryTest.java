@@ -1,6 +1,8 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
+import com.pdm.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SuppressWarnings("PMD.LawOfDemeter")
 class UserDetailsServiceRepositoryTest extends AbstractJUnit {
 
-
     private static final String NOTNULL = "Result is Null";
 
     @Mock
@@ -34,7 +35,6 @@ class UserDetailsServiceRepositoryTest extends AbstractJUnit {
     @Mock
     private XhbDispMgrUserDetailsRepository mockXhbDispMgrUserDetailsRepository;
 
-    //
     private UserDetailsServiceRepository classUnderTest;
 
 
@@ -44,6 +44,11 @@ class UserDetailsServiceRepositoryTest extends AbstractJUnit {
     @BeforeEach
     public void setup() {
         classUnderTest = new UserDetailsServiceRepository();
+    }
+    
+    @AfterEach
+    public void teardown() {
+        Mockito.clearAllCaches();
     }
 
     @Test
@@ -58,6 +63,14 @@ class UserDetailsServiceRepositoryTest extends AbstractJUnit {
         assertNotNull(result, NOTNULL);
     }
    
+    @Test
+    void testNullEntityManager() {
+        Mockito.mockStatic(EntityManagerUtil.class);
+        Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
+        XhbDispMgrUserDetailsRepository result = classUnderTest.getXhbDispMgrUserDetailsRepository();
+        assertNotNull(result, NOTNULL);
+    }
+    
     private void expectEntityManager() {
         ReflectionTestUtils.setField(classUnderTest, "entityManager", mockEntityManager);
         Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
