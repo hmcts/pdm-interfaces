@@ -103,9 +103,9 @@ public class WebSecurityConfig {
             
     protected CorsConfiguration getCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Sensitive
-        configuration.addAllowedMethod("*"); // Sensitive
-        configuration.addAllowedHeader("*"); // Sensitive
+        configuration.addAllowedOrigin("https://pdda-public-display-manager");
+        configuration.addAllowedMethod("*"); 
+        configuration.addAllowedHeader("*"); 
         return configuration;
     }
 
