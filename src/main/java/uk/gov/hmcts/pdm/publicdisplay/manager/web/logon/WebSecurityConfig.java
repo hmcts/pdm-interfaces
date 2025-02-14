@@ -29,6 +29,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -95,8 +96,17 @@ public class WebSecurityConfig {
                 .authorizationEndpoint(endPoint -> endPoint
                     .authorizationRequestRepository(cookieAuthorizationRequestRepository())))
             .addFilterAfter(new AuthorisationTokenExistenceFilter(),
-                SecurityContextHolderFilter.class).csrf(AbstractHttpConfigurer::disable);
+                SecurityContextHolderFilter.class).csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(request -> getCorsConfiguration()));
         return http;
+    }
+            
+    private CorsConfiguration getCorsConfiguration() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        return configuration;
     }
 
     /**
