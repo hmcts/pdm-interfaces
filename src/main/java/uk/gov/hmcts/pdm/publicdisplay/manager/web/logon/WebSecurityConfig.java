@@ -101,7 +101,7 @@ public class WebSecurityConfig {
         return http;
     }
             
-    private CorsConfiguration getCorsConfiguration() {
+    protected CorsConfiguration getCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("*"));

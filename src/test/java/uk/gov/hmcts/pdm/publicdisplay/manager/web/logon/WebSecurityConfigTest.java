@@ -64,6 +64,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
@@ -279,6 +280,12 @@ class WebSecurityConfigTest extends AbstractJUnit {
         } catch (Exception exception) {
             fail(exception.getMessage());
         }
+    }
+    
+    @Test
+    void testGetCorsConfiguration() {
+        CorsConfiguration result = classUnderTest.getCorsConfiguration();
+        assertNotNull(result, NOTNULL);
     }
 
     @Test
