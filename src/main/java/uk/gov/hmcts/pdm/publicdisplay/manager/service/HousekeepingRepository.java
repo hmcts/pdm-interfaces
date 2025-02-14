@@ -6,14 +6,21 @@ import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrhousekeeping.XhbDispMgrHousekeepingRepository;
 
 
+@SuppressWarnings("PMD.NullAssignment")
 public class HousekeepingRepository {
 
     private EntityManager entityManager;
     
     private XhbDispMgrHousekeepingRepository xhbDispMgrHousekeepingRepository;
 
+    
+    protected void clearRepositories() {
+        xhbDispMgrHousekeepingRepository = null;
+    }
+    
     private EntityManager getEntityManager() {
         if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
