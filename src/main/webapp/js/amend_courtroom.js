@@ -60,7 +60,7 @@ $(document).ready(function () {
 				.fail(function(jqXHR, textStatus, error)
 				{
 					console.log('loadCourtRooms failure');
-					console.log(error);
+					console.log('error:'+error);
 					resetCourtRoomValues();
 				});
 		} else {
@@ -102,7 +102,7 @@ $(document).ready(function () {
 				.fail(function(jqXHR, textStatus, error)
 				{
 					console.log('loadSelectedCourtRoom failure');
-					console.log(error);
+					console.log('error:'+error);
 					resetSelectedCourtRoomValues();
 				});
 		} else {

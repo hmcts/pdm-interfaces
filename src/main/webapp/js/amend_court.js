@@ -51,6 +51,7 @@ $(document).ready(function () {
 				.fail(function(jqXHR, textStatus, error)
 				{
 					console.log('loadCourtSite failure');
+					console.log('error:'+error);
 					resetCourtSiteValues();
 				});
 		} else {

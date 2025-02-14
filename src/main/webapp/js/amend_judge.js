@@ -51,6 +51,7 @@ $(document).ready(function () {
 				.fail(function(jqXHR, textStatus, error)
 				{
 					console.log('loadJudge failure');
+					console.log('error:'+error);
 					resetJudgeValues();
 				});
 		} else {

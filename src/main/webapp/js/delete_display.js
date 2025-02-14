@@ -49,7 +49,7 @@ $(document).ready(function () {
 				.fail(function(jqXHR, textStatus, error)
 				{
 					console.log('loadDisplay failure');
-					console.log(error);
+					console.log('error:'+error);
 					resetDisplayValues();
 				});
 		} else {
