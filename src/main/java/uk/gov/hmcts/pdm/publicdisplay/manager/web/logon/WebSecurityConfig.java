@@ -44,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @SuppressWarnings({"PMD.SignatureDeclareThrowsException", "PMD.LawOfDemeter", "removal",
-    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "squid:S4502"})
+    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "squid:S4502", "squid:S5122"})
 public class WebSecurityConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebSecurityConfig.class);
