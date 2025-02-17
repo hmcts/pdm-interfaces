@@ -103,7 +103,7 @@ public class WebSecurityConfig {
             
     protected CorsConfiguration getCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://pdda-public-display-manager");
+        configuration.addAllowedOrigin("https://pdda-public-display-manager.staging.platform.hmcts.net");
         configuration.addAllowedMethod("*"); 
         configuration.addAllowedHeader("*"); 
         return configuration;

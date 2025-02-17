@@ -52,10 +52,10 @@ $(document).ready(function () {
 				{
 					console.log('loadHearingType failure');
 					console.log('error:'+error);
-					resetHearingValues();
+					resetHearingTypeValues();
 				});
 		} else {
-			resetHearingValues();
+			resetHearingTypeValues();
 		}
 		console.log('loadHearingType end');
 	}
