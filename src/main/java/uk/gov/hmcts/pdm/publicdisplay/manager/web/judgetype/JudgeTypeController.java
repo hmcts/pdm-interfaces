@@ -222,10 +222,11 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
     public RefSystemCodeDto loadJudgeType(
         @PathVariable("refSystemCodeId") @EncryptedFormat final Integer refSystemCodeId) {
         final String methodName = "loadJudgeType";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         RefSystemCodeDto result = null;
         for (RefSystemCodeDto dto : judgeTypePageStateHolder.getJudgeTypes()) {
             if (dto.getRefSystemCodeId().equals(refSystemCodeId)) {
+                LOGGER.info("Found JudgeType");
                 result = dto;
                 break;
             }

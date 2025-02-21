@@ -222,10 +222,11 @@ public class HearingTypeController extends HearingTypePageStateSetter {
     public HearingTypeDto loadHearingType(
         @PathVariable("refHearingTypeId") @EncryptedFormat final Integer refHearingTypeId) {
         final String methodName = "loadHearingType";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         HearingTypeDto result = null;
         for (HearingTypeDto dto : hearingTypePageStateHolder.getHearingTypes()) {
             if (dto.getRefHearingTypeId().equals(refHearingTypeId)) {
+                LOGGER.info("Found HearingType");
                 result = dto;
                 break;
             }
