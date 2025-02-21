@@ -179,8 +179,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.3.5'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.3.5'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.5'
-    implementation 'org.springframework.data:spring-data-commons:3.4.2'
-    implementation 'org.springframework.data:spring-data-jpa:3.4.2'
+    implementation 'org.springframework.data:spring-data-commons:3.4.3'
+    implementation 'org.springframework.data:spring-data-jpa:3.4.3'
     // Comment out org.hibernate:hibernate-entitymanager to work in Eclipse
     implementation 'org.hibernate:hibernate-entitymanager:5.6.15.Final'
     implementation 'org.postgresql:postgresql:42.7.5'
