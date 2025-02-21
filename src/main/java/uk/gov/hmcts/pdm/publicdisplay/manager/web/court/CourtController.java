@@ -290,10 +290,11 @@ public class CourtController extends CourtPageStateSetter {
     public XhibitCourtSiteDto loadCourtSite(
         @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId) {
         final String methodName = "loadCourtSite";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         XhibitCourtSiteDto result = null;
         for (XhibitCourtSiteDto dto : courtPageStateHolder.getSites()) {
             if (dto.getId().equals(xhibitCourtSiteId)) {
+                LOGGER.info("Found Court");
                 result = dto;
                 break;
             }
