@@ -298,10 +298,11 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
     public CourtRoomDto loadSelectedCourtRoomForAmend(
         @PathVariable("courtRoomId") @EncryptedFormat final Long courtRoomId) {
         final String methodName = "loadSelectedCourtRoomForAmend";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         CourtRoomDto result = null;
         for (CourtRoomDto dto : courtRoomPageStateHolder.getCourtRoomsList()) {
             if (dto.getId().equals(courtRoomId)) {
+                LOGGER.info("Found CourtRoom");
                 result = dto;
                 break;
             }

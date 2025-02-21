@@ -238,10 +238,11 @@ public class DisplayController extends DisplayPageStateSetter {
     @ResponseBody
     public DisplayDto loadDisplay(@PathVariable("displayId") @EncryptedFormat final Integer displayId) {
         final String methodName = "loadDisplay";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         DisplayDto result = null;
         for (DisplayDto dto : displayPageStateHolder.getDisplays()) {
             if (dto.getDisplayId().equals(displayId)) {
+                LOGGER.info("Found Display");
                 result = dto;
                 break;
             }
