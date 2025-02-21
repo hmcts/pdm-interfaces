@@ -237,6 +237,7 @@ public class JudgeController extends JudgePageStateSetter {
         final String methodName = "loadJudge";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         RefJudgeDto result = null;
+        LOGGER.debug("No of Judges = {}", judgePageStateHolder.getJudges().size());
         for (RefJudgeDto dto : judgePageStateHolder.getJudges()) {
             if (dto.getRefJudgeId().equals(refJudgeId)) {
                 LOGGER.info("Found Judge");
@@ -245,6 +246,7 @@ public class JudgeController extends JudgePageStateSetter {
             }
         }
         // Get Judge Type description
+        LOGGER.debug("No of JudgeTypes = {}", judgePageStateHolder.getJudgeTypes().size());
         for (RefSystemCodeDto dto : judgePageStateHolder.getJudgeTypes()) {
             if (dto.getCode().equals(result.getJudgeType())) {
                 result.setJudgeTypeDeCode(dto.getDeCode());
