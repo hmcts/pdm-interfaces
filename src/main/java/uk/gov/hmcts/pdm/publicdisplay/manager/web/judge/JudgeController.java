@@ -235,10 +235,11 @@ public class JudgeController extends JudgePageStateSetter {
     @ResponseBody
     public RefJudgeDto loadJudge(@PathVariable("refJudgeId") @EncryptedFormat final Integer refJudgeId) {
         final String methodName = "loadJudge";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         RefJudgeDto result = null;
         for (RefJudgeDto dto : judgePageStateHolder.getJudges()) {
             if (dto.getRefJudgeId().equals(refJudgeId)) {
+                LOGGER.info("Found Judge");
                 result = dto;
                 break;
             }
@@ -247,6 +248,7 @@ public class JudgeController extends JudgePageStateSetter {
         for (RefSystemCodeDto dto : judgePageStateHolder.getJudgeTypes()) {
             if (dto.getCode().equals(result.getJudgeType())) {
                 result.setJudgeTypeDeCode(dto.getDeCode());
+                LOGGER.info("Found JudgeType");
                 break;
             }
         }
