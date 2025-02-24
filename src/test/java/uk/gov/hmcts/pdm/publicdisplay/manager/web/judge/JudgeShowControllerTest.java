@@ -46,9 +46,12 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
         mockJudgeSelectedValidator.validate(capture(capturedJudgeSearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockRefJudgeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
         expect(mockRefJudgeService.getJudges(eq(8L))).andReturn(refJudgeDtos);
         expect(mockRefJudgeService.getJudgeTypes(eq(8L))).andReturn(refSystemCodeDtos);
 
+        mockJudgePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
         mockJudgePageStateHolder.setJudges(capture(capturedRefJudgeDtos));
         expectLastCall();
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
@@ -130,9 +133,12 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
         mockJudgeSelectedValidator.validate(capture(capturedJudgeSearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockRefJudgeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
         expect(mockRefJudgeService.getJudges(eq(8L))).andReturn(refJudgeDtos);
         expect(mockRefJudgeService.getJudgeTypes(eq(8L))).andReturn(refSystemCodeDtos);
 
+        mockJudgePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
         mockJudgePageStateHolder.setJudges(capture(capturedRefJudgeDtos));
         expectLastCall();
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
@@ -218,9 +224,12 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
         mockJudgeSelectedValidator.validate(capture(capturedJudgeSearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockRefJudgeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
         expect(mockRefJudgeService.getJudges(eq(8L))).andReturn(refJudgeDtos);
         expect(mockRefJudgeService.getJudgeTypes(eq(8L))).andReturn(refSystemCodeDtos);
 
+        mockJudgePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
         mockJudgePageStateHolder.setJudges(capture(capturedRefJudgeDtos));
         expectLastCall();
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
