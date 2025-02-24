@@ -214,7 +214,7 @@ dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.36'
     implementation 'org.apache.tomcat.embed:tomcat-embed-websocket:10.1.36'
     implementation 'org.apache.xmlgraphics:batik-css:1.18'
-    implementation 'com.mchange:c3p0:0.10.2'
+    implementation 'com.mchange:c3p0:0.11.0-pre2'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2'
     implementation 'org.htmlunit:neko-htmlunit:4.6.0'
     implementation 'ch.qos.logback:logback-core:1.5.16'
