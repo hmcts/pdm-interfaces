@@ -56,11 +56,11 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
         expectLastCall();
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockJudgePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos);
-        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos);
+        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos).anyTimes();
+        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos).anyTimes();
         replay(mockJudgeSelectedValidator);
         replay(mockRefJudgeService);
         replay(mockJudgePageStateHolder);

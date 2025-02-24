@@ -62,6 +62,7 @@ public class JudgeController extends JudgePageStateSetter {
     private static final String JUDGE_TYPE_LIST = "judgeTypeList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_JUDGE = "judge";
@@ -199,8 +200,17 @@ public class JudgeController extends JudgePageStateSetter {
 
         } else {
             // Populate the amend lists
-            setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
-
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the AmendPageStateSelectionLists");
+                setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
+                if (!judgePageStateHolder.getSites().isEmpty()
+                    && !judgePageStateHolder.getJudges().isEmpty()
+                    && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
+                    LOGGER.info("All AmendPageStateSelectionLists populated");
+                    break;
+                }
+            }
+                
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 judgeSearchCommand.getXhibitCourtSiteId());
