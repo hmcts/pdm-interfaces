@@ -160,11 +160,13 @@ abstract class JudgeControllerBaseTest extends AbstractJUnit {
 
     @Test
     void loadJudgeTest() throws Exception {
+        final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = createCourtSiteDtoList();
         final List<RefJudgeDto> refJudgeDtos = createRefJudgeDto();
         final List<RefSystemCodeDto> refSystemCodeDtos = createRefSystemCodeDto();
 
-        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos);
-        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos);
+        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
+        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos).anyTimes();
+        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos).anyTimes();
         replay(mockJudgePageStateHolder);
 
         // Perform the test
@@ -179,11 +181,13 @@ abstract class JudgeControllerBaseTest extends AbstractJUnit {
 
     @Test
     void loadJudgeErrorTest() throws Exception {
+        final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = createCourtSiteDtoList();
         final List<RefJudgeDto> refJudgeDtos = createRefJudgeDto();
         final List<RefSystemCodeDto> refSystemCodeDtos = createRefSystemCodeDto();
 
-        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos);
-        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos);
+        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
+        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos).anyTimes();
+        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos).anyTimes();
         replay(mockJudgePageStateHolder);
 
         // Perform the test
