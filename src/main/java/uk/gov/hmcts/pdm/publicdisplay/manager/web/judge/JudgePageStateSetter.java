@@ -51,6 +51,8 @@ public class JudgePageStateSetter {
         final String methodName = "setAmendPageStateSelectionLists";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Set the court site list
+        judgePageStateHolder.setSites(refJudgeService.getCourtSites());
         // Set the judges list
         judgePageStateHolder.setJudges(refJudgeService.getJudges(xhibitCourtSiteId));
         // Set the judge types list
@@ -66,6 +68,8 @@ public class JudgePageStateSetter {
         final String methodName = "setDeletePageStateSelectionLists";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Set the court site list
+        judgePageStateHolder.setSites(refJudgeService.getCourtSites());
         // Set the judges list
         judgePageStateHolder.setJudges(refJudgeService.getJudges(xhibitCourtSiteId));
         // Set the judge types list
