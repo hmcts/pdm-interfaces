@@ -60,6 +60,7 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
     private static final String JUDGE_TYPE_LIST = "judgeTypeList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_JUDGETYPE = "judgetype";
@@ -186,7 +187,15 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
 
         } else {
             // Populate the amend lists
-            setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the AmendPageStateSelectionLists");
+                setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
+                if (!judgeTypePageStateHolder.getSites().isEmpty()
+                    && !judgeTypePageStateHolder.getJudgeTypes().isEmpty()) {
+                    LOGGER.info("All AmendPageStateSelectionLists populated");
+                    break;
+                }
+            }
 
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
@@ -312,12 +321,20 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE_TYPE);
 
         } else {
+            // Populate the create lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the AmendPageStateSelectionLists");
+                setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
+                if (!judgeTypePageStateHolder.getSites().isEmpty()
+                    && !judgeTypePageStateHolder.getJudgeTypes().isEmpty()) {
+                    LOGGER.info("All AmendPageStateSelectionLists populated");
+                    break;
+                }
+            }
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 judgeTypeSearchCommand.getXhibitCourtSiteId());
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
 
             // Populate the relevant fields
             final JudgeTypeCreateCommand judgeTypeCommand = new JudgeTypeCreateCommand();

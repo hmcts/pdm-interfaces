@@ -126,13 +126,16 @@ class JudgeTypeControllerTest extends JudgeTypeErrorControllerTest {
         mockJudgeTypeSelectedValidator.validate(capture(capturedJudgeTypeSearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockRefJudgeTypeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
+        mockJudgeTypePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
         expect(mockRefJudgeTypeService.getJudgeTypes(eq(8L))).andReturn(refSystemCodeDtoList);
         mockJudgeTypePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDtos));
         expectLastCall();
-        expect(mockJudgeTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockJudgeTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockJudgeTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
-        expect(mockJudgeTypePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtoList);
+        expect(mockJudgeTypePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtoList).anyTimes();
         replay(mockJudgeTypeSelectedValidator);
         replay(mockRefJudgeTypeService);
         replay(mockJudgeTypePageStateHolder);
@@ -209,13 +212,16 @@ class JudgeTypeControllerTest extends JudgeTypeErrorControllerTest {
         mockJudgeTypeSelectedValidator.validate(capture(capturedJudgeTypeSearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockRefJudgeTypeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
+        mockJudgeTypePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
         expect(mockRefJudgeTypeService.getJudgeTypes(eq(8L))).andReturn(refSystemCodeDtoList);
         mockJudgeTypePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDtos));
         expectLastCall();
-        expect(mockJudgeTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockJudgeTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockJudgeTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
-        expect(mockJudgeTypePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtoList);
+        expect(mockJudgeTypePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtoList).anyTimes();
         replay(mockJudgeTypeSelectedValidator);
         replay(mockRefJudgeTypeService);
         replay(mockJudgeTypePageStateHolder);
