@@ -61,6 +61,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
     private static final String CATEGORIES_LIST = "categoriesList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_HEARING = "hearing";
@@ -184,12 +185,20 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_HEARING);
             model.addObject(COMMAND, hearingTypeSearchCommand);
         } else {
+            // Populate the amend lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the AmendPageStateSelectionLists");
+                setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
+                if (!hearingTypePageStateHolder.getSites().isEmpty()
+                    && !hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
+                    LOGGER.info("All AmendPageStateSelectionLists populated");
+                    break;
+                }
+            }
+
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 hearingTypeSearchCommand.getXhibitCourtSiteId());
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
 
             // Populate the relevant fields
             final HearingTypeAmendCommand hearingTypeCommand = new HearingTypeAmendCommand();
@@ -325,12 +334,20 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             model.addObject(COMMAND, hearingTypeSearchCommand);
 
         } else {
+            // Populate the create lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the AmendPageStateSelectionLists");
+                setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
+                if (!hearingTypePageStateHolder.getSites().isEmpty()
+                    && !hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
+                    LOGGER.info("All AmendPageStateSelectionLists populated");
+                    break;
+                }
+            }
+
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 hearingTypeSearchCommand.getXhibitCourtSiteId());
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
 
             // Populate the relevant fields
             final HearingTypeCreateCommand hearingTypeCreateCommand =

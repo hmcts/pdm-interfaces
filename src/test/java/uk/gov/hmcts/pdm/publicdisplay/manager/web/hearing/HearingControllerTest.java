@@ -131,17 +131,21 @@ class HearingControllerTest extends HearingErrorController {
         mockHearingTypeSelectedValidator.validate(capture(capturedHearingTypeSearchCommand), capture(capturedErrors));
         expectLastCall();
 
+        expect(mockHearingTypeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
+        mockHearingTypePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
+        
         expect(mockHearingTypeService.getHearingTypes(eq(8L))).andReturn(hearingTypeDtos);
 
         mockHearingTypePageStateHolder.setHearingTypes(capture(hearingTypeDtoListCapture));
         expectLastCall();
 
-        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockHearingTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
 
-        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos);
-        expect(mockHearingTypeService.getAllCategories()).andReturn(categories);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos).anyTimes();
+        expect(mockHearingTypeService.getAllCategories()).andReturn(categories).anyTimes();
 
         replay(mockHearingTypeSelectedValidator);
         replay(mockHearingTypeService);
@@ -266,14 +270,17 @@ class HearingControllerTest extends HearingErrorController {
         expectLastCall();
         mockHearingTypeSelectedValidator.validate(capture(capturedHearingTypeSearchCommand), capture(capturedErrors));
         expectLastCall();
+        expect(mockHearingTypeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
+        mockHearingTypePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
         expect(mockHearingTypeService.getHearingTypes(eq(8L))).andReturn(hearingTypeDtos);
         mockHearingTypePageStateHolder.setHearingTypes(capture(hearingTypeDtoListCapture));
         expectLastCall();
-        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockHearingTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
-        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos);
-        expect(mockHearingTypeService.getAllCategories()).andReturn(categories);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos).anyTimes();
+        expect(mockHearingTypeService.getAllCategories()).andReturn(categories).anyTimes();
         replay(mockHearingTypeSelectedValidator);
         replay(mockHearingTypeService);
         replay(mockHearingTypePageStateHolder);
