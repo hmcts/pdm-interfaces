@@ -456,13 +456,21 @@ public class JudgeController extends JudgePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE);
 
         } else {
-
+            // Populate the delete lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                setDeletePageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
+                if (!judgePageStateHolder.getSites().isEmpty()
+                    && !judgePageStateHolder.getJudges().isEmpty()
+                    && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
+                    LOGGER.info("All PageStateSelectionLists populated");
+                    break;
+                }
+            }
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 judgeSearchCommand.getXhibitCourtSiteId());
-
-            // Populate the delete lists
-            setDeletePageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
 
             // Populate the relevant fields
             final JudgeDeleteCommand judgeCommand = new JudgeDeleteCommand();
