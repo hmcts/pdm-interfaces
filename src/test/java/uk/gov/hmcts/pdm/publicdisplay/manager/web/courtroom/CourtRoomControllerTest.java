@@ -110,15 +110,19 @@ class CourtRoomControllerTest extends CourtRoomControllerErrorsTest {
         mockCourtRoomPageStateHolder.setCourtRoomSearchCommand(capture(capturedCourtRoomSearchCommand));
         mockCourtRoomSelectedValidator.validate(capture(capturedCourtRoomSearchCommand), capture(capturedErrors));
         expectLastCall();
-        expect(mockCourtRoomPageStateHolder.getCourts()).andReturn(courtDtos);
+        expect(mockCourtRoomPageStateHolder.getCourts()).andReturn(courtDtos).anyTimes();
+        
         replay(mockCourtRoomSelectedValidator);
+        expect(mockCourtRoomService.getCourts()).andReturn(courtDtos);
+        mockCourtRoomPageStateHolder.setCourts(courtDtos);
+        expectLastCall();
         expect(mockCourtRoomService.getCourtSites(3)).andReturn(xhibitCourtSiteDtos);
         replay(mockCourtRoomService);
         mockCourtRoomPageStateHolder.setSites(capture(capturedCourtSites));
         expectLastCall();
         mockCourtRoomPageStateHolder.setCourt(courtDtos.get(0));
         expectLastCall();
-        expect(mockCourtRoomPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockCourtRoomPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         replay(mockCourtRoomPageStateHolder);
 
         // Perform the test
@@ -152,15 +156,18 @@ class CourtRoomControllerTest extends CourtRoomControllerErrorsTest {
         mockCourtRoomPageStateHolder.setCourtRoomSearchCommand(capture(capturedCourtRoomSearchCommand));
         mockCourtRoomSelectedValidator.validate(capture(capturedCourtRoomSearchCommand), capture(capturedErrors));
         expectLastCall();
-        expect(mockCourtRoomPageStateHolder.getCourts()).andReturn(courtDtos);
+        expect(mockCourtRoomPageStateHolder.getCourts()).andReturn(courtDtos).anyTimes();
         replay(mockCourtRoomSelectedValidator);
+        expect(mockCourtRoomService.getCourts()).andReturn(courtDtos);
+        mockCourtRoomPageStateHolder.setCourts(courtDtos);
+        expectLastCall();
         expect(mockCourtRoomService.getCourtSites(3)).andReturn(xhibitCourtSiteDtos);
         replay(mockCourtRoomService);
         mockCourtRoomPageStateHolder.setSites(capture(capturedCourtSites));
         expectLastCall();
         mockCourtRoomPageStateHolder.setCourt(courtDtos.get(0));
         expectLastCall();
-        expect(mockCourtRoomPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockCourtRoomPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         replay(mockCourtRoomPageStateHolder);
 
         // Perform the test
@@ -197,15 +204,18 @@ class CourtRoomControllerTest extends CourtRoomControllerErrorsTest {
         expectLastCall();
         mockCourtRoomSelectedValidator.validate(capture(capturedCourtRoomSearchCommand), capture(capturedErrors));
         expectLastCall();
-        expect(mockCourtRoomPageStateHolder.getCourts()).andReturn(courtDtos);
+        expect(mockCourtRoomPageStateHolder.getCourts()).andReturn(courtDtos).anyTimes();
         replay(mockCourtRoomSelectedValidator);
+        expect(mockCourtRoomService.getCourts()).andReturn(courtDtos);
+        mockCourtRoomPageStateHolder.setCourts(courtDtos);
+        expectLastCall();
         expect(mockCourtRoomService.getCourtSites(3)).andReturn(xhibitCourtSiteDtos);
         replay(mockCourtRoomService);
         mockCourtRoomPageStateHolder.setSites(capture(capturedCourtSites));
         expectLastCall();
         mockCourtRoomPageStateHolder.setCourt(courtDtos.get(0));
         expectLastCall();
-        expect(mockCourtRoomPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockCourtRoomPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         expect(mockCourtRoomPageStateHolder.getCourtRoomsList()).andReturn(new ArrayList<>());
         replay(mockCourtRoomPageStateHolder);
 

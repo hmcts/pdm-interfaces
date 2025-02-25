@@ -39,6 +39,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
     private static final String COURT = "court";
     private static final String SUCCESS_MESSAGE = "successMessage";
     private static final String APPLICATION_JSON = "application/json";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_COURTROOM = "courtroom";
@@ -176,9 +177,16 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURTROOM);
 
         } else {
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
+            // Populate the create lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
+                if (!courtRoomPageStateHolder.getSites().isEmpty()
+                    && !courtRoomPageStateHolder.getCourts().isEmpty()) {
+                    LOGGER.info("All PageStateSelectionLists populated");
+                    break;
+                }
+            }
 
             // Get the selected CourtSite
             final CourtDto court =
@@ -233,11 +241,18 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURTROOM);
 
         } else {
-
             // Populate the amend lists
-            setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
-
-            // // Get the selected court
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
+                if (!courtRoomPageStateHolder.getSites().isEmpty()
+                    && !courtRoomPageStateHolder.getCourts().isEmpty()) {
+                    LOGGER.info("All PageStateSelectionLists populated");
+                    break;
+                }
+            }
+            
+            // Get the selected court
             final CourtDto court =
                 populateSelectedCourtInPageStateHolder(courtRoomSearchCommand.getCourtId());
 
@@ -387,10 +402,17 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURTROOM);
 
         } else {
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
-
+            // Populate the delete lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
+                if (!courtRoomPageStateHolder.getSites().isEmpty()
+                    && !courtRoomPageStateHolder.getCourts().isEmpty()) {
+                    LOGGER.info("All PageStateSelectionLists populated");
+                    break;
+                }
+            }
+            
             // Get the selected CourtSite
             final CourtDto court =
                 populateSelectedCourtInPageStateHolder(courtRoomSearchCommand.getCourtId());
