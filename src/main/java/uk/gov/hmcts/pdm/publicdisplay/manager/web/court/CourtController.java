@@ -32,6 +32,7 @@ public class CourtController extends CourtPageStateSetter {
     private static final String COMMAND = "command";
     private static final String COURT = "court";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     protected static final String FOLDER_COURT = "court";
@@ -253,13 +254,21 @@ public class CourtController extends CourtPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURT_SITE);
 
         } else {
+            // Populate the amend lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                setAmendPageStateSelectionLists(courtSearchCommand.getCourtId());
+                if (!courtPageStateHolder.getSites().isEmpty()
+                    && !courtPageStateHolder.getCourts().isEmpty()) {
+                    LOGGER.info("All PageStateSelectionLists populated");
+                    break;
+                }
+            }
+
             // Get the selected Court
             final CourtDto court =
                 populateSelectedCourtInPageStateHolder(courtSearchCommand.getCourtId());
             courtPageStateHolder.setCourt(court);
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(courtSearchCommand.getCourtId());
 
             // Populate the relevant fields
             final CourtAmendCommand courtAmendCommand = new CourtAmendCommand();
