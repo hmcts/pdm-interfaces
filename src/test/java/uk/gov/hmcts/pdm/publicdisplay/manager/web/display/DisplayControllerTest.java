@@ -53,23 +53,26 @@ class DisplayControllerTest extends DisplayControllerErrorTest {
         mockDisplaySelectedValidator.validate(capture(capturedDisplaySearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockDisplayService.getCourtSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
+        mockDisplayPageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall().anyTimes();
         expect(mockDisplayService.getDisplayTypes()).andReturn(displayTypeDtos);
         mockDisplayPageStateHolder.setDisplayTypes(capture(capturedDisplayTypeDtos));
         expectLastCall();
-        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos);
+        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos).anyTimes();
         mockDisplayPageStateHolder.setRotationSets(capture(capturedRotationSetsDtos));
         expectLastCall();
         expect(mockDisplayService.getDisplays(eq(8L), anyObject(), capture(capturedCourtSiteDtos),
             anyObject())).andReturn(displayDtos);
         mockDisplayPageStateHolder.setDisplays(capture(capturedDisplayDtos));
-        expect(mockDisplayPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockDisplayPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockDisplayPageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
         expect(mockDisplayPageStateHolder.getSitesBySelectedCourt(10))
             .andReturn(xhibitCourtSiteDtos);
-        expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos);
-        expect(mockDisplayPageStateHolder.getDisplayTypes()).andReturn(displayTypeDtos);
-        expect(mockDisplayService.getRotationSets(eq(10))).andReturn(rotationSetsDtos);
+        expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos).anyTimes();
+        expect(mockDisplayPageStateHolder.getDisplayTypes()).andReturn(displayTypeDtos).anyTimes();
+        expect(mockDisplayService.getRotationSets(eq(10))).andReturn(rotationSetsDtos).anyTimes();
         replay(mockDisplaySelectedValidator);
         replay(mockDisplayService);
         replay(mockDisplayPageStateHolder);
@@ -112,23 +115,26 @@ class DisplayControllerTest extends DisplayControllerErrorTest {
         mockDisplaySelectedValidator.validate(capture(capturedDisplaySearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockDisplayService.getCourtSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
+        mockDisplayPageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall().anyTimes();
         expect(mockDisplayService.getDisplayTypes()).andReturn(displayTypeDtos);
         mockDisplayPageStateHolder.setDisplayTypes(capture(capturedDisplayTypeDtos));
         expectLastCall();
-        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos);
+        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos).anyTimes();
         mockDisplayPageStateHolder.setRotationSets(capture(capturedRotationSetsDtos));
         expectLastCall();
         expect(mockDisplayService.getDisplays(eq(8L), anyObject(), capture(capturedCourtSiteDtos),
             anyObject())).andReturn(displayDtos);
         mockDisplayPageStateHolder.setDisplays(capture(capturedDisplayDtos));
-        expect(mockDisplayPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockDisplayPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockDisplayPageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
         expect(mockDisplayPageStateHolder.getSitesBySelectedCourt(10))
             .andReturn(xhibitCourtSiteDtos);
-        expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos);
-        expect(mockDisplayPageStateHolder.getDisplayTypes()).andReturn(displayTypeDtos);
-        expect(mockDisplayService.getRotationSets(eq(10))).andReturn(rotationSetsDtos);
+        expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos).anyTimes();
+        expect(mockDisplayPageStateHolder.getDisplayTypes()).andReturn(displayTypeDtos).anyTimes();
+        expect(mockDisplayService.getRotationSets(eq(10))).andReturn(rotationSetsDtos).anyTimes();
         replay(mockDisplaySelectedValidator);
         replay(mockDisplayService);
         replay(mockDisplayPageStateHolder);
@@ -171,21 +177,24 @@ class DisplayControllerTest extends DisplayControllerErrorTest {
         mockDisplaySelectedValidator.validate(capture(capturedDisplaySearchCommand),
             capture(capturedErrors));
         expectLastCall();
+        expect(mockDisplayService.getCourtSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
+        mockDisplayPageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall().anyTimes();
         expect(mockDisplayService.getDisplayTypes()).andReturn(displayTypeDtos);
         mockDisplayPageStateHolder.setDisplayTypes(capture(capturedDisplayTypeDtos));
         expectLastCall();
-        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos);
+        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos).anyTimes();
         mockDisplayPageStateHolder.setRotationSets(capture(capturedRotationSetsDtos));
         expectLastCall();
         expect(mockDisplayService.getDisplays(eq(8L), anyObject(), capture(capturedCourtSiteDtos),
             anyObject())).andReturn(displayDtos);
         mockDisplayPageStateHolder.setDisplays(capture(capturedDisplayDtos));
-        expect(mockDisplayPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockDisplayPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockDisplayPageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
-        expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos);
-        expect(mockDisplayPageStateHolder.getDisplayTypes()).andReturn(displayTypeDtos);
-        expect(mockDisplayService.getRotationSets(eq(10))).andReturn(rotationSetsDtos);
+        expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos).anyTimes();
+        expect(mockDisplayPageStateHolder.getDisplayTypes()).andReturn(displayTypeDtos).anyTimes();
+        expect(mockDisplayService.getRotationSets(eq(10))).andReturn(rotationSetsDtos).anyTimes();
         replay(mockDisplaySelectedValidator);
         replay(mockDisplayService);
         replay(mockDisplayPageStateHolder);

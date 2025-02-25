@@ -50,6 +50,8 @@ public class DisplayPageStateSetter {
         final String methodName = "setAmendPageStateSelectionLists";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Set the court site list
+        displayPageStateHolder.setSites(displayService.getCourtSites());
         // Set the display types
         displayPageStateHolder.setDisplayTypes(displayService.getDisplayTypes());
         // Set the rotation sets
@@ -70,6 +72,8 @@ public class DisplayPageStateSetter {
         final String methodName = "setDeletePageStateSelectionLists";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Set the court site list
+        displayPageStateHolder.setSites(displayService.getCourtSites());
         // Set the display types
         displayPageStateHolder.setDisplayTypes(displayService.getDisplayTypes());
         // Set the rotation sets

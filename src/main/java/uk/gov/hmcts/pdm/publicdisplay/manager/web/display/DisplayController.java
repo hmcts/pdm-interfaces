@@ -62,6 +62,13 @@ public class DisplayController extends DisplayPageStateSetter {
     private static final String ROTATION_SET_LIST = "rotationSetList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ATTEMPT = "Attempt {}{}";
+    private static final String POPULATING_COURTSITES = ", populating the CourtSites list";
+    private static final String COURTSITES_POPULATED = "CourtSites list populated";
+    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
+    
+    private static final int MAX_NUM_OF_RETRIES = 5;
     
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_DISPLAY = "display";
@@ -199,13 +206,33 @@ public class DisplayController extends DisplayPageStateSetter {
             model.addObject(COMMAND, displaySearchCommand);
 
         } else {
+            // Populate the CourtSites list
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_COURTSITES);
+                setViewPageStateSelectionLists();
+                if (!displayPageStateHolder.getSites().isEmpty()) {
+                    LOGGER.info(COURTSITES_POPULATED);
+                    break;
+                }
+            }
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 displaySearchCommand.getXhibitCourtSiteId());
             
             // Populate the amend lists
-            setAmendPageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(), courtSite.getCourtId());
-
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+                setAmendPageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(), courtSite.getCourtId());
+                if (!displayPageStateHolder.getSites().isEmpty()
+                    && !displayPageStateHolder.getDisplays().isEmpty()
+                    && !displayPageStateHolder.getDisplayTypes().isEmpty()
+                    && !displayPageStateHolder.getRotationSets().isEmpty()) {
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                    break;
+                }
+            }
+            
             // Populate the relevant fields
             final DisplayAmendCommand displayCommand = new DisplayAmendCommand();
             displayCommand.setXhibitCourtSiteId(courtSite.getId());
@@ -336,13 +363,33 @@ public class DisplayController extends DisplayPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_DISPLAY);
 
         } else {
+            // Populate the CourtSites list
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_COURTSITES);
+                setViewPageStateSelectionLists();
+                if (!displayPageStateHolder.getSites().isEmpty()) {
+                    LOGGER.info(COURTSITES_POPULATED);
+                    break;
+                }
+            }
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 displaySearchCommand.getXhibitCourtSiteId());
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(), courtSite.getCourtId());
-
+            
+            // Populate the create lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+                setAmendPageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(), courtSite.getCourtId());
+                if (!displayPageStateHolder.getSites().isEmpty()
+                    && !displayPageStateHolder.getDisplays().isEmpty()
+                    && !displayPageStateHolder.getDisplayTypes().isEmpty()
+                    && !displayPageStateHolder.getRotationSets().isEmpty()) {
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                    break;
+                }
+            }
+            
             // Populate the relevant fields
             final DisplayCreateCommand displayCommand = new DisplayCreateCommand();
             displayCommand.setXhibitCourtSiteId(courtSite.getId());
@@ -450,14 +497,33 @@ public class DisplayController extends DisplayPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_DISPLAY);
 
         } else {
-
+            // Populate the CourtSites list
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_COURTSITES);
+                setViewPageStateSelectionLists();
+                if (!displayPageStateHolder.getSites().isEmpty()) {
+                    LOGGER.info(COURTSITES_POPULATED);
+                    break;
+                }
+            }
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 displaySearchCommand.getXhibitCourtSiteId());
-
+            
             // Populate the delete lists
-            setDeletePageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(), courtSite.getCourtId());
-
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+                setDeletePageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(), courtSite.getCourtId());
+                if (!displayPageStateHolder.getSites().isEmpty()
+                    && !displayPageStateHolder.getDisplays().isEmpty()
+                    && !displayPageStateHolder.getDisplayTypes().isEmpty()
+                    && !displayPageStateHolder.getRotationSets().isEmpty()) {
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                    break;
+                }
+            }
+            
             // Populate the relevant fields
             final DisplayDeleteCommand displayCommand = new DisplayDeleteCommand();
 
