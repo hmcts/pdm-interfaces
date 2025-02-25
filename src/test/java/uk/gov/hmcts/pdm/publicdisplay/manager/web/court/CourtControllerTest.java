@@ -106,31 +106,35 @@ abstract class CourtControllerTest extends CourtControllerBase {
         final List<CourtDto> courtDtos = getCourtDtoList();
         final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = List.of(new XhibitCourtSiteDto());
         final Capture<CourtDto> capturedCourtDto = newCapture();
+        final Capture<List<CourtDto>> capturedCourtDtoList = newCapture();
 
         mockCourtPageStateHolder.setCourtSearchCommand(capture(capturedCourtSearchCommand));
         expectLastCall();
-        mockCourtSelectedValidator.validate(capture(capturedCourtSearchCommand), capture(capturedErrors));
+        mockCourtSelectedValidator.validate(capture(capturedCourtSearchCommand),
+            capture(capturedErrors));
         expectLastCall();
         replay(mockCourtSelectedValidator);
-        expect(mockCourtPageStateHolder.getCourts()).andReturn(courtDtos);
+        expect(mockCourtPageStateHolder.getCourts()).andReturn(courtDtos).anyTimes();
         mockCourtPageStateHolder.setCourt(capture(capturedCourtDto));
-        expectLastCall().times(2);
-        expect(mockCourtPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
-        expect(mockCourtPageStateHolder.getCourt()).andReturn(courtDtos.get(0));
+        expectLastCall().anyTimes();
+        mockCourtPageStateHolder.setCourts(capture(capturedCourtDtoList));
+        expectLastCall();
+        expect(mockCourtPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
+        expect(mockCourtPageStateHolder.getCourt()).andReturn(courtDtos.get(0)).anyTimes();
         replay(mockCourtPageStateHolder);
 
         // Perform the test
-        final MvcResult results = mockMvc.perform(post(mappingNameViewCourtSiteUrl)
-                .param(COURT_ID, THREE)
-                .param("btnAdd", ADD)).andReturn();
+        final MvcResult results = mockMvc
+            .perform(post(mappingNameViewCourtSiteUrl).param(COURT_ID, THREE).param("btnAdd", ADD))
+            .andReturn();
         ModelAndView modelAndView = results.getModelAndView();
 
         assertNotNull(modelAndView.getViewName(), NULL);
         assertEquals(viewNameCreateCourt, modelAndView.getViewName(), NOT_EQUAL);
         assertFalse(capturedErrors.getValue().hasErrors(), NOT_FALSE);
         assertEquals(3, capturedCourtSearchCommand.getValue().getCourtId(), NOT_EQUAL);
-        assertInstanceOf(CourtCreateCommand.class,
-                modelAndView.getModel().get(COMMAND), NOT_AN_INSTANCE);
+        assertInstanceOf(CourtCreateCommand.class, modelAndView.getModel().get(COMMAND),
+            NOT_AN_INSTANCE);
         assertEquals(xhibitCourtSiteDtos, modelAndView.getModel().get(COURTSITE_LIST), NOT_EQUAL);
         assertEquals(courtDtos.get(0), modelAndView.getModel().get(COURT), NOT_EQUAL);
         verify(mockCourtSelectedValidator);

@@ -153,6 +153,16 @@ public class CourtController extends CourtPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURT_SITE);
 
         } else {
+            // Populate the CourtSites list
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                setViewPageStateSelectionLists();
+                if (!courtPageStateHolder.getSites().isEmpty()
+                    && !courtPageStateHolder.getCourts().isEmpty()) {
+                    LOGGER.info("All PageStateSelectionLists populated");
+                    break;
+                }
+            }
 
             // Get the selected Court
             final CourtDto court =
