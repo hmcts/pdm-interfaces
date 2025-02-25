@@ -134,18 +134,19 @@ abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
             capture(capturedErrors));
         expectLastCall();
         expect(mockRefJudgeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockRefJudgeService.getJudges(eq(8L))).andReturn(refJudgeDtos);
+        expect(mockRefJudgeService.getJudgeTypes(eq(8L))).andReturn(refSystemCodeDtos);
+
         mockJudgePageStateHolder.setSites(xhibitCourtSiteDtos);
         expectLastCall();
-        expect(mockRefJudgeService.getJudges(eq(8L))).andReturn(refJudgeDtos);
         mockJudgePageStateHolder.setJudges(capture(capturedRefJudgeDtos));
         expectLastCall();
-        expect(mockRefJudgeService.getJudgeTypes(eq(8L))).andReturn(refSystemCodeDtos);
         mockJudgePageStateHolder.setJudgeTypes(capture(capturedRefSysCodeDto));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
+        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
         mockJudgePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos).anyTimes();
+        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos);
         replay(mockJudgeSelectedValidator);
         replay(mockRefJudgeService);
         replay(mockJudgePageStateHolder);
