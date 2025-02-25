@@ -201,6 +201,9 @@ abstract class CourtControllerTest extends CourtControllerBase {
         expect(mockCourtPageStateHolder.getCourts()).andReturn(courtDtos).anyTimes();
         mockCourtPageStateHolder.setCourt(capture(capturedCourtDto));
         expectLastCall().anyTimes();
+        expect(mockCourtService.getCourts()).andReturn(courtDtos);
+        mockCourtPageStateHolder.setCourts(courtDtos);
+        expectLastCall();
         expect(mockCourtService.getCourtSites(3)).andReturn(xhibitCourtSiteDtos).anyTimes();
         mockCourtPageStateHolder.setSites(capture(capturedCourtSites));
         expectLastCall();
