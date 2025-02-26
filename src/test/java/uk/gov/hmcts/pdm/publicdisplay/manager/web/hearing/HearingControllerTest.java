@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.hearing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +27,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
 class HearingControllerTest extends HearingErrorController {
 
     @Test
@@ -173,6 +176,57 @@ class HearingControllerTest extends HearingErrorController {
         verify(mockHearingTypePageStateHolder);
         verify(mockHearingTypeSelectedValidator);
     }
+    
+    @Test
+    void showAmendHearingEmptyListsTest() throws Exception {
+        final Capture<HearingTypeSearchCommand> capturedHearingTypeSearchCommand = newCapture();
+        final Capture<BindingResult> capturedErrors = newCapture();
+        final Capture<XhibitCourtSiteDto> capturedCourtSite = newCapture();
+        final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = createCourtSiteDtoList();
+        final List<HearingTypeDto> hearingTypeDtos = createHearingTypeDtoList();
+        final List<String> categories = createCategoriesList();
+
+        mockHearingTypePageStateHolder.setHearingSearchCommand(capture(capturedHearingTypeSearchCommand));
+        expectLastCall();
+        mockHearingTypeSelectedValidator.validate(capture(capturedHearingTypeSearchCommand), capture(capturedErrors));
+        expectLastCall();
+        
+        // Populate with empty lists
+        expect(mockHearingTypeService.getCourtSites()).andReturn(new ArrayList<>()).anyTimes();
+        mockHearingTypePageStateHolder.setSites(new ArrayList<>());
+        expectLastCall().anyTimes();
+        expect(mockHearingTypeService.getHearingTypes(EasyMock.isA(Long.class)))
+            .andReturn(new ArrayList<>()).anyTimes();
+        mockHearingTypePageStateHolder.setHearingTypes(new ArrayList<>());
+        expectLastCall().anyTimes();
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(new ArrayList<>()).times(5);
+
+        // Populate selected Court Site
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        mockHearingTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
+        expectLastCall();
+        
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos);
+        expect(mockHearingTypeService.getAllCategories()).andReturn(categories);
+
+        replay(mockHearingTypeSelectedValidator);
+        replay(mockHearingTypeService);
+        replay(mockHearingTypePageStateHolder);
+
+        boolean result = true;
+        // Perform the test
+        mockMvc.perform(post(mappingNameViewHearingUrl)
+                                            .param(XHIBIT_COURTSITE_ID, "8")
+                                            .param(
+                                            "btnAmend", ADD))
+                                         .andReturn();
+        assertTrue(result, FALSE);
+        verify(mockHearingTypeService);
+        verify(mockHearingTypePageStateHolder);
+        verify(mockHearingTypeSelectedValidator);
+    }
+
 
     @Test
     void updateHearingTypeTest() throws Exception {
@@ -302,6 +356,55 @@ class HearingControllerTest extends HearingErrorController {
         assertEquals(8, capturedCourtSite.getValue().getId(), NOT_EQUAL);
         assertEquals(A_HEARING_TYPE_CODE, hearingTypeDtoListCapture.getValue().get(0).getHearingTypeCode(), NOT_EQUAL);
         assertEquals(viewNameCreateHearing, results.getModelAndView().getViewName(), NOT_EQUAL);
+        verify(mockHearingTypeService);
+        verify(mockHearingTypePageStateHolder);
+        verify(mockHearingTypeSelectedValidator);
+    }
+    
+    @Test
+    void showCreateHearingEmptyListsTest() throws Exception {
+        final Capture<HearingTypeSearchCommand> capturedHearingTypeSearchCommand = newCapture();
+        final Capture<BindingResult> capturedErrors = newCapture();
+        final Capture<XhibitCourtSiteDto> capturedCourtSite = newCapture();
+        final List<HearingTypeDto> hearingTypeDtos = createHearingTypeDtoList();
+        final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = createCourtSiteDtoList();
+        final List<String> categories = createCategoriesList();
+
+        mockHearingTypePageStateHolder.setHearingSearchCommand(capture(capturedHearingTypeSearchCommand));
+        expectLastCall();
+        mockHearingTypeSelectedValidator.validate(capture(capturedHearingTypeSearchCommand), capture(capturedErrors));
+        expectLastCall();
+        
+        // Populate with empty lists
+        expect(mockHearingTypeService.getCourtSites()).andReturn(new ArrayList<>()).anyTimes();
+        mockHearingTypePageStateHolder.setSites(new ArrayList<>());
+        expectLastCall().anyTimes();
+        expect(mockHearingTypeService.getHearingTypes(EasyMock.isA(Long.class)))
+            .andReturn(new ArrayList<>()).anyTimes();
+        mockHearingTypePageStateHolder.setHearingTypes(new ArrayList<>());
+        expectLastCall().anyTimes();
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(new ArrayList<>()).times(5);
+
+        // Populate selected Court Site
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        mockHearingTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
+        expectLastCall();
+        
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos);
+        expect(mockHearingTypeService.getAllCategories()).andReturn(categories);
+        
+        replay(mockHearingTypeSelectedValidator);
+        replay(mockHearingTypeService);
+        replay(mockHearingTypePageStateHolder);
+
+        boolean result = true;
+        // Perform the test
+        mockMvc.perform(post(mappingNameViewHearingUrl)
+                                            .param(XHIBIT_COURTSITE_ID, "8")
+                                            .param("btnAdd", ADD))
+                                         .andReturn();
+        assertTrue(result, FALSE);
         verify(mockHearingTypeService);
         verify(mockHearingTypePageStateHolder);
         verify(mockHearingTypeSelectedValidator);
