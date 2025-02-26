@@ -189,16 +189,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             model.addObject(COMMAND, hearingTypeSearchCommand);
         } else {
             // Populate the amend lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-                setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
-                if (!hearingTypePageStateHolder.getSites().isEmpty()
-                    && !hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
-                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                    break;
-                }
-            }
-
+            populatePageStateSelectionLists(hearingTypeSearchCommand);
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 hearingTypeSearchCommand.getXhibitCourtSiteId());
@@ -338,15 +330,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
 
         } else {
             // Populate the create lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-                setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
-                if (!hearingTypePageStateHolder.getSites().isEmpty()
-                    && !hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
-                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                    break;
-                }
-            }
+            populatePageStateSelectionLists(hearingTypeSearchCommand);
 
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
@@ -434,5 +418,17 @@ public class HearingTypeController extends HearingTypePageStateSetter {
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
+    }
+    
+    private void populatePageStateSelectionLists(HearingTypeSearchCommand hearingTypeSearchCommand) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
+            if (!hearingTypePageStateHolder.getSites().isEmpty()
+                && !hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
     }
 }
