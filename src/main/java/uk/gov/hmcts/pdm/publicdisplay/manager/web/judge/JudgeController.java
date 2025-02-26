@@ -173,6 +173,30 @@ public class JudgeController extends JudgePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
+    
+    /**
+     * Populate the page state selection lists.
+     *
+     * @param judgeSearchCommand the judge search command
+     * @param isAmend Is amend if not then delete
+     */
+    private void populatePageStateSelectionLists(JudgeSearchCommand judgeSearchCommand,
+        Boolean isAmend) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            if (isAmend) {
+                setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
+            } else {
+                setDeletePageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
+            }
+            if (!judgePageStateHolder.getSites().isEmpty()
+                && !judgePageStateHolder.getJudges().isEmpty()
+                && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
+    }
 
     /**
      * Show amend judge.
@@ -203,16 +227,7 @@ public class JudgeController extends JudgePageStateSetter {
 
         } else {
             // Populate the amend lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-                setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
-                if (!judgePageStateHolder.getSites().isEmpty()
-                    && !judgePageStateHolder.getJudges().isEmpty()
-                    && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                    break;
-                }
-            }
+            populatePageStateSelectionLists(judgeSearchCommand, true);
                 
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
@@ -349,16 +364,7 @@ public class JudgeController extends JudgePageStateSetter {
 
         } else {
             // Populate the amend lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-                setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
-                if (!judgePageStateHolder.getSites().isEmpty()
-                    && !judgePageStateHolder.getJudges().isEmpty()
-                    && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                    break;
-                }
-            }
+            populatePageStateSelectionLists(judgeSearchCommand, true);
             
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
@@ -460,16 +466,7 @@ public class JudgeController extends JudgePageStateSetter {
 
         } else {
             // Populate the delete lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-                setDeletePageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
-                if (!judgePageStateHolder.getSites().isEmpty()
-                    && !judgePageStateHolder.getJudges().isEmpty()
-                    && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                    break;
-                }
-            }
+            populatePageStateSelectionLists(judgeSearchCommand, false);
             
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
