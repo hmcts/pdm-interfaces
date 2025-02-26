@@ -190,15 +190,7 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
 
         } else {
             // Populate the amend lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-                setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
-                if (!judgeTypePageStateHolder.getSites().isEmpty()
-                    && !judgeTypePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                    break;
-                }
-            }
+            populatePageStateSelectionLists(judgeTypeSearchCommand);
 
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
@@ -220,6 +212,23 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
         LOGGER.debug("{}{} viewName: {}", METHOD, methodName, model.getViewName());
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
+    }
+    
+    /**
+     * Populate the page state selection lists.
+     *
+     * @param judgeTypeSearchCommand the judge type search command
+     */
+    private void populatePageStateSelectionLists(JudgeTypeSearchCommand judgeTypeSearchCommand) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
+            if (!judgeTypePageStateHolder.getSites().isEmpty()
+                && !judgeTypePageStateHolder.getJudgeTypes().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
     }
 
     /**
@@ -325,15 +334,7 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
 
         } else {
             // Populate the create lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-                setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
-                if (!judgeTypePageStateHolder.getSites().isEmpty()
-                    && !judgeTypePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                    break;
-                }
-            }
+            populatePageStateSelectionLists(judgeTypeSearchCommand);
             
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
