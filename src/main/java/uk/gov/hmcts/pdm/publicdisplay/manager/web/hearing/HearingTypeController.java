@@ -61,6 +61,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
     private static final String CATEGORIES_LIST = "categoriesList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ATTEMPT = "Attempt {}{}";
+    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
     private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
@@ -187,11 +190,11 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         } else {
             // Populate the amend lists
             for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
                 setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
                 if (!hearingTypePageStateHolder.getSites().isEmpty()
                     && !hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
-                    LOGGER.info("All PageStateSelectionLists populated");
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
                     break;
                 }
             }
@@ -336,11 +339,11 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         } else {
             // Populate the create lists
             for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
                 setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
                 if (!hearingTypePageStateHolder.getSites().isEmpty()
                     && !hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
-                    LOGGER.info("All PageStateSelectionLists populated");
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
                     break;
                 }
             }

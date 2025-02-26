@@ -62,6 +62,9 @@ public class JudgeController extends JudgePageStateSetter {
     private static final String JUDGE_TYPE_LIST = "judgeTypeList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ATTEMPT = "Attempt {}{}";
+    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
     private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
@@ -201,12 +204,12 @@ public class JudgeController extends JudgePageStateSetter {
         } else {
             // Populate the amend lists
             for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
                 setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
                 if (!judgePageStateHolder.getSites().isEmpty()
                     && !judgePageStateHolder.getJudges().isEmpty()
                     && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info("All PageStateSelectionLists populated");
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
                     break;
                 }
             }
@@ -347,12 +350,12 @@ public class JudgeController extends JudgePageStateSetter {
         } else {
             // Populate the amend lists
             for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
                 setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
                 if (!judgePageStateHolder.getSites().isEmpty()
                     && !judgePageStateHolder.getJudges().isEmpty()
                     && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info("All PageStateSelectionLists populated");
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
                     break;
                 }
             }
@@ -458,12 +461,12 @@ public class JudgeController extends JudgePageStateSetter {
         } else {
             // Populate the delete lists
             for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info("Attempt {}{}", i + 1, ", populating the PageStateSelectionLists");
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
                 setDeletePageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
                 if (!judgePageStateHolder.getSites().isEmpty()
                     && !judgePageStateHolder.getJudges().isEmpty()
                     && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info("All PageStateSelectionLists populated");
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
                     break;
                 }
             }
