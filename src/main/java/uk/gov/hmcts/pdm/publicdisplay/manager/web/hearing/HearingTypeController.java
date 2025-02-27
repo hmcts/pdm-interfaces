@@ -426,7 +426,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
     
     private XhibitCourtSiteDto populateListsAndSetCourtSite(
         HearingTypeSearchCommand hearingTypeSearchCommand) {
-        // Populate the create lists
+        // Populate the lists
         populatePageStateSelectionLists(hearingTypeSearchCommand);
         
         // Get the selected CourtSite

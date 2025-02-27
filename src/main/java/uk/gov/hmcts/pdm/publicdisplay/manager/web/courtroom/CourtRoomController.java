@@ -180,13 +180,9 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURTROOM);
 
         } else {
-            // Populate the create lists
-            populatePageStateSelectionLists(courtRoomSearchCommand);
-
-            // Get the selected CourtSite
-            final CourtDto court =
-                populateSelectedCourtInPageStateHolder(courtRoomSearchCommand.getCourtId());
-
+            // Populate lists and set CourtSite
+            final CourtDto court = populateListsAndSetCourtSite(courtRoomSearchCommand);
+                
             // Populate the relevant fields
             final CourtRoomCreateCommand courtRoomCreateCommand = new CourtRoomCreateCommand();
 
@@ -206,23 +202,6 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
         return model;
     }
     
-    /**
-     * Populate the page state selection lists.
-     *
-     * @param courtRoomSearchCommand the court room search command
-     */
-    private void populatePageStateSelectionLists(CourtRoomSearchCommand courtRoomSearchCommand) {
-        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-            setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
-            if (!courtRoomPageStateHolder.getSites().isEmpty()
-                && !courtRoomPageStateHolder.getCourts().isEmpty()) {
-                LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                break;
-            }
-        }
-    }
-
     /**
      * Show amend court room.
      *
@@ -253,13 +232,8 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURTROOM);
 
         } else {
-            // Populate the amend lists
-            populatePageStateSelectionLists(courtRoomSearchCommand);
-            
-            // Get the selected court
-            final CourtDto court =
-                populateSelectedCourtInPageStateHolder(courtRoomSearchCommand.getCourtId());
-
+            // Populate lists and set CourtSite
+            final CourtDto court = populateListsAndSetCourtSite(courtRoomSearchCommand);
 
             // Populate the relevant fields
             final CourtRoomAmendCommand courtRoomAmendCommand = new CourtRoomAmendCommand();
@@ -406,14 +380,9 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURTROOM);
 
         } else {
-            // Populate the delete lists
-            populatePageStateSelectionLists(courtRoomSearchCommand);
+            // Populate lists and set CourtSite
+            final CourtDto court = populateListsAndSetCourtSite(courtRoomSearchCommand);
             
-            
-            // Get the selected CourtSite
-            final CourtDto court =
-                populateSelectedCourtInPageStateHolder(courtRoomSearchCommand.getCourtId());
-
             // Populate the relevant fields
             final CourtRoomDeleteCommand courtRoomDeleteCommand = new CourtRoomDeleteCommand();
 
@@ -592,5 +561,31 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
+    }
+
+    /**
+     * Populate the page state selection lists.
+     *
+     * @param courtRoomSearchCommand the court room search command
+     */
+    private void populatePageStateSelectionLists(CourtRoomSearchCommand courtRoomSearchCommand) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            setAmendPageStateSelectionLists(courtRoomSearchCommand.getCourtId());
+            if (!courtRoomPageStateHolder.getSites().isEmpty()
+                && !courtRoomPageStateHolder.getCourts().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
+    }
+
+    private CourtDto populateListsAndSetCourtSite(
+        CourtRoomSearchCommand courtRoomSearchCommand) {
+        // Populate the lists
+        populatePageStateSelectionLists(courtRoomSearchCommand);
+
+        // Get the selected CourtSite
+        return populateSelectedCourtInPageStateHolder(courtRoomSearchCommand.getCourtId());
     }
 }

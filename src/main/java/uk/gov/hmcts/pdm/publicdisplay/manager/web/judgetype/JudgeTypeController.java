@@ -406,7 +406,7 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
     
     private XhibitCourtSiteDto populateListsAndSetCourtSite(
         JudgeTypeSearchCommand judgeTypeSearchCommand) {
-        // Populate the amend lists
+        // Populate the lists
         populatePageStateSelectionLists(judgeTypeSearchCommand);
 
         // Get the selected CourtSite
