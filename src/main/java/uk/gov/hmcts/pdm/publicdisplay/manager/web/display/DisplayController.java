@@ -49,6 +49,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
 @Controller
 @RequestMapping("/display")
+@SuppressWarnings("PMD.TooManyMethods")
 public class DisplayController extends DisplayPageStateSetter {
 
     /** The Constant LOGGER. */
@@ -178,49 +179,6 @@ public class DisplayController extends DisplayPageStateSetter {
     }
     
     /**
-     * Populate the court site lists.
-     *
-     */
-    private void populateCourtSitesList() {
-        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-            LOGGER.info(ATTEMPT, i + 1, POPULATING_COURTSITES);
-            setViewPageStateSelectionLists();
-            if (!displayPageStateHolder.getSites().isEmpty()) {
-                LOGGER.info(COURTSITES_POPULATED);
-                break;
-            }
-        }
-    }
-
-    /**
-     * Populate the page state selection lists.
-     *
-     * @param displaySearchCommand the display search command
-     * @param courtSite the court site
-     * @param isAmend Is amend if not then delete
-     */
-    private void populatePageStateSelectionLists(DisplaySearchCommand displaySearchCommand,
-        XhibitCourtSiteDto courtSite, Boolean isAmend) {
-        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
-            if (isAmend) {
-                setAmendPageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(),
-                    courtSite.getCourtId());
-            } else {
-                setDeletePageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(),
-                    courtSite.getCourtId());
-            }
-            if (!displayPageStateHolder.getSites().isEmpty()
-                && !displayPageStateHolder.getDisplays().isEmpty()
-                && !displayPageStateHolder.getDisplayTypes().isEmpty()
-                && !displayPageStateHolder.getRotationSets().isEmpty()) {
-                LOGGER.info(PAGESTATE_LISTS_POPULATED);
-                break;
-            }
-        }
-    }
-
-    /**
      * Show amend display.
      *
      * @param displaySearchCommand the xhibit court site command
@@ -249,15 +207,8 @@ public class DisplayController extends DisplayPageStateSetter {
             model.addObject(COMMAND, displaySearchCommand);
 
         } else {
-            // Populate the CourtSites list
-            populateCourtSitesList();
-            
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                displaySearchCommand.getXhibitCourtSiteId());
-            
-            // Populate the amend lists
-            populatePageStateSelectionLists(displaySearchCommand, courtSite, true);
+            // Populate the lists and set CourtSite
+            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(displaySearchCommand, true);
             
             // Populate the relevant fields
             final DisplayAmendCommand displayCommand = new DisplayAmendCommand();
@@ -389,15 +340,8 @@ public class DisplayController extends DisplayPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_DISPLAY);
 
         } else {
-            // Populate the CourtSites list
-            populateCourtSitesList();
-            
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                displaySearchCommand.getXhibitCourtSiteId());
-            
-            // Populate the create lists
-            populatePageStateSelectionLists(displaySearchCommand, courtSite, true);
+            // Populate the lists and set CourtSite
+            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(displaySearchCommand, true);
             
             // Populate the relevant fields
             final DisplayCreateCommand displayCommand = new DisplayCreateCommand();
@@ -506,15 +450,8 @@ public class DisplayController extends DisplayPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_DISPLAY);
 
         } else {
-            // Populate the CourtSites list
-            populateCourtSitesList();
-            
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                displaySearchCommand.getXhibitCourtSiteId());
-            
-            // Populate the delete lists
-            populatePageStateSelectionLists(displaySearchCommand, courtSite, false);
+            // Populate the lists and set CourtSite
+            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(displaySearchCommand, false);
             
             // Populate the relevant fields
             final DisplayDeleteCommand displayCommand = new DisplayDeleteCommand();
@@ -578,5 +515,63 @@ public class DisplayController extends DisplayPageStateSetter {
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
+    }
+    
+    /**
+     * Populate the court site lists.
+     *
+     */
+    private void populateCourtSitesList() {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_COURTSITES);
+            setViewPageStateSelectionLists();
+            if (!displayPageStateHolder.getSites().isEmpty()) {
+                LOGGER.info(COURTSITES_POPULATED);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Populate the page state selection lists.
+     *
+     * @param displaySearchCommand the display search command
+     * @param courtSite the court site
+     * @param isAmend Is amend if not then delete
+     */
+    private void populatePageStateSelectionLists(DisplaySearchCommand displaySearchCommand,
+        XhibitCourtSiteDto courtSite, Boolean isAmend) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            if (isAmend) {
+                setAmendPageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(),
+                    courtSite.getCourtId());
+            } else {
+                setDeletePageStateSelectionLists(displaySearchCommand.getXhibitCourtSiteId(),
+                    courtSite.getCourtId());
+            }
+            if (!displayPageStateHolder.getSites().isEmpty()
+                && !displayPageStateHolder.getDisplays().isEmpty()
+                && !displayPageStateHolder.getDisplayTypes().isEmpty()
+                && !displayPageStateHolder.getRotationSets().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
+    }
+
+    private XhibitCourtSiteDto populateListsAndSetCourtSite(
+        DisplaySearchCommand displaySearchCommand, boolean isAmend) {
+        // Populate the CourtSites list
+        populateCourtSitesList();
+        
+        // Get the selected CourtSite
+        final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
+            displaySearchCommand.getXhibitCourtSiteId());
+        
+        // Populate the lists
+        populatePageStateSelectionLists(displaySearchCommand, courtSite, isAmend);
+        
+        return courtSite;
     }
 }
