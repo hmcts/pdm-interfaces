@@ -190,6 +190,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         } else {
             // Populate the amend lists
             populatePageStateSelectionLists(hearingTypeSearchCommand);
+            LOGGER.debug("Finished populating lists for showAmendHearing");
             
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
@@ -331,7 +332,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         } else {
             // Populate the create lists
             populatePageStateSelectionLists(hearingTypeSearchCommand);
-
+            LOGGER.debug("Finished populating lists for showCreateHearing");
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 hearingTypeSearchCommand.getXhibitCourtSiteId());
