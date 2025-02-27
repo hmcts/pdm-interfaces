@@ -50,6 +50,8 @@ public class HearingTypePageStateSetter {
         final String methodName = "setAmendPageStateSelectionLists";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Set the court site list
+        hearingTypePageStateHolder.setSites(hearingTypeService.getCourtSites());
         // Set the hearing type list
         hearingTypePageStateHolder.setHearingTypes(hearingTypeService
             .getHearingTypes(xhibitCourtSiteId));

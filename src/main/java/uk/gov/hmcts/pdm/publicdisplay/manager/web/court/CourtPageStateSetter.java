@@ -49,6 +49,8 @@ public class CourtPageStateSetter {
         final String methodName = "setAmendPageStateSelectionLists";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Set the court list
+        courtPageStateHolder.setCourts(courtService.getCourts());
         // Set the court sites by courtId
         courtPageStateHolder.setSites(courtService.getCourtSites(courtId));
 

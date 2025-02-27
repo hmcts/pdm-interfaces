@@ -32,6 +32,10 @@ public class CourtController extends CourtPageStateSetter {
     private static final String COMMAND = "command";
     private static final String COURT = "court";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ATTEMPT = "Attempt {}{}";
+    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     protected static final String FOLDER_COURT = "court";
@@ -152,6 +156,16 @@ public class CourtController extends CourtPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURT_SITE);
 
         } else {
+            // Populate the CourtSites list
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+                setViewPageStateSelectionLists();
+                if (!courtPageStateHolder.getSites().isEmpty()
+                    && !courtPageStateHolder.getCourts().isEmpty()) {
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                    break;
+                }
+            }
 
             // Get the selected Court
             final CourtDto court =
@@ -253,13 +267,21 @@ public class CourtController extends CourtPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_COURT_SITE);
 
         } else {
+            // Populate the amend lists
+            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+                LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+                setAmendPageStateSelectionLists(courtSearchCommand.getCourtId());
+                if (!courtPageStateHolder.getSites().isEmpty()
+                    && !courtPageStateHolder.getCourts().isEmpty()) {
+                    LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                    break;
+                }
+            }
+
             // Get the selected Court
             final CourtDto court =
                 populateSelectedCourtInPageStateHolder(courtSearchCommand.getCourtId());
             courtPageStateHolder.setCourt(court);
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(courtSearchCommand.getCourtId());
 
             // Populate the relevant fields
             final CourtAmendCommand courtAmendCommand = new CourtAmendCommand();

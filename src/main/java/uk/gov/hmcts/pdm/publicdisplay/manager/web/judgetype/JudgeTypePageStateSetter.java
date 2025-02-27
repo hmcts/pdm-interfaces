@@ -50,6 +50,8 @@ public class JudgeTypePageStateSetter {
         final String methodName = "setAmendPageStateSelectionLists";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Set the court site list
+        judgeTypePageStateHolder.setSites(refJudgeTypeService.getCourtSites());
         // Set the judge types list
         judgeTypePageStateHolder.setJudgeTypes(refJudgeTypeService.getJudgeTypes(xhibitCourtSiteId));
 

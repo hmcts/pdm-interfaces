@@ -62,6 +62,9 @@ public class JudgeController extends JudgePageStateSetter {
     private static final String JUDGE_TYPE_LIST = "judgeTypeList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ATTEMPT = "Attempt {}{}";
+    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
     private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
@@ -170,6 +173,30 @@ public class JudgeController extends JudgePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
+    
+    /**
+     * Populate the page state selection lists.
+     *
+     * @param judgeSearchCommand the judge search command
+     * @param isAmend Is amend if not then delete
+     */
+    private void populatePageStateSelectionLists(JudgeSearchCommand judgeSearchCommand,
+        Boolean isAmend) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            if (isAmend) {
+                setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
+            } else {
+                setDeletePageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
+            }
+            if (!judgePageStateHolder.getSites().isEmpty()
+                && !judgePageStateHolder.getJudges().isEmpty()
+                && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
+    }
 
     /**
      * Show amend judge.
@@ -200,16 +227,7 @@ public class JudgeController extends JudgePageStateSetter {
 
         } else {
             // Populate the amend lists
-            for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
-                LOGGER.info("Attempt {}{}", i + 1, ", populating the AmendPageStateSelectionLists");
-                setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
-                if (!judgePageStateHolder.getSites().isEmpty()
-                    && !judgePageStateHolder.getJudges().isEmpty()
-                    && !judgePageStateHolder.getJudgeTypes().isEmpty()) {
-                    LOGGER.info("All AmendPageStateSelectionLists populated");
-                    break;
-                }
-            }
+            populatePageStateSelectionLists(judgeSearchCommand, true);
                 
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
@@ -345,12 +363,12 @@ public class JudgeController extends JudgePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE);
 
         } else {
+            // Populate the amend lists
+            populatePageStateSelectionLists(judgeSearchCommand, true);
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 judgeSearchCommand.getXhibitCourtSiteId());
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
 
             // Populate the relevant fields
             final JudgeCreateCommand judgeCommand = new JudgeCreateCommand();
@@ -447,13 +465,12 @@ public class JudgeController extends JudgePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE);
 
         } else {
-
+            // Populate the delete lists
+            populatePageStateSelectionLists(judgeSearchCommand, false);
+            
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 judgeSearchCommand.getXhibitCourtSiteId());
-
-            // Populate the delete lists
-            setDeletePageStateSelectionLists(judgeSearchCommand.getXhibitCourtSiteId());
 
             // Populate the relevant fields
             final JudgeDeleteCommand judgeCommand = new JudgeDeleteCommand();

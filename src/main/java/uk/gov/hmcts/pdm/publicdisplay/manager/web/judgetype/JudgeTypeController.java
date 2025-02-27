@@ -60,6 +60,10 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
     private static final String JUDGE_TYPE_LIST = "judgeTypeList";
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ATTEMPT = "Attempt {}{}";
+    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_JUDGETYPE = "judgetype";
@@ -185,12 +189,9 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE_TYPE);
 
         } else {
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
-
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                judgeTypeSearchCommand.getXhibitCourtSiteId());
+            // Populate lists and set CourtSite
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(judgeTypeSearchCommand);
 
             // Populate the relevant fields
             final JudgeTypeAmendCommand judgeTypeCommand = new JudgeTypeAmendCommand();
@@ -208,6 +209,23 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
         LOGGER.debug("{}{} viewName: {}", METHOD, methodName, model.getViewName());
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
+    }
+    
+    /**
+     * Populate the page state selection lists.
+     *
+     * @param judgeTypeSearchCommand the judge type search command
+     */
+    private void populatePageStateSelectionLists(JudgeTypeSearchCommand judgeTypeSearchCommand) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
+            if (!judgeTypePageStateHolder.getSites().isEmpty()
+                && !judgeTypePageStateHolder.getJudgeTypes().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
     }
 
     /**
@@ -312,12 +330,9 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE_TYPE);
 
         } else {
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                judgeTypeSearchCommand.getXhibitCourtSiteId());
-
-            // Populate the amend lists
-            setAmendPageStateSelectionLists(judgeTypeSearchCommand.getXhibitCourtSiteId());
+            // Populate lists and set CourtSite
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(judgeTypeSearchCommand);
 
             // Populate the relevant fields
             final JudgeTypeCreateCommand judgeTypeCommand = new JudgeTypeCreateCommand();
@@ -387,5 +402,15 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
+    }
+    
+    private XhibitCourtSiteDto populateListsAndSetCourtSite(
+        JudgeTypeSearchCommand judgeTypeSearchCommand) {
+        // Populate the lists
+        populatePageStateSelectionLists(judgeTypeSearchCommand);
+
+        // Get the selected CourtSite
+        return populateSelectedCourtSiteInPageStateHolder(
+            judgeTypeSearchCommand.getXhibitCourtSiteId());
     }
 }
