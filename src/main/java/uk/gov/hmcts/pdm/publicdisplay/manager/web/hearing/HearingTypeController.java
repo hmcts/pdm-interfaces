@@ -188,13 +188,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_HEARING);
             model.addObject(COMMAND, hearingTypeSearchCommand);
         } else {
-            // Populate the amend lists
-            populatePageStateSelectionLists(hearingTypeSearchCommand);
-            LOGGER.debug("Finished populating lists for showAmendHearing");
-            
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                hearingTypeSearchCommand.getXhibitCourtSiteId());
+            // Populate lists and set CourtSite
+            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(hearingTypeSearchCommand);
 
             // Populate the relevant fields
             final HearingTypeAmendCommand hearingTypeCommand = new HearingTypeAmendCommand();
@@ -330,14 +325,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             model.addObject(COMMAND, hearingTypeSearchCommand);
 
         } else {
-            // Populate the create lists
-            populatePageStateSelectionLists(hearingTypeSearchCommand);
-            LOGGER.debug("Finished populating lists for showCreateHearing");
+            // Populate lists and set CourtSite
+            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(hearingTypeSearchCommand);
             
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                hearingTypeSearchCommand.getXhibitCourtSiteId());
-
             // Populate the relevant fields
             final HearingTypeCreateCommand hearingTypeCreateCommand =
                 new HearingTypeCreateCommand();
@@ -432,5 +422,15 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 break;
             }
         }
+    }
+    
+    private XhibitCourtSiteDto populateListsAndSetCourtSite(
+        HearingTypeSearchCommand hearingTypeSearchCommand) {
+        // Populate the create lists
+        populatePageStateSelectionLists(hearingTypeSearchCommand);
+        
+        // Get the selected CourtSite
+        return populateSelectedCourtSiteInPageStateHolder(
+            hearingTypeSearchCommand.getXhibitCourtSiteId());
     }
 }
