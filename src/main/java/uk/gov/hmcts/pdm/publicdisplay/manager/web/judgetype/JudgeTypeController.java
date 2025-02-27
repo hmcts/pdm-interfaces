@@ -189,12 +189,9 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE_TYPE);
 
         } else {
-            // Populate the amend lists
-            populatePageStateSelectionLists(judgeTypeSearchCommand);
-
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                judgeTypeSearchCommand.getXhibitCourtSiteId());
+            // Populate lists and set CourtSite
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(judgeTypeSearchCommand);
 
             // Populate the relevant fields
             final JudgeTypeAmendCommand judgeTypeCommand = new JudgeTypeAmendCommand();
@@ -333,12 +330,9 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_JUDGE_TYPE);
 
         } else {
-            // Populate the create lists
-            populatePageStateSelectionLists(judgeTypeSearchCommand);
-            
-            // Get the selected CourtSite
-            final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                judgeTypeSearchCommand.getXhibitCourtSiteId());
+            // Populate lists and set CourtSite
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(judgeTypeSearchCommand);
 
             // Populate the relevant fields
             final JudgeTypeCreateCommand judgeTypeCommand = new JudgeTypeCreateCommand();
@@ -408,5 +402,15 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
+    }
+    
+    private XhibitCourtSiteDto populateListsAndSetCourtSite(
+        JudgeTypeSearchCommand judgeTypeSearchCommand) {
+        // Populate the amend lists
+        populatePageStateSelectionLists(judgeTypeSearchCommand);
+
+        // Get the selected CourtSite
+        return populateSelectedCourtSiteInPageStateHolder(
+            judgeTypeSearchCommand.getXhibitCourtSiteId());
     }
 }
