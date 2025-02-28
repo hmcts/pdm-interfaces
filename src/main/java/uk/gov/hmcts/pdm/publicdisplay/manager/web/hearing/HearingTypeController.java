@@ -229,6 +229,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 LOGGER.info("Found HearingType");
                 result = dto;
                 break;
+            } else {
+                LOGGER.info("Ignored HearingType {}", dto.getHearingTypeDesc()); 
             }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
@@ -428,6 +430,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         HearingTypeSearchCommand hearingTypeSearchCommand) {
         // Populate the lists
         populatePageStateSelectionLists(hearingTypeSearchCommand);
+        
         LOGGER.info("Sites after population: {}", hearingTypePageStateHolder.getSites().size());
         LOGGER.info("HearingTypes after population: {}", hearingTypePageStateHolder.getHearingTypes().size());
         
