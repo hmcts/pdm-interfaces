@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IHearingTypeService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
