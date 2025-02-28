@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import jakarta.persistence.EntityManager;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +45,7 @@ class HearingTypeServiceTest {
 
     protected static final String NOT_EQUAL = "Not equal";
     protected static final String NOT_EMPTY = "Not empty";
+    protected static final String NULL = "Result is Null";
 
     @BeforeEach
     public void setup() {
@@ -325,6 +327,23 @@ class HearingTypeServiceTest {
         verify(mockRefHearingTypeRepository);
         verify(mockEntityManager);
 
+    }
+    
+    @Test
+    void testGetHearingType() {
+        expect(mockRefHearingTypeRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockRefHearingTypeRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(getXhbRefHearingTypeDao());
+        
+        replay(mockEntityManager);
+        replay(mockRefHearingTypeRepository);
+        
+        HearingTypeDto result = classUnderTest.getHearingType(1);
+        
+        verify(mockEntityManager);
+        verify(mockRefHearingTypeRepository);
+        assertNotNull(result, NULL);
     }
 
     private static Optional<XhbRefHearingTypeDao> getXhbRefHearingTypeDao() {
