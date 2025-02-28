@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.hearing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IHearingTypeService;
 
@@ -11,7 +12,8 @@ import java.util.List;
 public class HearingTypePageStateSetter {
 
     /** The Constant LOGGER. */
-    protected static final Logger LOGGER = LoggerFactory.getLogger(HearingTypePageStateSetter.class);
+    protected static final Logger LOGGER =
+        LoggerFactory.getLogger(HearingTypePageStateSetter.class);
 
     protected static final String METHOD = "Method ";
     protected static final String THREE_PARAMS = "{}{}{}";
@@ -42,7 +44,7 @@ public class HearingTypePageStateSetter {
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
     }
-    
+
     /**
      * Sets the amend page state selection lists.
      */
@@ -53,8 +55,8 @@ public class HearingTypePageStateSetter {
         // Set the court site list
         hearingTypePageStateHolder.setSites(hearingTypeService.getCourtSites());
         // Set the hearing type list
-        hearingTypePageStateHolder.setHearingTypes(hearingTypeService
-            .getHearingTypes(xhibitCourtSiteId));
+        hearingTypePageStateHolder
+            .setHearingTypes(hearingTypeService.getHearingTypes(xhibitCourtSiteId));
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
     }
@@ -69,7 +71,7 @@ public class HearingTypePageStateSetter {
         final Long xhibitCourtSiteId) {
         final String methodName = "populateSelectedCourtSiteInPageStateHolder ";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-        
+
         XhibitCourtSiteDto selectedCourtSite = null;
         List<XhibitCourtSiteDto> courtSites = hearingTypePageStateHolder.getSites();
         for (XhibitCourtSiteDto courtSite : courtSites) {
@@ -84,5 +86,17 @@ public class HearingTypePageStateSetter {
         hearingTypePageStateHolder.setCourtSite(selectedCourtSite);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return selectedCourtSite;
+    }
+
+    protected List<HearingTypeDto> getHearingTypes() {
+        if (hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
+            LOGGER.debug("No HearingTypes populated.");
+            Long xhibitCourtSiteId =
+                hearingTypePageStateHolder.getHearingSearchCommand().getXhibitCourtSiteId();
+            LOGGER.debug("Populating HearingTypes");
+            hearingTypePageStateHolder
+                .setHearingTypes(hearingTypeService.getHearingTypes(xhibitCourtSiteId));
+        }
+        return hearingTypePageStateHolder.getHearingTypes();
     }
 }
