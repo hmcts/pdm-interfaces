@@ -299,7 +299,8 @@ abstract class HearingErrorController extends AbstractJUnit {
 
         expect(mockHearingTypeService.getCourtSites()).andReturn(courtSites).anyTimes();
         mockHearingTypePageStateHolder.setSites(courtSites);
-        expect(mockHearingTypeService.getHearingType(EasyMock.isA(Integer.class))).andReturn(null).anyTimes();
+        expect(mockHearingTypeService.getHearingType(EasyMock.isA(Integer.class))).andReturn(null)
+            .anyTimes();
         expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(refHearingTypeDtos)
             .anyTimes();
         replay(mockHearingTypePageStateHolder);
