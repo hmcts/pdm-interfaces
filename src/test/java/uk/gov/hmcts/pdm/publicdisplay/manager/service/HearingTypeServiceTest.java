@@ -142,6 +142,33 @@ class HearingTypeServiceTest {
         verify(mockRefHearingTypeRepository);
         verify(mockEntityManager);
     }
+    
+    @Test
+    void testHearingTypesByCourt() {
+
+        XhbRefHearingTypeDao refHearingTypeDao = getXhbRefHearingTypeDao().get();
+
+        List<XhbRefHearingTypeDao> refHearingTypeDaoList = new ArrayList<>();
+        refHearingTypeDaoList.add(refHearingTypeDao);
+
+        // Add the mock calls to child classes
+        expect(mockRefHearingTypeRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockRefHearingTypeRepository.findByCourtId(1)).andReturn(refHearingTypeDaoList);
+
+        replay(mockRefHearingTypeRepository);
+        replay(mockEntityManager);
+
+        // Perform the test
+        List<HearingTypeDto> hearingTypeDtoList = classUnderTest.getHearingTypesByCourtId(1);
+
+        // Assert that the objects are as expected
+        assertEquals(refHearingTypeDao.getHearingTypeCode(), hearingTypeDtoList.get(0).getHearingTypeCode(), NOT_EQUAL);
+
+        // Verify the expected mocks were called
+        verify(mockRefHearingTypeRepository);
+        verify(mockEntityManager);
+    }
 
     @Test
     void hearingTypesEmptyTest() {
