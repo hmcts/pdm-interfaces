@@ -224,7 +224,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         final String methodName = "loadHearingType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         HearingTypeDto result = null;
-        for (HearingTypeDto dto : hearingTypePageStateHolder.getHearingTypes()) {
+        for (HearingTypeDto dto : getHearingTypes()) {
             if (dto.getRefHearingTypeId().equals(refHearingTypeId)) {
                 LOGGER.info("Found HearingType");
                 result = dto;
