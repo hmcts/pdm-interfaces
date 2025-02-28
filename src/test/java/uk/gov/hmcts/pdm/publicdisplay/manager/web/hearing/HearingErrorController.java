@@ -172,8 +172,7 @@ abstract class HearingErrorController extends AbstractJUnit {
 
         assertInstanceOf(HearingTypeCreateCommand.class, model.get(COMMAND), NOT_AN_INSTANCE);
         assertEquals(1, capturedErrors.getValue().getErrorCount(), NOT_EQUAL);
-        assertEquals(viewNameCreateHearing, results.getModelAndView().getViewName(),
-            NOT_EQUAL);
+        assertEquals(viewNameCreateHearing, results.getModelAndView().getViewName(), NOT_EQUAL);
         assertEquals(A_HEARING_TYPE_CODE,
             hearingTypeCreateCommandCapture.getValue().getHearingTypeCode(), NOT_EQUAL);
         assertEquals(4, capturedHearingTypeList.getValue().get(0).getListSequence(), NOT_EQUAL);
@@ -296,7 +295,8 @@ abstract class HearingErrorController extends AbstractJUnit {
     void loadHearingTypeNullTest() throws Exception {
         final List<HearingTypeDto> refHearingTypeDtos = createHearingTypeDtoList();
 
-        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(refHearingTypeDtos);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(refHearingTypeDtos)
+            .anyTimes();
         replay(mockHearingTypePageStateHolder);
 
         // Perform the test
