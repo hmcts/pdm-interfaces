@@ -103,7 +103,7 @@ public class HearingTypeService extends HearingTypeServiceFinder implements IHea
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
     }
-    
+
     /**
      * Gets the hearing types by court site id.
      *
@@ -121,14 +121,7 @@ public class HearingTypeService extends HearingTypeServiceFinder implements IHea
 
         if (!xhbHearingList.isEmpty()) {
             for (XhbRefHearingTypeDao xhbRefHearingType : xhbHearingList) {
-                final HearingTypeDto dto = createHearingTypeDto();
-                dto.setRefHearingTypeId(xhbRefHearingType.getRefHearingTypeId());
-                dto.setHearingTypeCode(xhbRefHearingType.getHearingTypeCode());
-                dto.setHearingTypeDesc(xhbRefHearingType.getHearingTypeDesc());
-                dto.setCategory(xhbRefHearingType.getCategory());
-                dto.setSeqNo(xhbRefHearingType.getSeqNo());
-                dto.setListSequence(xhbRefHearingType.getListSequence());
-                dto.setCourtId(xhbRefHearingType.getCourtId());
+                final HearingTypeDto dto = getDto(xhbRefHearingType);
                 resultList.add(dto);
             }
         }
@@ -136,6 +129,31 @@ public class HearingTypeService extends HearingTypeServiceFinder implements IHea
         return resultList;
     }
     
+    /**
+     * Gets the hearing types by court id.
+     *
+     * @return List of HearingTypeDto
+     */
+    @Override
+    public List<HearingTypeDto> getHearingTypesByCourtId(Integer courtId) {
+        final String methodName = "getHearingTypesByCourtId";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final List<HearingTypeDto> resultList = new ArrayList<>();
+        final List<XhbRefHearingTypeDao> xhbHearingList =
+            getXhbRefHearingTypeRepository().findByCourtId(courtId);
+        LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Hearing Types returned : ",
+            xhbHearingList.size());
+
+        if (!xhbHearingList.isEmpty()) {
+            for (XhbRefHearingTypeDao xhbRefHearingType : xhbHearingList) {
+                final HearingTypeDto dto = getDto(xhbRefHearingType);
+                resultList.add(dto);
+            }
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return resultList;
+    }
+
     /**
      * Gets the hearing type categories.
      *
@@ -151,7 +169,7 @@ public class HearingTypeService extends HearingTypeServiceFinder implements IHea
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
     }
-    
+
     /**
      * Updates the selected hearing type.
      *
@@ -178,7 +196,7 @@ public class HearingTypeService extends HearingTypeServiceFinder implements IHea
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
     }
-    
+
     @Override
     @Secured(UserRole.ROLE_ADMIN_VALUE)
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -194,9 +212,41 @@ public class HearingTypeService extends HearingTypeServiceFinder implements IHea
         hearingTypeDao.setCategory(command.getCategory());
         hearingTypeDao.setCourtId(courtId);
         hearingTypeDao.setObsInd(NO);
-        
+
         // Save
         getXhbRefHearingTypeRepository().saveDao(hearingTypeDao);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
+
+    /**
+     * Gets the hearing type by id.
+     *
+     * @return HearingTypeDto
+     */
+    @Override
+    public HearingTypeDto getHearingType(Integer refHearingTypeId) {
+        final String methodName = "getHearingType";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final Optional<XhbRefHearingTypeDao> dao =
+            getXhbRefHearingTypeRepository().findById(refHearingTypeId);
+        HearingTypeDto result = null;
+        if (dao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Hearing Type found");
+            result = getDto(dao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
+
+    private HearingTypeDto getDto(final XhbRefHearingTypeDao xhbRefHearingType) {
+        final HearingTypeDto dto = createHearingTypeDto();
+        dto.setRefHearingTypeId(xhbRefHearingType.getRefHearingTypeId());
+        dto.setHearingTypeCode(xhbRefHearingType.getHearingTypeCode());
+        dto.setHearingTypeDesc(xhbRefHearingType.getHearingTypeDesc());
+        dto.setCategory(xhbRefHearingType.getCategory());
+        dto.setSeqNo(xhbRefHearingType.getSeqNo());
+        dto.setListSequence(xhbRefHearingType.getListSequence());
+        dto.setCourtId(xhbRefHearingType.getCourtId());
+        return dto;
     }
 }

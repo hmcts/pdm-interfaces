@@ -47,6 +47,24 @@ public class XhbRefHearingTypeRepository extends AbstractRepository<XhbRefHearin
     }
     
     /**
+     * findByCourtId.
+     *
+     * @param courtId Integer
+     * @return XhbRefHearingTypeDao
+     */
+    @SuppressWarnings("unchecked")
+    public List<XhbRefHearingTypeDao> findByCourtId(final Integer courtId) {
+        final String methodName = "findByCourtId";
+        LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
+
+        Query query = getEntityManager().createNamedQuery("XHB_REF_HEARING_TYPE.findByCourtId");
+        query.setParameter("courtId", courtId);
+
+        LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
+        return query.getResultList();
+    }
+    
+    /**
      * findAllCategories.
      *
      * @return String

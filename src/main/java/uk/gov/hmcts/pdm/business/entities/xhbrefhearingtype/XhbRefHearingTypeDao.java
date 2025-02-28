@@ -13,6 +13,9 @@ import uk.gov.hmcts.pdm.business.entities.AbstractDao;
 import java.time.LocalDateTime;
 
 @Entity(name = "XHB_REF_HEARING_TYPE")
+@NamedQuery(name = "XHB_REF_HEARING_TYPE.findByCourtId",
+query = "SELECT o FROM XHB_REF_HEARING_TYPE o WHERE o.courtId = :courtId "
+    + "AND (o.obsInd IS NULL OR o.obsInd <> 'Y')")
 @NamedQuery(name = "XHB_REF_HEARING_TYPE.findByCourtSiteId",
     query = "SELECT o FROM XHB_REF_HEARING_TYPE o WHERE o.courtId = "
         + "(SELECT cs.courtId FROM XHB_COURT_SITE cs WHERE cs.courtSiteId = :courtSiteId) "

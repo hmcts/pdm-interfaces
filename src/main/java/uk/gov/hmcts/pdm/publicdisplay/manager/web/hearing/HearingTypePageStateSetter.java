@@ -87,16 +87,4 @@ public class HearingTypePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return selectedCourtSite;
     }
-
-    protected List<HearingTypeDto> getHearingTypes() {
-        if (hearingTypePageStateHolder.getHearingTypes().isEmpty()) {
-            LOGGER.debug("No HearingTypes populated.");
-            Long xhibitCourtSiteId =
-                hearingTypePageStateHolder.getHearingSearchCommand().getXhibitCourtSiteId();
-            LOGGER.debug("Populating HearingTypes");
-            hearingTypePageStateHolder
-                .setHearingTypes(hearingTypeService.getHearingTypes(xhibitCourtSiteId));
-        }
-        return hearingTypePageStateHolder.getHearingTypes();
-    }
 }

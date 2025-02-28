@@ -223,16 +223,11 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         @PathVariable("refHearingTypeId") @EncryptedFormat final Integer refHearingTypeId) {
         final String methodName = "loadHearingType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-        HearingTypeDto result = null;
-        for (HearingTypeDto dto : getHearingTypes()) {
-            if (dto.getRefHearingTypeId().equals(refHearingTypeId)) {
-                LOGGER.info("Found HearingType");
-                result = dto;
-                break;
-            } else {
-                LOGGER.info("Ignored HearingType {}", dto.getHearingTypeDesc()); 
-            }
-        }
+        // Get the selected type
+        HearingTypeDto result = hearingTypeService.getHearingType(refHearingTypeId);
+        // Reload what is in setAmendPageStateSelectionLists
+        hearingTypePageStateHolder.setSites(hearingTypeService.getCourtSites());
+        hearingTypePageStateHolder.setHearingTypes(hearingTypeService.getHearingTypesByCourtId(result.getCourtId()));
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
     }
