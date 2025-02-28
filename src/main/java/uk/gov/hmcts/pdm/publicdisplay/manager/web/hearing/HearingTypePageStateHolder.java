@@ -69,7 +69,6 @@ public class HearingTypePageStateHolder implements Serializable {
      * Reset all the variables.
      */
     public void reset() {
-        setHearingSearchCommand(null);
         setCourtSite(null);
         setSites(new ArrayList<>());
         setHearingTypes(new ArrayList<>());
