@@ -44,7 +44,7 @@ public interface IHearingTypeService {
      * @return List
      */
     List<XhibitCourtSiteDto> getCourtSites();
-    
+
     /**
      * Retrieves all hearing types for the courtSiteId.
      * 
@@ -53,12 +53,26 @@ public interface IHearingTypeService {
     List<HearingTypeDto> getHearingTypes(Long courtSiteId);
     
     /**
+     * Retrieves all hearing types for the courtId.
+     * 
+     * @return List
+     */
+    List<HearingTypeDto> getHearingTypesByCourtId(Integer courtId);
+
+    /**
+     * Retrieve the hearing type for the id.
+     * 
+     * @return HearingTypeDto
+     */
+    HearingTypeDto getHearingType(Integer refHearingTypeId);
+
+    /**
      * Retrieves all categories.
      * 
      * @return List
      */
     List<String> getAllCategories();
-    
+
     /**
      * Update Hearing Type.
      *
@@ -73,4 +87,5 @@ public interface IHearingTypeService {
      * @param courtId the Id of the court
      */
     void createHearingType(HearingTypeCreateCommand hearingTypeCreateCommand, Integer courtId);
+
 }

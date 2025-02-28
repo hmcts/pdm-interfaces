@@ -62,7 +62,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
     private static final String COMMAND = "command";
     private static final String SUCCESS_MESSAGE = "successMessage";
     private static final String ATTEMPT = "Attempt {}{}";
-    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String POPULATING_PAGESTATE_LISTS =
+        ", populating the PageStateSelectionLists";
     private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
     private static final int MAX_NUM_OF_RETRIES = 5;
 
@@ -189,7 +190,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             model.addObject(COMMAND, hearingTypeSearchCommand);
         } else {
             // Populate lists and set CourtSite
-            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(hearingTypeSearchCommand);
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(hearingTypeSearchCommand);
 
             // Populate the relevant fields
             final HearingTypeAmendCommand hearingTypeCommand = new HearingTypeAmendCommand();
@@ -223,15 +225,16 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         @PathVariable("refHearingTypeId") @EncryptedFormat final Integer refHearingTypeId) {
         final String methodName = "loadHearingType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        // Reload the courtsites
+        hearingTypePageStateHolder.setSites(hearingTypeService.getCourtSites());
+        // Get the selected hearing type
         HearingTypeDto result = null;
-        for (HearingTypeDto dto : getHearingTypes()) {
-            if (dto.getRefHearingTypeId().equals(refHearingTypeId)) {
-                LOGGER.info("Found HearingType");
-                result = dto;
-                break;
-            } else {
-                LOGGER.info("Ignored HearingType {}", dto.getHearingTypeDesc()); 
-            }
+        if (refHearingTypeId != null) {
+            result = hearingTypeService.getHearingType(refHearingTypeId);
+        }
+        if (result != null) {
+            hearingTypePageStateHolder
+                .setHearingTypes(hearingTypeService.getHearingTypesByCourtId(result.getCourtId()));
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
@@ -328,8 +331,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
 
         } else {
             // Populate lists and set CourtSite
-            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(hearingTypeSearchCommand);
-            
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(hearingTypeSearchCommand);
+
             // Populate the relevant fields
             final HearingTypeCreateCommand hearingTypeCreateCommand =
                 new HearingTypeCreateCommand();
@@ -413,8 +417,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-    
-    private void populatePageStateSelectionLists(HearingTypeSearchCommand hearingTypeSearchCommand) {
+
+    private void populatePageStateSelectionLists(
+        HearingTypeSearchCommand hearingTypeSearchCommand) {
         for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
             LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
             setAmendPageStateSelectionLists(hearingTypeSearchCommand.getXhibitCourtSiteId());
@@ -425,15 +430,16 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             }
         }
     }
-    
+
     private XhibitCourtSiteDto populateListsAndSetCourtSite(
         HearingTypeSearchCommand hearingTypeSearchCommand) {
         // Populate the lists
         populatePageStateSelectionLists(hearingTypeSearchCommand);
-        
+
         LOGGER.info("Sites after population: {}", hearingTypePageStateHolder.getSites().size());
-        LOGGER.info("HearingTypes after population: {}", hearingTypePageStateHolder.getHearingTypes().size());
-        
+        LOGGER.info("HearingTypes after population: {}",
+            hearingTypePageStateHolder.getHearingTypes().size());
+
         // Get the selected CourtSite
         return populateSelectedCourtSiteInPageStateHolder(
             hearingTypeSearchCommand.getXhibitCourtSiteId());
