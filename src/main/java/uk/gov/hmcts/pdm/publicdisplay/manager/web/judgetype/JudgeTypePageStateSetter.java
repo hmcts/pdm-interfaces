@@ -73,6 +73,7 @@ public class JudgeTypePageStateSetter {
         List<XhibitCourtSiteDto> courtSites = judgeTypePageStateHolder.getSites();
         for (XhibitCourtSiteDto courtSite : courtSites) {
             if (courtSite.getId().equals(xhibitCourtSiteId)) {
+                LOGGER.debug("Found Selected CourtSite {}", courtSite.getCourtSiteName());
                 selectedCourtSite = courtSite;
                 break;
             }

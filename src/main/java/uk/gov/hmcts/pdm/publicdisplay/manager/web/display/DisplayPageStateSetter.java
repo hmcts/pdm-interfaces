@@ -103,6 +103,7 @@ public class DisplayPageStateSetter {
         List<XhibitCourtSiteDto> courtSites = displayPageStateHolder.getSites();
         for (XhibitCourtSiteDto courtSite : courtSites) {
             if (courtSite.getId().equals(xhibitCourtSiteId)) {
+                LOGGER.debug("Found Selected CourtSite {}", courtSite.getCourtSiteName());
                 selectedCourtSite = courtSite;
                 break;
             }
