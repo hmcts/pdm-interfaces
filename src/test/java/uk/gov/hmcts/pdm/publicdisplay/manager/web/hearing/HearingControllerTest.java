@@ -506,7 +506,7 @@ class HearingControllerTest extends HearingErrorController {
     void loadHearingTypeTest() throws Exception {
         final List<HearingTypeDto> refHearingTypeDtos = createHearingTypeDtoList();
 
-        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(refHearingTypeDtos);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(refHearingTypeDtos).anyTimes();
         replay(mockHearingTypePageStateHolder);
 
         // Perform the test
