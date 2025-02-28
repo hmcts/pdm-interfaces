@@ -206,8 +206,8 @@ class HearingControllerTest extends HearingErrorController {
         mockHearingTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
         
-        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
-        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos);
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos).times(2);
         expect(mockHearingTypeService.getAllCategories()).andReturn(categories);
 
         replay(mockHearingTypeSelectedValidator);
@@ -390,8 +390,8 @@ class HearingControllerTest extends HearingErrorController {
         mockHearingTypePageStateHolder.setCourtSite(capture(capturedCourtSite));
         expectLastCall();
         
-        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
-        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos);
+        expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).times(2);
+        expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(hearingTypeDtos).times(2);
         expect(mockHearingTypeService.getAllCategories()).andReturn(categories);
         
         replay(mockHearingTypeSelectedValidator);

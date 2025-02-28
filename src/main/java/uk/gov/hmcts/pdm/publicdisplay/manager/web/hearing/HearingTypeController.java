@@ -428,6 +428,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
         HearingTypeSearchCommand hearingTypeSearchCommand) {
         // Populate the lists
         populatePageStateSelectionLists(hearingTypeSearchCommand);
+        LOGGER.info("Sites after population: {}", hearingTypePageStateHolder.getSites().size());
+        LOGGER.info("HearingTypes after population: {}", hearingTypePageStateHolder.getHearingTypes().size());
         
         // Get the selected CourtSite
         return populateSelectedCourtSiteInPageStateHolder(
