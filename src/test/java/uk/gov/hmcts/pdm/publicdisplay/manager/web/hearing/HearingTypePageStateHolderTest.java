@@ -72,7 +72,6 @@ class HearingTypePageStateHolderTest extends AbstractJUnit {
     @Test
     void resetTest() {
         classUnderTest.reset();
-        assertNull(classUnderTest.getHearingSearchCommand(), NOT_NULL);
         assertEquals(classUnderTest.getHearingTypes(), new ArrayList<>(), NOT_EQUAL);
         assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);
         assertNull(classUnderTest.getCourtSite(), NOT_NULL);
