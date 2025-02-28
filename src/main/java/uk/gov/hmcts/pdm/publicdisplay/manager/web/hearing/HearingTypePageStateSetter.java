@@ -74,8 +74,11 @@ public class HearingTypePageStateSetter {
         List<XhibitCourtSiteDto> courtSites = hearingTypePageStateHolder.getSites();
         for (XhibitCourtSiteDto courtSite : courtSites) {
             if (courtSite.getId().equals(xhibitCourtSiteId)) {
+                LOGGER.debug("Found Selected CourtSite {}", courtSite.getCourtSiteName());
                 selectedCourtSite = courtSite;
                 break;
+            } else {
+                LOGGER.debug("Ingored CourtSite {}", courtSite.getCourtSiteName());
             }
         }
         hearingTypePageStateHolder.setCourtSite(selectedCourtSite);
