@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.hearing;
 
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.IAnswer;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IHearingTypeService;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -294,10 +295,15 @@ abstract class HearingErrorController extends AbstractJUnit {
     @Test
     void loadHearingTypeNullTest() throws Exception {
         final List<HearingTypeDto> refHearingTypeDtos = createHearingTypeDtoList();
+        final List<XhibitCourtSiteDto> courtSites = new ArrayList<>();
 
+        expect(mockHearingTypeService.getCourtSites()).andReturn(courtSites).anyTimes();
+        mockHearingTypePageStateHolder.setSites(courtSites);
+        expect(mockHearingTypeService.getHearingType(EasyMock.isA(Integer.class))).andReturn(null).anyTimes();
         expect(mockHearingTypePageStateHolder.getHearingTypes()).andReturn(refHearingTypeDtos)
             .anyTimes();
         replay(mockHearingTypePageStateHolder);
+        replay(mockHearingTypeService);
 
         // Perform the test
         final MvcResult results =
