@@ -229,6 +229,8 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 LOGGER.info("Found HearingType");
                 result = dto;
                 break;
+            } else {
+                LOGGER.info("Ignored HearingType {}", dto.getHearingTypeDesc()); 
             }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
