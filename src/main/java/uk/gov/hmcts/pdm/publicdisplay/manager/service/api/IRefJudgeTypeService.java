@@ -53,6 +53,20 @@ public interface IRefJudgeTypeService {
     List<RefSystemCodeDto> getJudgeTypes(Long xhibitCourtSiteId);
 
     /**
+     * Retrieves all judge types for the courtId.
+     * 
+     * @return List
+     */
+    List<RefSystemCodeDto> getJudgeTypesByCourtId(Integer courtId);
+    
+    /**
+     * Retrieve the judge type for the id.
+     * 
+     * @return RefSystemCodeDto
+     */
+    RefSystemCodeDto getJudgeType(Integer refSystemCodeId);
+    
+    /**
      * Create judge type.
      *
      * @param judgeTypeCreateCommand the judge type create command

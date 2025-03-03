@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 
 
 @Entity(name = "XHB_REF_SYSTEM_CODE")
+@NamedQuery(name = "XHB_REF_SYSTEM_CODE.findByCourtId",
+    query = "SELECT o FROM XHB_REF_SYSTEM_CODE o WHERE o.courtId = :courtId "
+    + "AND (o.obsInd IS NULL OR o.obsInd <> 'Y')")
 @NamedQuery(name = "XHB_REF_SYSTEM_CODE.findJudgeTypeByCourtSiteId",
     query = "SELECT o FROM XHB_REF_SYSTEM_CODE o WHERE o.codeType = 'JUDGE_TYPE' and "
     + "(o.obsInd IS NULL OR o.obsInd <> 'Y') and "

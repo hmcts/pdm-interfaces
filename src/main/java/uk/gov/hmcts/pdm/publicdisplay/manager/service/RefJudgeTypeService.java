@@ -123,25 +123,37 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
 
         if (!xhbRefJudgeTypeList.isEmpty()) {
             for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
-                final RefSystemCodeDto dto = createRefSystemCodeDto();
-                dto.setCode(xhbRefJudgeType.getCode());
-                dto.setCodeTitle(xhbRefJudgeType.getCodeTitle());
-                dto.setCodeType(xhbRefJudgeType.getCodeType());
-                dto.setCourtId(xhbRefJudgeType.getCourtId());
-                dto.setCreatedBy(xhbRefJudgeType.getCreatedBy());
-                dto.setCreationDate(xhbRefJudgeType.getCreationDate());
-                dto.setDeCode(xhbRefJudgeType.getDeCode());
-                dto.setLastUpdateDate(xhbRefJudgeType.getLastUpdateDate());
-                dto.setLastUpdatedBy(xhbRefJudgeType.getLastUpdatedBy());
-                dto.setObsInd(xhbRefJudgeType.getObsInd());
-                dto.setRefCodeOrder(xhbRefJudgeType.getRefCodeOrder());
-                dto.setRefSystemCodeId(xhbRefJudgeType.getRefSystemCodeId());
-                dto.setVersion(xhbRefJudgeType.getVersion());
+                final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
                 resultList.add(dto);
             }
             // Sort by name
             Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
                 .compare(obj1.getCode(), obj2.getCode()));
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return resultList;
+    }
+    
+    /**
+     * Gets the judge types by court id.
+     *
+     * @return List of RefSystemCodeDto
+     */
+    @Override
+    public List<RefSystemCodeDto> getJudgeTypesByCourtId(Integer courtId) {
+        final String methodName = "getJudgeTypesByCourtId";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final List<RefSystemCodeDto> resultList = new ArrayList<>();
+        final List<XhbRefSystemCodeDao> xhbRefJudgeTypeList =
+            getXhbRefSystemCodeRepository().findByCourtId(courtId);
+        LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Judge Types returned : ",
+            xhbRefJudgeTypeList.size());
+
+        if (!xhbRefJudgeTypeList.isEmpty()) {
+            for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
+                final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
+                resultList.add(dto);
+            }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
@@ -196,5 +208,43 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             getXhbRefSystemCodeRepository().updateDao(dao);
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
+    
+    /**
+     * Gets the judge type by id.
+     *
+     * @return RefSystemCodeDto
+     */
+    @Override
+    public RefSystemCodeDto getJudgeType(Integer refSystemCodeId) {
+        final String methodName = "getJudgeType";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final Optional<XhbRefSystemCodeDao> dao =
+            getXhbRefSystemCodeRepository().findById(refSystemCodeId);
+        RefSystemCodeDto result = null;
+        if (dao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Judge Type found");
+            result = getDto(dao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
+    
+    private RefSystemCodeDto getDto(final XhbRefSystemCodeDao xhbRefJudgeType) {
+        final RefSystemCodeDto dto = createRefSystemCodeDto();
+        dto.setCode(xhbRefJudgeType.getCode());
+        dto.setCodeTitle(xhbRefJudgeType.getCodeTitle());
+        dto.setCodeType(xhbRefJudgeType.getCodeType());
+        dto.setCourtId(xhbRefJudgeType.getCourtId());
+        dto.setCreatedBy(xhbRefJudgeType.getCreatedBy());
+        dto.setCreationDate(xhbRefJudgeType.getCreationDate());
+        dto.setDeCode(xhbRefJudgeType.getDeCode());
+        dto.setLastUpdateDate(xhbRefJudgeType.getLastUpdateDate());
+        dto.setLastUpdatedBy(xhbRefJudgeType.getLastUpdatedBy());
+        dto.setObsInd(xhbRefJudgeType.getObsInd());
+        dto.setRefCodeOrder(xhbRefJudgeType.getRefCodeOrder());
+        dto.setRefSystemCodeId(xhbRefJudgeType.getRefSystemCodeId());
+        dto.setVersion(xhbRefJudgeType.getVersion());
+        return dto;
     }
 }
