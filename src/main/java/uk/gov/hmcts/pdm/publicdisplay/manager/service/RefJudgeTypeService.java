@@ -136,8 +136,6 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
      */
     @Override
     public List<RefSystemCodeDto> getJudgeTypesByCourtId(Integer courtId) {
-        final String methodName = "getJudgeTypesByCourtId";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         final List<RefSystemCodeDto> resultList = new ArrayList<>();
         final List<XhbRefSystemCodeDao> xhbRefJudgeTypeList =
             getXhbRefSystemCodeRepository().findByCourtId(courtId);
@@ -145,7 +143,6 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
         if (!xhbRefJudgeTypeList.isEmpty()) {
             populateJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
         }
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
     }
 
@@ -208,7 +205,6 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
     @Override
     public RefSystemCodeDto getJudgeType(Integer refSystemCodeId) {
         final String methodName = "getJudgeType";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         final Optional<XhbRefSystemCodeDao> dao =
             getXhbRefSystemCodeRepository().findById(refSystemCodeId);
         RefSystemCodeDto result = null;
@@ -216,7 +212,6 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Judge Type found");
             result = getDto(dao.get());
         }
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
     }
     
