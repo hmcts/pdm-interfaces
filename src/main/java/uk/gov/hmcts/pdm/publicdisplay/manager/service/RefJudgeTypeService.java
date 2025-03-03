@@ -122,10 +122,7 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             xhbRefJudgeTypeList.size());
 
         if (!xhbRefJudgeTypeList.isEmpty()) {
-            for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
-                final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
-                resultList.add(dto);
-            }
+            populateJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
             // Sort by name
             Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
                 .compare(obj1.getCode(), obj2.getCode()));
@@ -150,10 +147,7 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             xhbRefJudgeTypeList.size());
 
         if (!xhbRefJudgeTypeList.isEmpty()) {
-            for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
-                final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
-                resultList.add(dto);
-            }
+            populateJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
@@ -246,5 +240,13 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
         dto.setRefSystemCodeId(xhbRefJudgeType.getRefSystemCodeId());
         dto.setVersion(xhbRefJudgeType.getVersion());
         return dto;
+    }
+    
+    private void populateJudgeTypeResultList(List<XhbRefSystemCodeDao> xhbRefJudgeTypeList,
+        List<RefSystemCodeDto> resultList) {
+        for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
+            final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
+            resultList.add(dto);
+        }
     }
 }
