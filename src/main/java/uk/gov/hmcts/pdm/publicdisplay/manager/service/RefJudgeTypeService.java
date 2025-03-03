@@ -118,9 +118,7 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
         final List<RefSystemCodeDto> resultList = new ArrayList<>();
         final List<XhbRefSystemCodeDao> xhbRefJudgeTypeList = getXhbRefSystemCodeRepository()
             .findJudgeTypeByCourtSiteId(xhibitCourtSiteId.intValue());
-        LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Judge types returned : ",
-            xhbRefJudgeTypeList.size());
-
+        
         if (!xhbRefJudgeTypeList.isEmpty()) {
             populateJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
             // Sort by name
@@ -143,9 +141,7 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
         final List<RefSystemCodeDto> resultList = new ArrayList<>();
         final List<XhbRefSystemCodeDao> xhbRefJudgeTypeList =
             getXhbRefSystemCodeRepository().findByCourtId(courtId);
-        LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Judge Types returned : ",
-            xhbRefJudgeTypeList.size());
-
+        
         if (!xhbRefJudgeTypeList.isEmpty()) {
             populateJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
         }
@@ -244,6 +240,7 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
     
     private void populateJudgeTypeResultList(List<XhbRefSystemCodeDao> xhbRefJudgeTypeList,
         List<RefSystemCodeDto> resultList) {
+        LOGGER.debug("Judge types returned : {}", xhbRefJudgeTypeList.size());
         for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
             final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
             resultList.add(dto);
