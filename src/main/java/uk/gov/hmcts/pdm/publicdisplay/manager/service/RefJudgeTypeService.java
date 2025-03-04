@@ -120,15 +120,8 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             .findJudgeTypeByCourtSiteId(xhibitCourtSiteId.intValue());
         LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Judge types returned : ",
             xhbRefJudgeTypeList.size());
-
-        if (!xhbRefJudgeTypeList.isEmpty()) {
-            populateJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
-            // Sort by name
-            Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
-                .compare(obj1.getCode(), obj2.getCode()));
-        }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
-        return resultList;
+        return getJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
     }
     
     /**
@@ -145,12 +138,8 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             getXhbRefSystemCodeRepository().findByCourtId(courtId);
         LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Judge Types returned : ",
             xhbRefJudgeTypeList.size());
-
-        if (!xhbRefJudgeTypeList.isEmpty()) {
-            populateJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
-        }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
-        return resultList;
+        return getJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
     }
 
     /**
@@ -242,11 +231,17 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
         return dto;
     }
     
-    private void populateJudgeTypeResultList(List<XhbRefSystemCodeDao> xhbRefJudgeTypeList,
+    private List<RefSystemCodeDto> getJudgeTypeResultList(List<XhbRefSystemCodeDao> xhbRefJudgeTypeList,
         List<RefSystemCodeDto> resultList) {
-        for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
-            final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
-            resultList.add(dto);
+        if (!xhbRefJudgeTypeList.isEmpty()) {
+            for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
+                final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
+                resultList.add(dto);
+            }
+            // Sort by name
+            Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
+                .compare(obj1.getCode(), obj2.getCode()));
         }
+        return resultList;
     }
 }
