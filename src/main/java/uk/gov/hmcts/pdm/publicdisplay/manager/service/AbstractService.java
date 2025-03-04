@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplay.XhbDisplayRepository;
@@ -74,6 +75,7 @@ public class AbstractService {
     private EntityManager entityManager;
     private XhbCourtRepository xhbCourtRepository;
     private XhbCourtSiteRepository xhbCourtSiteRepository;
+    private XhbCourtRoomRepository xhbCourtRoomRepository;
     private XhbRefSystemCodeRepository xhbRefSystemCodeRepository;
     private XhbDisplayRepository xhbDisplayRepository;
     private XhbDisplayLocationRepository xhbDisplayLocationRepository;
@@ -85,6 +87,7 @@ public class AbstractService {
     protected void clearRepositories() {
         xhbCourtRepository = null;
         xhbCourtSiteRepository = null;
+        xhbCourtRoomRepository = null;
         xhbRefSystemCodeRepository = null;
         xhbDisplayRepository = null;
         xhbDisplayLocationRepository = null;
@@ -191,6 +194,13 @@ public class AbstractService {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
+    }
+    
+    protected XhbCourtRoomRepository getXhbCourtRoomRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtRoomRepository)) {
+            xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
+        }
+        return xhbCourtRoomRepository;
     }
     
     protected XhbRefSystemCodeRepository getXhbRefSystemCodeRepository() {

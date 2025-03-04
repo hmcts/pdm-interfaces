@@ -1,11 +1,9 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
-import jakarta.persistence.EntityManager;
 import org.easymock.Capture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdm.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
@@ -26,7 +24,6 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("PMD.LawOfDemeter")
@@ -211,24 +208,6 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         // Verify the expected mocks were called
         verify(mockCourtRoomRepo);
         verify(mockEntityManager);
-    }
-    
-    @Test
-    void testEntityManager() {
-        CourtRoomServiceFinder localClassUnderTest = new CourtRoomServiceFinder() {
-            
-            @Override
-            public EntityManager getEntityManager() {
-                return super.getEntityManager();
-            }
-        };
-        ReflectionTestUtils.setField(localClassUnderTest, "entityManager", mockEntityManager);
-        expect(mockEntityManager.isOpen()).andReturn(true);
-        mockEntityManager.close();
-        replay(mockEntityManager);
-        try (EntityManager result = localClassUnderTest.getEntityManager()) {
-            assertNotNull(result, NOT_NULL);
-        }
     }
 
     private XhbCourtSiteDao createCourtSiteDao() {

@@ -28,12 +28,6 @@ public class CourtService extends CourtServiceCreator implements ICourtService {
      * Set up our logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CourtService.class);
-    private static final String METHOD = "Method ";
-    private static final String THREE_PARAMS = "{}{}{}";
-    private static final String FOUR_PARAMS = "{}{}{}{}";
-    private static final String STARTS = " - starts";
-    private static final String ENDS = " - ends";
-    private static final String YES = "Y";
     private static final String DISPLAYNAME_PREFIX = "Court Site ";
 
     /**

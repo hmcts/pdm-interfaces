@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdm.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefjudge.XhbRefJudgeRepository;
@@ -45,6 +46,9 @@ class AbstractServiceTest extends AbstractJUnit {
     
     @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
+    
+    @Mock
+    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
     
     @Mock
     private XhbRefHearingTypeRepository mockXhbRefHearingTypeRepository;
@@ -87,6 +91,17 @@ class AbstractServiceTest extends AbstractJUnit {
         ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteRepository",
             mockXhbCourtSiteRepository);
         result = classUnderTest.getXhbCourtSiteRepository();
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testGetXhbCourtRoomRepository() {
+        expectEntityManager();
+        XhbCourtRoomRepository result = classUnderTest.getXhbCourtRoomRepository();
+        assertNotNull(result, NOTNULL);
+        
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomRepository", mockXhbCourtRoomRepository);
+        result = classUnderTest.getXhbCourtRoomRepository();
         assertNotNull(result, NOTNULL);
     }
     
