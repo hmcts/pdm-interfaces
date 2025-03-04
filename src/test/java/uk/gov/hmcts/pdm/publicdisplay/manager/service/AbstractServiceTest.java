@@ -19,14 +19,14 @@ import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * The Class RefJudgeTypeServiceFinder.
+ * The Class AbstractServiceTest.
  *
  * @author harrism
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("PMD.LawOfDemeter")
-class RefJudgeTypeServiceFinderTest extends AbstractJUnit {
+class AbstractServiceTest extends AbstractJUnit {
 
 
     private static final String NOTNULL = "Result is Null";
@@ -41,7 +41,7 @@ class RefJudgeTypeServiceFinderTest extends AbstractJUnit {
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
 
 
-    private RefJudgeTypeServiceFinder classUnderTest;
+    private AbstractService classUnderTest;
 
 
     /**
@@ -49,7 +49,7 @@ class RefJudgeTypeServiceFinderTest extends AbstractJUnit {
      */
     @BeforeEach
     public void setup() {
-        classUnderTest = new RefJudgeTypeServiceFinder();
+        classUnderTest = new AbstractService();
     }
 
     @AfterEach
