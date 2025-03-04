@@ -14,6 +14,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbrefjudge.XhbRefJudgeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeRepository;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
@@ -44,9 +45,10 @@ class AbstractServiceTest extends AbstractJUnit {
     @Mock
     private XhbRefHearingTypeRepository mockXhbRefHearingTypeRepository;
 
+    @Mock
+    private XhbRefJudgeRepository mockXhbRefJudgeRepository;
 
     private AbstractService classUnderTest;
-
 
     /**
      * Setup.
@@ -94,6 +96,18 @@ class AbstractServiceTest extends AbstractJUnit {
         ReflectionTestUtils.setField(classUnderTest, "xhbRefHearingTypeRepository",
             mockXhbRefHearingTypeRepository);
         result = classUnderTest.getXhbRefHearingTypeRepository();
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testGetXhbRefJudgeRepository() {
+        expectEntityManager();
+        XhbRefJudgeRepository result = classUnderTest.getXhbRefJudgeRepository();
+        assertNotNull(result, NOTNULL);
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbRefJudgeRepository",
+            mockXhbRefJudgeRepository);
+        result = classUnderTest.getXhbRefJudgeRepository();
         assertNotNull(result, NOTNULL);
     }
     

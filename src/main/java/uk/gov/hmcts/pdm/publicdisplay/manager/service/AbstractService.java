@@ -37,6 +37,7 @@ import uk.gov.hmcts.pdm.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbrefjudge.XhbRefJudgeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -75,6 +76,7 @@ public class AbstractService {
     private XhbDisplayTypeRepository xhbDisplayTypeRepository;
     private XhbRotationSetsRepository xhbRotationSetsRepository;
     private XhbRefHearingTypeRepository xhbRefHearingTypeRepository;
+    private XhbRefJudgeRepository xhbRefJudgeRepository;
 
     
     protected void clearRepositories() {
@@ -85,6 +87,7 @@ public class AbstractService {
         xhbDisplayTypeRepository = null;
         xhbRotationSetsRepository = null;
         xhbRefHearingTypeRepository = null;
+        xhbRefJudgeRepository = null;
     }
 
     /**
@@ -185,5 +188,12 @@ public class AbstractService {
             xhbRefHearingTypeRepository = new XhbRefHearingTypeRepository(getEntityManager());
         }
         return xhbRefHearingTypeRepository;
+    }
+    
+    protected XhbRefJudgeRepository getXhbRefJudgeRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbRefJudgeRepository)) {
+            xhbRefJudgeRepository = new XhbRefJudgeRepository(getEntityManager());
+        }
+        return xhbRefJudgeRepository;
     }
 }

@@ -5,16 +5,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefJudgeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class RefJudgeServiceCreator {
+public class RefJudgeServiceCreator extends AbstractService {
 
-    protected XhibitCourtSiteDto createXhibitCourtSiteDto() {
-        return new XhibitCourtSiteDto();
-    }
-    
     protected RefJudgeDto createRefJudgeDto() {
         return new RefJudgeDto();
     }
