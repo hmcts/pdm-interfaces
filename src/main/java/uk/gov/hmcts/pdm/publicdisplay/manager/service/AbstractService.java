@@ -36,6 +36,7 @@ import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -51,7 +52,7 @@ import java.util.List;
  */
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@SuppressWarnings("PMD.NullAssignment")
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods"})
 public class AbstractService {
 
     /**
@@ -73,6 +74,7 @@ public class AbstractService {
     private XhbDisplayLocationRepository xhbDisplayLocationRepository;
     private XhbDisplayTypeRepository xhbDisplayTypeRepository;
     private XhbRotationSetsRepository xhbRotationSetsRepository;
+    private XhbRefHearingTypeRepository xhbRefHearingTypeRepository;
 
     
     protected void clearRepositories() {
@@ -82,6 +84,7 @@ public class AbstractService {
         xhbDisplayLocationRepository = null;
         xhbDisplayTypeRepository = null;
         xhbRotationSetsRepository = null;
+        xhbRefHearingTypeRepository = null;
     }
 
     /**
@@ -175,5 +178,12 @@ public class AbstractService {
             xhbRotationSetsRepository = new XhbRotationSetsRepository(getEntityManager());
         }
         return xhbRotationSetsRepository;
+    }
+    
+    protected XhbRefHearingTypeRepository getXhbRefHearingTypeRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbRefHearingTypeRepository)) {
+            xhbRefHearingTypeRepository = new XhbRefHearingTypeRepository(getEntityManager());
+        }
+        return xhbRefHearingTypeRepository;
     }
 }
