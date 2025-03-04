@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.pdm.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplay.XhbDisplayRepository;
@@ -71,6 +72,7 @@ public class AbstractService {
     protected static final String YES = "Y";
     
     private EntityManager entityManager;
+    private XhbCourtRepository xhbCourtRepository;
     private XhbCourtSiteRepository xhbCourtSiteRepository;
     private XhbRefSystemCodeRepository xhbRefSystemCodeRepository;
     private XhbDisplayRepository xhbDisplayRepository;
@@ -79,9 +81,9 @@ public class AbstractService {
     private XhbRotationSetsRepository xhbRotationSetsRepository;
     private XhbRefHearingTypeRepository xhbRefHearingTypeRepository;
     private XhbRefJudgeRepository xhbRefJudgeRepository;
-
     
     protected void clearRepositories() {
+        xhbCourtRepository = null;
         xhbCourtSiteRepository = null;
         xhbRefSystemCodeRepository = null;
         xhbDisplayRepository = null;
@@ -93,15 +95,31 @@ public class AbstractService {
     }
 
     /**
-     * Gets the court sites.
+     * Parent wrapper for getCourtSites() for instances where no courtId is passed in.
      *
      * @return the court sites
      */
     public List<XhibitCourtSiteDto> getCourtSites() {
+        return getCourtSites(null);
+    }
+    
+    /**
+     * Gets the court sites.
+     *
+     * @return the court sites
+     */
+    public List<XhibitCourtSiteDto> getCourtSites(Integer courtId) {
         final String methodName = "getCourtSites";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         final List<XhibitCourtSiteDto> resultList = new ArrayList<>();
-        final List<XhbCourtSiteDao> xhibitCourtSiteList = getXhbCourtSiteRepository().findAll();
+        List<XhbCourtSiteDao> xhibitCourtSiteList;
+        
+        if (courtId != null) {
+            xhibitCourtSiteList = getXhbCourtSiteRepository().findByCourtId(courtId);
+        } else {
+            xhibitCourtSiteList = getXhbCourtSiteRepository().findAll();
+        }
+        
         LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Court sites returned : ",
             xhibitCourtSiteList.size());
 
@@ -159,6 +177,13 @@ public class AbstractService {
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
+    }
+    
+    protected XhbCourtRepository getXhbCourtRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtRepository)) {
+            xhbCourtRepository = new XhbCourtRepository(getEntityManager());
+        }
+        return xhbCourtRepository;
     }
     
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
