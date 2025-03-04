@@ -49,7 +49,7 @@ import java.util.Optional;
  */
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class RefJudgeTypeService extends RefJudgeTypeServiceCreator implements IRefJudgeTypeService {
+public class RefJudgeTypeService extends AbstractService implements IRefJudgeTypeService {
 
     /**
      * Set up our logger.
@@ -158,35 +158,17 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceCreator implements I
         RefSystemCodeDto result = null;
         if (dao.isPresent()) {
             LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Judge Type found");
-            result = getDto(dao.get());
+            result = createRefSystemCodeDto(dao.get());
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
-    }
-    
-    private RefSystemCodeDto getDto(final XhbRefSystemCodeDao xhbRefJudgeType) {
-        final RefSystemCodeDto dto = createRefSystemCodeDto();
-        dto.setCode(xhbRefJudgeType.getCode());
-        dto.setCodeTitle(xhbRefJudgeType.getCodeTitle());
-        dto.setCodeType(xhbRefJudgeType.getCodeType());
-        dto.setCourtId(xhbRefJudgeType.getCourtId());
-        dto.setCreatedBy(xhbRefJudgeType.getCreatedBy());
-        dto.setCreationDate(xhbRefJudgeType.getCreationDate());
-        dto.setDeCode(xhbRefJudgeType.getDeCode());
-        dto.setLastUpdateDate(xhbRefJudgeType.getLastUpdateDate());
-        dto.setLastUpdatedBy(xhbRefJudgeType.getLastUpdatedBy());
-        dto.setObsInd(xhbRefJudgeType.getObsInd());
-        dto.setRefCodeOrder(xhbRefJudgeType.getRefCodeOrder());
-        dto.setRefSystemCodeId(xhbRefJudgeType.getRefSystemCodeId());
-        dto.setVersion(xhbRefJudgeType.getVersion());
-        return dto;
     }
     
     private List<RefSystemCodeDto> getJudgeTypeResultList(List<XhbRefSystemCodeDao> xhbRefJudgeTypeList,
         List<RefSystemCodeDto> resultList) {
         if (!xhbRefJudgeTypeList.isEmpty()) {
             for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
-                final RefSystemCodeDto dto = getDto(xhbRefJudgeType);
+                final RefSystemCodeDto dto = createRefSystemCodeDto(xhbRefJudgeType);
                 resultList.add(dto);
             }
             // Sort by name

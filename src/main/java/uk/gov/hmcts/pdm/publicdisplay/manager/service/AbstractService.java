@@ -38,8 +38,10 @@ import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationR
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefjudge.XhbRefJudgeRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeDao;
 import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsRepository;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.util.ArrayList;
@@ -131,6 +133,24 @@ public class AbstractService {
 
     protected XhibitCourtSiteDto createXhibitCourtSiteDto() {
         return new XhibitCourtSiteDto();
+    }
+    
+    protected RefSystemCodeDto createRefSystemCodeDto(XhbRefSystemCodeDao dao) {
+        final RefSystemCodeDto dto = new RefSystemCodeDto();
+        dto.setCode(dao.getCode());
+        dto.setCodeTitle(dao.getCodeTitle());
+        dto.setCodeType(dao.getCodeType());
+        dto.setCourtId(dao.getCourtId());
+        dto.setCreatedBy(dao.getCreatedBy());
+        dto.setCreationDate(dao.getCreationDate());
+        dto.setDeCode(dao.getDeCode());
+        dto.setLastUpdateDate(dao.getLastUpdateDate());
+        dto.setLastUpdatedBy(dao.getLastUpdatedBy());
+        dto.setObsInd(dao.getObsInd());
+        dto.setRefCodeOrder(dao.getRefCodeOrder());
+        dto.setRefSystemCodeId(dao.getRefSystemCodeId());
+        dto.setVersion(dao.getVersion());
+        return dto;
     }
     
     protected EntityManager getEntityManager() {

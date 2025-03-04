@@ -120,20 +120,7 @@ public class RefJudgeService extends RefJudgeServiceCreator implements IRefJudge
 
         if (!xhbRefJudgeTypeList.isEmpty()) {
             for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
-                final RefSystemCodeDto dto = createRefSystemCodeDto();
-                dto.setCode(xhbRefJudgeType.getCode());
-                dto.setCodeTitle(xhbRefJudgeType.getCodeTitle());
-                dto.setCodeType(xhbRefJudgeType.getCodeType());
-                dto.setCourtId(xhbRefJudgeType.getCourtId());
-                dto.setCreatedBy(xhbRefJudgeType.getCreatedBy());
-                dto.setCreationDate(xhbRefJudgeType.getCreationDate());
-                dto.setDeCode(xhbRefJudgeType.getDeCode());
-                dto.setLastUpdateDate(xhbRefJudgeType.getLastUpdateDate());
-                dto.setLastUpdatedBy(xhbRefJudgeType.getLastUpdatedBy());
-                dto.setObsInd(xhbRefJudgeType.getObsInd());
-                dto.setRefCodeOrder(xhbRefJudgeType.getRefCodeOrder());
-                dto.setRefSystemCodeId(xhbRefJudgeType.getRefSystemCodeId());
-                dto.setVersion(xhbRefJudgeType.getVersion());
+                final RefSystemCodeDto dto = createRefSystemCodeDto(xhbRefJudgeType);
                 resultList.add(dto);
             }
             // Sort by name
