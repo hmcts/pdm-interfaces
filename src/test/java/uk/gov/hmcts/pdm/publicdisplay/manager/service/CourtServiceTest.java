@@ -29,7 +29,6 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -266,23 +265,5 @@ class CourtServiceTest extends AbstractJUnit {
         // Verify the expected mocks were called
         verify(mockCourtSiteRepo);
         verify(mockEntityManager);
-    }
-    
-    @Test
-    void testEntityManager() {
-        CourtServiceFinder localClassUnderTest = new CourtServiceFinder() {
-            
-            @Override
-            public EntityManager getEntityManager() {
-                return super.getEntityManager();
-            }
-        };
-        ReflectionTestUtils.setField(localClassUnderTest, "entityManager", mockEntityManager);
-        expect(mockEntityManager.isOpen()).andReturn(true);
-        mockEntityManager.close();
-        replay(mockEntityManager);
-        try (EntityManager result = localClassUnderTest.getEntityManager()) {
-            assertNotNull(result, NOT_EMPTY);
-        }
     }
 }

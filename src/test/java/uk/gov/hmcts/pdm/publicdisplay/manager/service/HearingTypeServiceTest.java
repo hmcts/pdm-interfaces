@@ -277,24 +277,6 @@ class HearingTypeServiceTest {
     }
     
     @Test
-    void testEntityManager() {
-        HearingTypeServiceFinder localClassUnderTest = new HearingTypeServiceFinder() {
-            
-            @Override
-            public EntityManager getEntityManager() {
-                return super.getEntityManager();
-            }
-        };
-        ReflectionTestUtils.setField(localClassUnderTest, "entityManager", mockEntityManager);
-        expect(mockEntityManager.isOpen()).andReturn(true);
-        mockEntityManager.close();
-        replay(mockEntityManager);
-        try (EntityManager result = localClassUnderTest.getEntityManager()) {
-            assertNotNull(result, NOT_EMPTY);
-        }
-    }
-
-    @Test
     void createHearingTypeTest() {
 
         HearingTypeCreateCommand hearingTypeCreateCommand = new HearingTypeCreateCommand();

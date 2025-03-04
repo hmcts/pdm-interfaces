@@ -31,7 +31,6 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -289,23 +288,4 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         verify(mockRefJudgeRepo);
         verify(mockEntityManager);
     }
-    
-    @Test
-    void testEntityManager() {
-        RefJudgeServiceFinder localClassUnderTest = new RefJudgeServiceFinder() {
-            
-            @Override
-            public EntityManager getEntityManager() {
-                return super.getEntityManager();
-            }
-        };
-        ReflectionTestUtils.setField(localClassUnderTest, "entityManager", mockEntityManager);
-        expect(mockEntityManager.isOpen()).andReturn(true);
-        mockEntityManager.close();
-        replay(mockEntityManager);
-        try (EntityManager result = localClassUnderTest.getEntityManager()) {
-            assertNotNull(result, NOT_EMPTY);
-        }
-    }
-
 }

@@ -4,16 +4,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class HearingTypeServiceCreator {
+public class HearingTypeServiceCreator extends AbstractService {
 
-    protected XhibitCourtSiteDto createXhibitCourtSiteDto() {
-        return new XhibitCourtSiteDto();
-    }
-    
     protected HearingTypeDto createHearingTypeDto() {
         return new HearingTypeDto();
     }

@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import jakarta.persistence.EntityManager;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +30,11 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
 class RefJudgeTypeServiceTest {
 
     /**
@@ -45,6 +47,7 @@ class RefJudgeTypeServiceTest {
 
     private static final String NOT_EQUAL = "Not equal";
     private static final String NOT_EMPTY = "Not empty";
+    private static final String NULL = "Result is Null";
     private static final String COURT_SITE_CODE = "COURTSITECODE";
     private static final String COURT_SITE_NAME = "COURTSITENAME";
 
@@ -171,6 +174,47 @@ class RefJudgeTypeServiceTest {
         verify(mockEntityManager);
     }
 
+    @Test
+    void testGetJudgeTypesByCourtId() {
+        List<XhbRefSystemCodeDao> refSystemCodeDaoList = new ArrayList<>();
+        XhbRefSystemCodeDao xhbRefSystemCodeDao = new XhbRefSystemCodeDao();
+        refSystemCodeDaoList.add(xhbRefSystemCodeDao);
+        
+        expect(mockRefSystemCodeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockRefSystemCodeRepo.findByCourtId(EasyMock.isA(Integer.class)))
+            .andReturn(refSystemCodeDaoList);
+        
+        replay(mockRefSystemCodeRepo);
+        replay(mockEntityManager);
+
+        // Perform the test
+        List<RefSystemCodeDto> result = classUnderTest.getJudgeTypesByCourtId(1);
+        
+        verify(mockRefSystemCodeRepo);
+        verify(mockEntityManager);
+        assertNotNull(result, NULL);
+    }
+    
+    @Test
+    void testGetJudgeType() {
+        XhbRefSystemCodeDao xhbRefSystemCodeDao = new XhbRefSystemCodeDao();
+        expect(mockRefSystemCodeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockRefSystemCodeRepo.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbRefSystemCodeDao));
+        
+        replay(mockRefSystemCodeRepo);
+        replay(mockEntityManager);
+        
+        // Perform the test
+        RefSystemCodeDto result = classUnderTest.getJudgeType(1);
+        
+        verify(mockRefSystemCodeRepo);
+        verify(mockEntityManager);
+        assertNotNull(result, NULL);
+    }
+    
     @Test
     void createJudgeTypeTest() {
 

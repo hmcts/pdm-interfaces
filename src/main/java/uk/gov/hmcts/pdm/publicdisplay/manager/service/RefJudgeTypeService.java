@@ -29,10 +29,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.UserRole;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IRefJudgeTypeService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.web.judgetype.JudgeTypeAmendCommand;
@@ -51,61 +49,14 @@ import java.util.Optional;
  */
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IRefJudgeTypeService {
+public class RefJudgeTypeService extends AbstractService implements IRefJudgeTypeService {
 
     /**
      * Set up our logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(RefJudgeTypeService.class);
-    private static final String METHOD = "Method ";
-    private static final String THREE_PARAMS = "{}{}{}";
-    private static final String FOUR_PARAMS = "{}{}{}{}";
-    private static final String STARTS = " - starts";
-    private static final String ENDS = " - ends";
-    private static final String NO = "N";
-    private static final String YES = "Y";
     private static final String CODE_TYPE = "JUDGE_TYPE";
-
-    /**
-     * Gets the court sites.
-     *
-     * @return the court sites
-     */
-    @Override
-    public List<XhibitCourtSiteDto> getCourtSites() {
-        final String methodName = "getCourtSites";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-        final List<XhibitCourtSiteDto> resultList = new ArrayList<>();
-        final List<XhbCourtSiteDao> xhibitCourtSiteList = getXhbCourtSiteRepository().findAll();
-        LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Court sites returned : ",
-            xhibitCourtSiteList.size());
-
-        if (!xhibitCourtSiteList.isEmpty()) {
-            // Transfer each court site to a dto and save in resultList
-            for (XhbCourtSiteDao xhibitCourtSite : xhibitCourtSiteList) {
-                if (YES.equals(xhibitCourtSite.getObsInd())) {
-                    continue;
-                }
-                LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - transferring court site to dto");
-                final XhibitCourtSiteDto dto = createXhibitCourtSiteDto();
-
-                // need the court site details from the main court site in 'xhb_court_site' table
-                dto.setId(xhibitCourtSite.getId().longValue());
-                dto.setCourtSiteName(xhibitCourtSite.getCourtSiteName());
-                dto.setCourtSiteCode(xhibitCourtSite.getCourtSiteCode());
-                dto.setCourtId(xhibitCourtSite.getCourtId());
-                LOGGER.debug("dto id : {}", dto.getId());
-                LOGGER.debug("dto courtSiteName: {}", dto.getCourtSiteName());
-                resultList.add(dto);
-            }
-            // Sort by name
-            Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
-                .compare(obj1.getCourtSiteName(), obj2.getCourtSiteName()));
-        }
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
-        return resultList;
-    }
-
+    
     /**
      * Gets the judge types by court site id.
      *
@@ -120,31 +71,26 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             .findJudgeTypeByCourtSiteId(xhibitCourtSiteId.intValue());
         LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Judge types returned : ",
             xhbRefJudgeTypeList.size());
-
-        if (!xhbRefJudgeTypeList.isEmpty()) {
-            for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
-                final RefSystemCodeDto dto = createRefSystemCodeDto();
-                dto.setCode(xhbRefJudgeType.getCode());
-                dto.setCodeTitle(xhbRefJudgeType.getCodeTitle());
-                dto.setCodeType(xhbRefJudgeType.getCodeType());
-                dto.setCourtId(xhbRefJudgeType.getCourtId());
-                dto.setCreatedBy(xhbRefJudgeType.getCreatedBy());
-                dto.setCreationDate(xhbRefJudgeType.getCreationDate());
-                dto.setDeCode(xhbRefJudgeType.getDeCode());
-                dto.setLastUpdateDate(xhbRefJudgeType.getLastUpdateDate());
-                dto.setLastUpdatedBy(xhbRefJudgeType.getLastUpdatedBy());
-                dto.setObsInd(xhbRefJudgeType.getObsInd());
-                dto.setRefCodeOrder(xhbRefJudgeType.getRefCodeOrder());
-                dto.setRefSystemCodeId(xhbRefJudgeType.getRefSystemCodeId());
-                dto.setVersion(xhbRefJudgeType.getVersion());
-                resultList.add(dto);
-            }
-            // Sort by name
-            Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
-                .compare(obj1.getCode(), obj2.getCode()));
-        }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
-        return resultList;
+        return getJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
+    }
+    
+    /**
+     * Gets the judge types by court id.
+     *
+     * @return List of RefSystemCodeDto
+     */
+    @Override
+    public List<RefSystemCodeDto> getJudgeTypesByCourtId(Integer courtId) {
+        final String methodName = "getJudgeTypesByCourtId";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final List<RefSystemCodeDto> resultList = new ArrayList<>();
+        final List<XhbRefSystemCodeDao> xhbRefJudgeTypeList =
+            getXhbRefSystemCodeRepository().findByCourtId(courtId);
+        LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Judge Types returned : ",
+            xhbRefJudgeTypeList.size());
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return getJudgeTypeResultList(xhbRefJudgeTypeList, resultList);
     }
 
     /**
@@ -196,5 +142,39 @@ public class RefJudgeTypeService extends RefJudgeTypeServiceFinder implements IR
             getXhbRefSystemCodeRepository().updateDao(dao);
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
+    
+    /**
+     * Gets the judge type by id.
+     *
+     * @return RefSystemCodeDto
+     */
+    @Override
+    public RefSystemCodeDto getJudgeType(Integer refSystemCodeId) {
+        final String methodName = "getJudgeType";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final Optional<XhbRefSystemCodeDao> dao =
+            getXhbRefSystemCodeRepository().findById(refSystemCodeId);
+        RefSystemCodeDto result = null;
+        if (dao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Judge Type found");
+            result = createRefSystemCodeDto(dao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
+    
+    private List<RefSystemCodeDto> getJudgeTypeResultList(List<XhbRefSystemCodeDao> xhbRefJudgeTypeList,
+        List<RefSystemCodeDto> resultList) {
+        if (!xhbRefJudgeTypeList.isEmpty()) {
+            for (XhbRefSystemCodeDao xhbRefJudgeType : xhbRefJudgeTypeList) {
+                final RefSystemCodeDto dto = createRefSystemCodeDto(xhbRefJudgeType);
+                resultList.add(dto);
+            }
+            // Sort by name
+            Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
+                .compare(obj1.getCode(), obj2.getCode()));
+        }
+        return resultList;
     }
 }

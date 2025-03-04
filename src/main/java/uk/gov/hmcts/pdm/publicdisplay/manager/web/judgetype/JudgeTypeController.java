@@ -241,13 +241,16 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
         @PathVariable("refSystemCodeId") @EncryptedFormat final Integer refSystemCodeId) {
         final String methodName = "loadJudgeType";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        // Reload the courtsites
+        judgeTypePageStateHolder.setSites(refJudgeTypeService.getCourtSites());
+        // Get the selected judge type
         RefSystemCodeDto result = null;
-        for (RefSystemCodeDto dto : judgeTypePageStateHolder.getJudgeTypes()) {
-            if (dto.getRefSystemCodeId().equals(refSystemCodeId)) {
-                LOGGER.info("Found JudgeType");
-                result = dto;
-                break;
-            }
+        if (refSystemCodeId != null) {
+            result = refJudgeTypeService.getJudgeType(refSystemCodeId);
+        }
+        if (result != null) {
+            judgeTypePageStateHolder
+                .setJudgeTypes(refJudgeTypeService.getJudgeTypesByCourtId(result.getCourtId()));
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;

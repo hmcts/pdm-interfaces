@@ -45,6 +45,24 @@ public class XhbRefSystemCodeRepository extends AbstractRepository<XhbRefSystemC
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         return query.getResultList();
     }
+    
+    /**
+     * findByCourtId.
+     *
+     * @param courtId Integer
+     * @return XhbRefSystemCodeDao
+     */
+    @SuppressWarnings("unchecked")
+    public List<XhbRefSystemCodeDao> findByCourtId(final Integer courtId) {
+        final String methodName = "findByCourtId";
+        LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
+
+        Query query = getEntityManager().createNamedQuery("XHB_REF_SYSTEM_CODE.findByCourtId");
+        query.setParameter("courtId", courtId);
+
+        LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
+        return query.getResultList();
+    }
 
     /**
      * saveDao.
