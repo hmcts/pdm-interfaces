@@ -33,7 +33,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdisplay.XhbDisplayRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.util.ArrayList;
@@ -65,10 +69,19 @@ public class AbstractService {
     private EntityManager entityManager;
     private XhbCourtSiteRepository xhbCourtSiteRepository;
     private XhbRefSystemCodeRepository xhbRefSystemCodeRepository;
+    private XhbDisplayRepository xhbDisplayRepository;
+    private XhbDisplayLocationRepository xhbDisplayLocationRepository;
+    private XhbDisplayTypeRepository xhbDisplayTypeRepository;
+    private XhbRotationSetsRepository xhbRotationSetsRepository;
+
     
     protected void clearRepositories() {
         xhbCourtSiteRepository = null;
         xhbRefSystemCodeRepository = null;
+        xhbDisplayRepository = null;
+        xhbDisplayLocationRepository = null;
+        xhbDisplayTypeRepository = null;
+        xhbRotationSetsRepository = null;
     }
 
     /**
@@ -134,5 +147,33 @@ public class AbstractService {
             xhbRefSystemCodeRepository = new XhbRefSystemCodeRepository(getEntityManager());
         }
         return xhbRefSystemCodeRepository;
+    }
+
+    protected XhbDisplayRepository getXhbDisplayRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbDisplayRepository)) {
+            xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
+        }
+        return xhbDisplayRepository;
+    }
+    
+    protected XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbDisplayLocationRepository)) {
+            xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
+        }
+        return xhbDisplayLocationRepository;
+    }
+    
+    protected XhbDisplayTypeRepository getXhbDisplayTypeRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbDisplayTypeRepository)) {
+            xhbDisplayTypeRepository = new XhbDisplayTypeRepository(getEntityManager());
+        }
+        return xhbDisplayTypeRepository;
+    }
+    
+    protected XhbRotationSetsRepository getXhbRotationSetsRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbRotationSetsRepository)) {
+            xhbRotationSetsRepository = new XhbRotationSetsRepository(getEntityManager());
+        }
+        return xhbRotationSetsRepository;
     }
 }

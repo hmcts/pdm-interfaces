@@ -6,15 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class DisplayServiceCreator {
-
-    protected XhibitCourtSiteDto createXhibitCourtSiteDto() {
-        return new XhibitCourtSiteDto();
-    }
+public class DisplayServiceCreator extends AbstractService {
 
     protected DisplayDto createDisplayDto() {
         return new DisplayDto();
