@@ -5,20 +5,15 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtRoomDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class CourtRoomServiceCreator {
+public class CourtRoomServiceCreator extends AbstractService {
 
     protected CourtRoomDto createCourtRoomDto() {
         return new CourtRoomDto();
     }
     
-    protected XhibitCourtSiteDto createXhibitCourtSiteDto() {
-        return new XhibitCourtSiteDto();
-    }
-
     protected CourtDto createCourtDto() {
         return new CourtDto();
     }

@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.judgetype;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -10,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -300,11 +302,23 @@ class JudgeTypeControllerTest extends JudgeTypeErrorControllerTest {
         RefSystemCodeDto refSystemCodeDto = new RefSystemCodeDto();
         refSystemCodeDto.setRefSystemCodeId(7);
         refSystemCodeDto.setCodeType("A Code Type");
+        refSystemCodeDto.setCourtId(1);
         final List<RefSystemCodeDto> refSystemCodeDtoList = List.of(refSystemCodeDto);
-
-        expect(mockJudgeTypePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtoList);
+        final List<XhibitCourtSiteDto> courtSites = new ArrayList<>();
+        
+        expect(mockRefJudgeTypeService.getCourtSites()).andReturn(courtSites);
+        mockJudgeTypePageStateHolder.setSites(courtSites);
+        expectLastCall();
+        expect(mockRefJudgeTypeService.getJudgeType(EasyMock.isA(Integer.class)))
+            .andReturn(refSystemCodeDto);
+        expect(mockRefJudgeTypeService.getJudgeTypesByCourtId(refSystemCodeDto.getCourtId()))
+            .andReturn(refSystemCodeDtoList);
+        mockJudgeTypePageStateHolder.setJudgeTypes(refSystemCodeDtoList);
+        expectLastCall();
+        
+        replay(mockRefJudgeTypeService);
         replay(mockJudgeTypePageStateHolder);
-
+        
         // Perform the test
         final MvcResult results =
             mockMvc.perform(get(mappingNameAmendJudgeTypeUrl + "/7")).andReturn();
@@ -314,25 +328,8 @@ class JudgeTypeControllerTest extends JudgeTypeErrorControllerTest {
 
         assertEquals(7, returnedRefSysCodeDto.getRefSystemCodeId(), NOT_EQUAL);
         assertEquals("A Code Type", returnedRefSysCodeDto.getCodeType(), NOT_EQUAL);
-        verify(mockJudgeTypePageStateHolder);
-    }
-
-    @Test
-    void loadJudgeTypeNullTest() throws Exception {
-        RefSystemCodeDto refSystemCodeDto = new RefSystemCodeDto();
-        refSystemCodeDto.setRefSystemCodeId(8);
-        refSystemCodeDto.setCodeType("A Code Type");
-        final List<RefSystemCodeDto> refSystemCodeDtoList = List.of(refSystemCodeDto);
-
-        expect(mockJudgeTypePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtoList);
-        replay(mockJudgeTypePageStateHolder);
-
-        // Perform the test
-        final MvcResult results =
-            mockMvc.perform(get(mappingNameAmendJudgeTypeUrl + "/7")).andReturn();
-        String response = results.getResponse().getContentAsString();
-
-        assertEquals("", response, NOT_EQUAL);
+        assertEquals(1, returnedRefSysCodeDto.getCourtId(), NOT_EQUAL);
+        verify(mockRefJudgeTypeService);
         verify(mockJudgeTypePageStateHolder);
     }
 }

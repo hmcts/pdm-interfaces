@@ -29,17 +29,14 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.HearingTypeDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.UserRole;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IHearingTypeService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.web.hearing.HearingTypeAmendCommand;
 import uk.gov.hmcts.pdm.publicdisplay.manager.web.hearing.HearingTypeCreateCommand;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,60 +47,13 @@ import java.util.Optional;
  */
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class HearingTypeService extends HearingTypeServiceFinder implements IHearingTypeService {
+public class HearingTypeService extends HearingTypeServiceCreator implements IHearingTypeService {
 
     /**
      * Set up our logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(HearingTypeService.class);
-    private static final String METHOD = "Method ";
-    private static final String THREE_PARAMS = "{}{}{}";
-    private static final String FOUR_PARAMS = "{}{}{}{}";
-    private static final String STARTS = " - starts";
-    private static final String ENDS = " - ends";
-    private static final String YES = "Y";
-    private static final String NO = "N";
-
-    /**
-     * Gets the court sites.
-     *
-     * @return the court sites
-     */
-    @Override
-    public List<XhibitCourtSiteDto> getCourtSites() {
-        final String methodName = "getCourtSites";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-        final List<XhibitCourtSiteDto> resultList = new ArrayList<>();
-        final List<XhbCourtSiteDao> xhibitCourtSiteList = getXhbCourtSiteRepository().findAll();
-        LOGGER.debug(FOUR_PARAMS, METHOD, methodName, " - Court sites returned : ",
-            xhibitCourtSiteList.size());
-
-        if (!xhibitCourtSiteList.isEmpty()) {
-            // Transfer each court site to a dto and save in resultList
-            for (XhbCourtSiteDao xhibitCourtSite : xhibitCourtSiteList) {
-                if (YES.equals(xhibitCourtSite.getObsInd())) {
-                    continue;
-                }
-                LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - transferring court site to dto");
-                final XhibitCourtSiteDto dto = createXhibitCourtSiteDto();
-
-                // need the court site details from the main court site in 'xhb_court_site' table
-                dto.setId(xhibitCourtSite.getId().longValue());
-                dto.setCourtSiteName(xhibitCourtSite.getCourtSiteName());
-                dto.setCourtSiteCode(xhibitCourtSite.getCourtSiteCode());
-                dto.setCourtId(xhibitCourtSite.getCourtId());
-                LOGGER.debug("dto id : {}", dto.getId());
-                LOGGER.debug("dto courtSiteName: {}", dto.getCourtSiteName());
-                resultList.add(dto);
-            }
-            // Sort by name
-            Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
-                .compare(obj1.getCourtSiteName(), obj2.getCourtSiteName()));
-        }
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
-        return resultList;
-    }
-
+    
     /**
      * Gets the hearing types by court site id.
      *
