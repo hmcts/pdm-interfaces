@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.UserRole;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICourtService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.web.court.CourtAmendCommand;
@@ -69,6 +70,25 @@ public class CourtService extends CourtServiceCreator implements ICourtService {
     }
 
     @Override
+    public Optional<XhbCourtSiteDao> getXhbCourtSiteDao(Integer xhibitCourtSiteId) {
+        return getXhbCourtSiteRepository().findById(xhibitCourtSiteId);
+    }
+    
+    @Override
+    public XhibitCourtSiteDto getXhibitCourtSite(Integer xhibitCourtSiteId) {
+        final String methodName = "getXhibitCourtSiteDto";
+        Optional<XhbCourtSiteDao> xhbCourtSiteDao =
+            getXhbCourtSiteRepository().findById(xhibitCourtSiteId);
+        XhibitCourtSiteDto result = null;
+        if (xhbCourtSiteDao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - court site found");
+            result = getDto(xhbCourtSiteDao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
+
+    @Override
     @Secured(UserRole.ROLE_ADMIN_VALUE)
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public void createCourt(final CourtCreateCommand command, Integer courtId, Integer addressId) {
@@ -98,8 +118,9 @@ public class CourtService extends CourtServiceCreator implements ICourtService {
         final String methodName = "updateCourt";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
-        Optional<XhbCourtSiteDao> existingDao =
-            getXhbCourtSiteRepository().findById(command.getXhibitCourtSiteId().intValue());
+        Optional<XhbCourtSiteDao> existingDao = 
+            getXhbCourtSiteDao(command.getXhibitCourtSiteId().intValue());
+            
         if (existingDao.isPresent()) {
             XhbCourtSiteDao courtSiteDao = existingDao.get();
 
@@ -115,10 +136,20 @@ public class CourtService extends CourtServiceCreator implements ICourtService {
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
     }
-
+    
     private String getDisplayName(String courtSiteCode) {
         StringBuilder displayNameSb = new StringBuilder();
         displayNameSb.append(DISPLAYNAME_PREFIX).append(courtSiteCode);
         return displayNameSb.toString();
+    }
+    
+    private XhibitCourtSiteDto getDto(final XhbCourtSiteDao xhbCourtSite) {
+        final XhibitCourtSiteDto dto = createXhibitCourtSiteDto();
+        dto.setId(xhbCourtSite.getId().longValue());
+        dto.setCourtSiteName(xhbCourtSite.getCourtSiteName());
+        dto.setCourtSiteCode(xhbCourtSite.getCourtSiteCode());
+        dto.setCourtId(xhbCourtSite.getCourtId());
+        dto.setAddressId(xhbCourtSite.getAddressId());
+        return dto;
     }
 }

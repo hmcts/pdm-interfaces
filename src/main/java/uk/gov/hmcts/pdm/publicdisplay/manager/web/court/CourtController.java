@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.publicdisplay.common.exception.XpdmException;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/court")
@@ -314,12 +317,20 @@ public class CourtController extends CourtPageStateSetter {
         final String methodName = "loadCourtSite";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         XhibitCourtSiteDto result = null;
-        for (XhibitCourtSiteDto dto : courtPageStateHolder.getSites()) {
-            if (dto.getId().equals(xhibitCourtSiteId)) {
-                LOGGER.info("Found Court");
-                result = dto;
-                break;
+        // Get the courtId from the xhibitCourtSiteId
+        if (xhibitCourtSiteId != null) {
+            int courtId = 0;
+            Optional<XhbCourtSiteDao> courtSite = 
+                courtService.getXhbCourtSiteDao(xhibitCourtSiteId.intValue());
+            if (courtSite.isPresent()) {
+                courtId = courtSite.get().getCourtId();
             }
+            // Reload the courts and court sites
+            courtPageStateHolder.setSites(courtService.getCourtSites(courtId));
+            courtPageStateHolder.setCourts(courtService.getCourts());
+            
+            // Get the selected court site
+            result = courtService.getXhibitCourtSite(xhibitCourtSiteId.intValue());
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
