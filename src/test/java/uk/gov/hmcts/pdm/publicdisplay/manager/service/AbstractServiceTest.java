@@ -62,12 +62,12 @@ class AbstractServiceTest extends AbstractJUnit {
      * Setup.
      */
     @BeforeEach
-    public void setup() {
+    void setup() {
         classUnderTest = new AbstractService();
     }
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         Mockito.clearAllCaches();
     }
 
