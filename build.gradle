@@ -222,7 +222,7 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.springframework.boot:spring-boot-starter-security:3.3.5'
     implementation 'org.owasp.antisamy:antisamy:1.7.7'
-    implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:5.20.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:5.20.1'
     implementation 'org.springframework.security:spring-security-oauth2-jose:6.4.3'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
