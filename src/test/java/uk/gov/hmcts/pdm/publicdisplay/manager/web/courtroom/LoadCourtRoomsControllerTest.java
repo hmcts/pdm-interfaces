@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.courtroom;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,16 +12,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtRoomDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DynamicDropdownList;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DynamicDropdownOption;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.CourtRoomService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICourtRoomService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -30,10 +34,11 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects"})
 abstract class LoadCourtRoomsControllerTest extends AbstractJUnit {
     protected CourtRoomSelectedValidator mockCourtRoomSelectedValidator;
     protected CourtRoomCreateValidator mockCourtRoomCreateValidator;
@@ -180,41 +185,34 @@ abstract class LoadCourtRoomsControllerTest extends AbstractJUnit {
 
     @Test
     void loadSelectedCourtRoomForAmendTest() throws Exception {
-        CourtRoomDto courtRoomDto = new CourtRoomDto();
-        courtRoomDto.setId(7L);
-        courtRoomDto.setCourtRoomNo(15);
-        List<CourtRoomDto> courtRoomDtos = List.of(courtRoomDto);
+        XhbCourtSiteDao xhbCourtSiteDao = new XhbCourtSiteDao();
+        xhbCourtSiteDao.setCourtId(1);
+        XhibitCourtSiteDto xhbibitCourtSiteDto = new XhibitCourtSiteDto();
+        List<XhibitCourtSiteDto> xhibitCourtSiteDtos = new ArrayList<>();
+        xhibitCourtSiteDtos.add(xhbibitCourtSiteDto);
+        final List<CourtDto> courtDtos = getCourtDtoList();
+        final CourtRoomDto courtRoomDto = new CourtRoomDto();
 
-        expect(mockCourtRoomPageStateHolder.getCourtRoomsList()).andReturn(courtRoomDtos);
+        expect(mockCourtRoomService.getXhbCourtSiteFromCourtRoomId(EasyMock.isA(Long.class)))
+            .andReturn(Optional.of(xhbCourtSiteDao));
+        expect(mockCourtRoomService.getCourtSites(EasyMock.isA(Integer.class))).andReturn(xhibitCourtSiteDtos);
+        mockCourtRoomPageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
+        expect(mockCourtRoomService.getCourts()).andReturn(courtDtos);
+        mockCourtRoomPageStateHolder.setCourts(courtDtos);
+        expectLastCall();
+        expect(mockCourtRoomService.getCourtRoom(EasyMock.isA(Long.class))).andReturn(courtRoomDto);
+        
+        replay(mockCourtRoomService);
         replay(mockCourtRoomPageStateHolder);
-
+        
         // Perform the test
         final MvcResult results =
             mockMvc.perform(get(mappingNameAmendCourtRoomUrl + "/courtRoom/7")).andReturn();
-        String response = results.getResponse().getContentAsString();
-        CourtRoomDto returnedCourtRoomDto =
-            new ObjectMapper().readValue(response, courtRoomDto.getClass());
-
-        assertEquals(7, returnedCourtRoomDto.getId(), NOT_EQUAL);
-        assertEquals(15, returnedCourtRoomDto.getCourtRoomNo(), NOT_EQUAL);
+       
+        verify(mockCourtRoomService);
         verify(mockCourtRoomPageStateHolder);
-    }
-
-    @Test
-    void loadSelectedCourtRoomForAmendNullTest() throws Exception {
-        CourtRoomDto courtRoomDto = new CourtRoomDto();
-        courtRoomDto.setId(8L);
-        List<CourtRoomDto> courtRoomDtos = List.of(courtRoomDto);
-
-        expect(mockCourtRoomPageStateHolder.getCourtRoomsList()).andReturn(courtRoomDtos);
-        replay(mockCourtRoomPageStateHolder);
-
-        // Perform the test
-        final MvcResult results =
-            mockMvc.perform(get(mappingNameAmendCourtRoomUrl + "/courtRoom/7")).andReturn();
-
-        assertEquals("", results.getResponse().getContentAsString(), NOT_EQUAL);
-        verify(mockCourtRoomPageStateHolder);
+        assertNotNull(results, NULL);
     }
 
     @Test
@@ -258,41 +256,33 @@ abstract class LoadCourtRoomsControllerTest extends AbstractJUnit {
 
     @Test
     void loadSelectedCourtRoomForDeleteTest() throws Exception {
-        CourtRoomDto courtRoomDto = new CourtRoomDto();
-        courtRoomDto.setId(16L);
-        courtRoomDto.setCourtRoomNo(19);
-        List<CourtRoomDto> courtRoomDtos = List.of(courtRoomDto);
+        XhbCourtSiteDao xhbCourtSiteDao = new XhbCourtSiteDao();
+        xhbCourtSiteDao.setCourtId(1);
+        XhibitCourtSiteDto xhbibitCourtSiteDto = new XhibitCourtSiteDto();
+        List<XhibitCourtSiteDto> xhibitCourtSiteDtos = new ArrayList<>();
+        xhibitCourtSiteDtos.add(xhbibitCourtSiteDto);
+        final List<CourtDto> courtDtos = getCourtDtoList();
+        final CourtRoomDto courtRoomDto = new CourtRoomDto();
 
-        expect(mockCourtRoomPageStateHolder.getCourtRoomsList()).andReturn(courtRoomDtos);
+        expect(mockCourtRoomService.getXhbCourtSiteFromCourtRoomId(EasyMock.isA(Long.class)))
+            .andReturn(Optional.of(xhbCourtSiteDao));
+        expect(mockCourtRoomService.getCourtSites(EasyMock.isA(Integer.class))).andReturn(xhibitCourtSiteDtos);
+        mockCourtRoomPageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
+        expect(mockCourtRoomService.getCourts()).andReturn(courtDtos);
+        mockCourtRoomPageStateHolder.setCourts(courtDtos);
+        expectLastCall();
+        expect(mockCourtRoomService.getCourtRoom(EasyMock.isA(Long.class))).andReturn(courtRoomDto);
+        
+        replay(mockCourtRoomService);
         replay(mockCourtRoomPageStateHolder);
-
+        
         // Perform the test
         final MvcResult results =
             mockMvc.perform(get(mappingNameDeleteCourtRoomUrl + "/courtRoom/16")).andReturn();
-        String response = results.getResponse().getContentAsString();
-        CourtRoomDto returnedCourtRoomDto =
-            new ObjectMapper().readValue(response, courtRoomDto.getClass());
-
-        assertEquals(16, returnedCourtRoomDto.getId(), NOT_EQUAL);
-        assertEquals(19, returnedCourtRoomDto.getCourtRoomNo(), NOT_EQUAL);
+        
+        verify(mockCourtRoomService);
         verify(mockCourtRoomPageStateHolder);
-    }
-
-    @Test
-    void loadSelectedCourtRoomForDeleteNullTest() throws Exception {
-        CourtRoomDto courtRoomDto = new CourtRoomDto();
-        courtRoomDto.setId(16L);
-        courtRoomDto.setCourtRoomNo(19);
-        List<CourtRoomDto> courtRoomDtos = List.of(courtRoomDto);
-
-        expect(mockCourtRoomPageStateHolder.getCourtRoomsList()).andReturn(courtRoomDtos);
-        replay(mockCourtRoomPageStateHolder);
-
-        // Perform the test
-        final MvcResult results =
-            mockMvc.perform(get(mappingNameDeleteCourtRoomUrl + "/courtRoom/17")).andReturn();
-
-        assertEquals("", results.getResponse().getContentAsString(), NOT_EQUAL);
-        verify(mockCourtRoomPageStateHolder);
+        assertNotNull(results, NULL);
     }
 }

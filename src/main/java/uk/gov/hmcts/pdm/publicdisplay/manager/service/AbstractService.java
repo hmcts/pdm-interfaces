@@ -49,6 +49,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Class AbstractService.
@@ -150,6 +151,10 @@ public class AbstractService {
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
+    }
+    
+    public Optional<XhbCourtSiteDao> getXhbCourtSiteDao(Integer xhibitCourtSiteId) {
+        return getXhbCourtSiteRepository().findById(xhibitCourtSiteId);
     }
 
     protected XhibitCourtSiteDto createXhibitCourtSiteDto() {
