@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import jakarta.persistence.EntityManager;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,7 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -42,6 +44,7 @@ class CourtServiceTest extends AbstractJUnit {
 
     private static final String NOT_EQUAL = "Not equal";
     private static final String NOT_EMPTY = "Not empty";
+    private static final String NULL = "Result is Null";
     private static final String COURT_SITE_CODE = "COURTSITECODE";
     private static final String COURT_SITE_NAME = "COURTSITENAME";
 
@@ -177,6 +180,31 @@ class CourtServiceTest extends AbstractJUnit {
 
     }
 
+    @Test
+    void testGetXhibitCourtSite() {
+        XhbCourtSiteDao xhbCourtSiteDao = new XhbCourtSiteDao();
+        xhbCourtSiteDao.setId(1);
+        xhbCourtSiteDao.setCourtSiteName(COURT_SITE_NAME);
+        xhbCourtSiteDao.setCourtSiteCode(COURT_SITE_CODE);
+        xhbCourtSiteDao.setCourtId(1);
+        xhbCourtSiteDao.setAddressId(1);
+        
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockCourtSiteRepo.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbCourtSiteDao));
+        
+        replay(mockCourtSiteRepo);
+        replay(mockEntityManager);
+        
+        // Perform the test
+        XhibitCourtSiteDto result = classUnderTest.getXhibitCourtSite(1);
+        
+        verify(mockCourtSiteRepo);
+        verify(mockEntityManager);
+        assertNotNull(result, NULL);
+    }
+    
     @Test
     void createCourtTest() {
 
