@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.court;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,11 +11,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
+import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.anyObject;
@@ -231,12 +234,25 @@ class CourtControllerErrorTest extends CourtControllerTest {
 
     @Test
     void loadCourtSiteTest() throws Exception {
+        XhbCourtSiteDao xhbCourtSiteDao = new XhbCourtSiteDao();
+        xhbCourtSiteDao.setCourtId(1);
         XhibitCourtSiteDto xhibitCourtSiteDto = new XhibitCourtSiteDto();
         xhibitCourtSiteDto.setCourtId(4);
         xhibitCourtSiteDto.setId(6L);
         final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = List.of(xhibitCourtSiteDto);
+        final List<CourtDto> courtDtos = getCourtDtoList();
 
-        expect(mockCourtPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
+        expect(mockCourtService.getXhbCourtSiteDao(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbCourtSiteDao));
+        expect(mockCourtService.getCourtSites(EasyMock.isA(Integer.class))).andReturn(xhibitCourtSiteDtos);
+        mockCourtPageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
+        expect(mockCourtService.getCourts()).andReturn(courtDtos);
+        mockCourtPageStateHolder.setCourts(courtDtos);
+        expectLastCall();
+        expect(mockCourtService.getXhibitCourtSite(EasyMock.isA(Integer.class))).andReturn(xhibitCourtSiteDto);
+        
+        replay(mockCourtService);
         replay(mockCourtPageStateHolder);
 
         // Perform the test
@@ -247,23 +263,7 @@ class CourtControllerErrorTest extends CourtControllerTest {
 
         assertEquals(4, returnedCourtSiteDto.getCourtId(), NOT_EQUAL);
         assertEquals(6, returnedCourtSiteDto.getId(), NOT_EQUAL);
-        verify(mockCourtPageStateHolder);
-    }
-
-    @Test
-    void loadCourtSiteErrorTest() throws Exception {
-        XhibitCourtSiteDto xhibitCourtSiteDto = new XhibitCourtSiteDto();
-        xhibitCourtSiteDto.setId(5L);
-        final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = List.of(xhibitCourtSiteDto);
-
-        expect(mockCourtPageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
-        replay(mockCourtPageStateHolder);
-
-        // Perform the test
-        final MvcResult results = mockMvc.perform(get(mappingNameAmendCourtUrl + "/6")).andReturn();
-        String response = results.getResponse().getContentAsString();
-
-        assertEquals("", response, NOT_EQUAL);
+        verify(mockCourtService);
         verify(mockCourtPageStateHolder);
     }
 }
