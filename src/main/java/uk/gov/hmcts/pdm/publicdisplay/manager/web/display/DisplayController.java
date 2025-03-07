@@ -257,13 +257,22 @@ public class DisplayController extends DisplayPageStateSetter {
             result = displayService.getDisplay(displayId);
         }
         if (result != null) {
-            // Fetch the display location 
-            DisplayLocationDto displayLocation = displayService.getDisplayLocation(result.getDisplayLocationId());
+            // Fetch the display location
+            DisplayLocationDto displayLocation =
+                displayService.getDisplayLocation(result.getDisplayLocationId());
             if (displayLocation != null) {
                 // Determine the court site from the display location
                 Long xhibitCourtSiteId = Long.valueOf(displayLocation.getCourtSiteId());
                 displayPageStateHolder.setDisplays(displayService.getDisplays(xhibitCourtSiteId,
                     null, displayPageStateHolder.getSites(), null));
+                // Get the courtSite from the courtSite id
+                XhibitCourtSiteDto courtSite = displayService
+                    .getCourtSite(displayPageStateHolder.getSites(), xhibitCourtSiteId);
+                if (courtSite != null) {
+                    // Reload the rotation sets
+                    displayPageStateHolder
+                        .setRotationSets(displayService.getRotationSets(courtSite.getCourtId()));
+                }
             }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
