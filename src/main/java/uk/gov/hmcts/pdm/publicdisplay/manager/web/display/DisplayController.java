@@ -267,6 +267,8 @@ public class DisplayController extends DisplayPageStateSetter {
                 XhibitCourtSiteDto courtSite = displayService
                     .getCourtSite(displayPageStateHolder.getSites(), xhibitCourtSiteId);
                 if (courtSite != null) {
+                    // Set the courtSite object for the returned display
+                    result.setCourtSite(courtSite);
                     // Reload the rotation sets
                     displayPageStateHolder
                         .setRotationSets(displayService.getRotationSets(courtSite.getCourtId()));
