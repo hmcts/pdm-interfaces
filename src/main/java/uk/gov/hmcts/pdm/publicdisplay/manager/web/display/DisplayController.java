@@ -263,8 +263,6 @@ public class DisplayController extends DisplayPageStateSetter {
             if (displayLocation != null) {
                 // Determine the court site from the display location
                 Long xhibitCourtSiteId = Long.valueOf(displayLocation.getCourtSiteId());
-                displayPageStateHolder.setDisplays(displayService.getDisplays(xhibitCourtSiteId,
-                    null, displayPageStateHolder.getSites(), null));
                 // Get the courtSite from the courtSite id
                 XhibitCourtSiteDto courtSite = displayService
                     .getCourtSite(displayPageStateHolder.getSites(), xhibitCourtSiteId);
@@ -273,6 +271,10 @@ public class DisplayController extends DisplayPageStateSetter {
                     displayPageStateHolder
                         .setRotationSets(displayService.getRotationSets(courtSite.getCourtId()));
                 }
+                // Reload the displays
+                displayPageStateHolder.setDisplays(displayService.getDisplays(xhibitCourtSiteId,
+                    displayPageStateHolder.getDisplayTypes(), displayPageStateHolder.getSites(),
+                    displayPageStateHolder.getRotationSets()));
             }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
