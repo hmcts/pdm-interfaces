@@ -48,6 +48,14 @@ public interface IDisplayService {
      * @return List
      */
     List<XhibitCourtSiteDto> getCourtSites();
+    
+    /**
+     * Retrieves court site from passed in list and id.
+     * 
+     * @return XhibitCourtSiteDto
+     */
+    XhibitCourtSiteDto getCourtSite(List<XhibitCourtSiteDto> courtSites,
+        Long xhibitCourtSiteId);
 
     /**
      * Retrieves all displays by court site id.

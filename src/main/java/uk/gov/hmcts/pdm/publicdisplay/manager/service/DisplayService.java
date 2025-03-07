@@ -158,7 +158,8 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         return null;
     }
 
-    private XhibitCourtSiteDto getCourtSite(final List<XhibitCourtSiteDto> courtSites,
+    @Override
+    public XhibitCourtSiteDto getCourtSite(final List<XhibitCourtSiteDto> courtSites,
         final Long xhibitCourtSiteId) {
         for (XhibitCourtSiteDto courtSiteDto : courtSites) {
             if (courtSiteDto.getId().equals(xhibitCourtSiteId)) {
