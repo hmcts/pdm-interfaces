@@ -75,7 +75,6 @@ class CourtRoomPageStateHolderTest {
     @Test
     void resetTest() {
         classUnderTest.reset();
-        assertNull(classUnderTest.getCourtRoomSearchCommand(), NOT_NULL);
         assertNull(classUnderTest.getCourt(), NOT_NULL);
         assertEquals(classUnderTest.getCourts(), new ArrayList<>(), NOT_EQUAL);
         assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);

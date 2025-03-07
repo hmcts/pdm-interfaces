@@ -51,7 +51,6 @@ public class CourtRoomPageStateHolder implements Serializable {
      * Reset all the variables.
      */
     public void reset() {
-        setCourtRoomSearchCommand(null);
         setCourtSite(null);
         setSites(new ArrayList<>());
         setCourt(null);
