@@ -34,6 +34,7 @@ import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationD
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeDao;
 import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -120,6 +121,28 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         if (dao.isPresent()) {
             LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Display found");
             result = getDto(dao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
+    
+    /**
+     * Retrieve the display location for the id.
+     * 
+     * @return DisplayLocationDto
+     */
+    @Override
+    public DisplayLocationDto getDisplayLocation(Integer displayLocationId) {
+        final String methodName = "getDisplayLocation";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final Optional<XhbDisplayLocationDao> dao = getXhbDisplayLocationRepository().findById(displayLocationId);
+        DisplayLocationDto result = null;
+        if (dao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Display Location found");
+            result =  createDisplayLocationDto();
+            result.setDisplayLocationId(dao.get().getDisplayLocationId());
+            result.setCourtSiteId(dao.get().getCourtSiteId());
+            result.setDescriptionCode(dao.get().getDescriptionCode());
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;

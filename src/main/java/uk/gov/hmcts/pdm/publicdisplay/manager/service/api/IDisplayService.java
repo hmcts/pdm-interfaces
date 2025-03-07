@@ -24,6 +24,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service.api;
 
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -62,6 +63,13 @@ public interface IDisplayService {
      * @return DisplayDto
      */
     DisplayDto getDisplay(Integer displayId);
+
+    /**
+     * Retrieve the display location for the id.
+     * 
+     * @return DisplayLocationDto
+     */
+    DisplayLocationDto getDisplayLocation(Integer displayId);
     
     /**
      * Retrieves all display types.

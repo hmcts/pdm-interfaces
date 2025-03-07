@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
 
@@ -13,6 +14,10 @@ public class DisplayServiceCreator extends AbstractService {
 
     protected DisplayDto createDisplayDto() {
         return new DisplayDto();
+    }
+
+    protected DisplayLocationDto createDisplayLocationDto() {
+        return new DisplayLocationDto();
     }
 
     protected DisplayTypeDto createDisplayTypeDto() {

@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import uk.gov.hmcts.pdm.publicdisplay.common.exception.XpdmException;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
@@ -254,6 +255,16 @@ public class DisplayController extends DisplayPageStateSetter {
         DisplayDto result = null;
         if (displayId != null) {
             result = displayService.getDisplay(displayId);
+        }
+        if (result != null) {
+            // Fetch the display location 
+            DisplayLocationDto displayLocation = displayService.getDisplayLocation(result.getDisplayLocationId());
+            if (displayLocation != null) {
+                // Determine the court site from the display location
+                Long xhibitCourtSiteId = Long.valueOf(displayLocation.getCourtSiteId());
+                displayPageStateHolder.setDisplays(displayService.getDisplays(xhibitCourtSiteId,
+                    null, displayPageStateHolder.getSites(), null));
+            }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;

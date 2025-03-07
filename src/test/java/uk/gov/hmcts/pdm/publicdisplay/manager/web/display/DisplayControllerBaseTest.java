@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -32,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects"})
 abstract class DisplayControllerBaseTest extends AbstractJUnit {
     protected DisplaySelectedValidator mockDisplaySelectedValidator;
     protected DisplayCreateValidator mockDisplayCreateValidator;
@@ -139,6 +140,7 @@ abstract class DisplayControllerBaseTest extends AbstractJUnit {
         DisplayDto displayDto = new DisplayDto();
         displayDto.setDisplayId(2);
         displayDto.setLocale(A_LOCALE);
+        displayDto.setDisplayLocationId(1);
         return List.of(displayDto);
     }
 
@@ -152,6 +154,14 @@ abstract class DisplayControllerBaseTest extends AbstractJUnit {
         RotationSetsDto rotationSetsDto = new RotationSetsDto();
         rotationSetsDto.setDefaultYn("yn");
         return List.of(rotationSetsDto);
+    }
+    
+    protected DisplayLocationDto createDisplayLocationDto() {
+        DisplayLocationDto displayLocationDto = new DisplayLocationDto();
+        displayLocationDto.setCourtSiteId(1);
+        displayLocationDto.setDescriptionCode(DESCRIPTION_CODE);
+        displayLocationDto.setDisplayLocationId(1);
+        return displayLocationDto;
     }
 
     @Test
