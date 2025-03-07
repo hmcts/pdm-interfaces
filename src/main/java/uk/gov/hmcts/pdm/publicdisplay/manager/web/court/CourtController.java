@@ -36,7 +36,8 @@ public class CourtController extends CourtPageStateSetter {
     private static final String COURT = "court";
     private static final String SUCCESS_MESSAGE = "successMessage";
     private static final String ATTEMPT = "Attempt {}{}";
-    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String POPULATING_PAGESTATE_LISTS =
+        ", populating the PageStateSelectionLists";
     private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
     private static final int MAX_NUM_OF_RETRIES = 5;
 
@@ -316,19 +317,19 @@ public class CourtController extends CourtPageStateSetter {
         @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId) {
         final String methodName = "loadCourtSite";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        // Reload the courts
+        courtPageStateHolder.setCourts(courtService.getCourts());
         XhibitCourtSiteDto result = null;
         // Get the courtId from the xhibitCourtSiteId
         if (xhibitCourtSiteId != null) {
-            int courtId = 0;
-            Optional<XhbCourtSiteDao> courtSite = 
+            Optional<XhbCourtSiteDao> courtSite =
                 courtService.getXhbCourtSiteDao(xhibitCourtSiteId.intValue());
             if (courtSite.isPresent()) {
-                courtId = courtSite.get().getCourtId();
+                // Reload the courts and court sites
+                courtPageStateHolder
+                    .setSites(courtService.getCourtSites(courtSite.get().getCourtId()));
             }
-            // Reload the courts and court sites
-            courtPageStateHolder.setSites(courtService.getCourtSites(courtId));
-            courtPageStateHolder.setCourts(courtService.getCourts());
-            
+
             // Get the selected court site
             result = courtService.getXhibitCourtSite(xhibitCourtSiteId.intValue());
         }

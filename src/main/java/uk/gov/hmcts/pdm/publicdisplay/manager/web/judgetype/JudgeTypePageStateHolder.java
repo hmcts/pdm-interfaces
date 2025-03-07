@@ -68,7 +68,6 @@ public class JudgeTypePageStateHolder implements Serializable {
      * Reset all the variables.
      */
     public void reset() {
-        setJudgeTypeSearchCommand(null);
         setCourtSite(null);
         setSites(new ArrayList<>());
         setJudgeTypes(new ArrayList<>());
