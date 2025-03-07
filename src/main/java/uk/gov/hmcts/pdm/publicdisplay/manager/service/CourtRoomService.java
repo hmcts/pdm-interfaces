@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtRoomDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.UserRole;
@@ -112,6 +113,30 @@ public class CourtRoomService extends CourtRoomServiceCreator implements ICourtR
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
     }
+    
+    @Override
+    public Optional<XhbCourtSiteDao> getXhbCourtSiteFromCourtRoomId(Long courtRoomId) {
+        Optional<XhbCourtRoomDao> xhbCourtRoomDao =
+            getXhbCourtRoomRepository().findById(courtRoomId.intValue());
+        if (xhbCourtRoomDao.isPresent()) {
+            return getXhbCourtSiteDao(xhbCourtRoomDao.get().getCourtSiteId());
+        }
+        return Optional.empty();
+    }
+    
+    @Override
+    public CourtRoomDto getCourtRoom(Long courtRoomId) {
+        final String methodName = "getCourtRoom";
+        Optional<XhbCourtRoomDao> xhbCourtRoomDao =
+            getXhbCourtRoomRepository().findById(courtRoomId.intValue());
+        CourtRoomDto result = null;
+        if (xhbCourtRoomDao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - court room found");
+            result = getDto(xhbCourtRoomDao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
 
     @Override
     @Secured(UserRole.ROLE_ADMIN_VALUE)
@@ -194,5 +219,13 @@ public class CourtRoomService extends CourtRoomServiceCreator implements ICourtR
         LOGGER.debug("getNextAvailableCourtRoomNo() - {}", result);
         return result;
     }
-
+    
+    private CourtRoomDto getDto(final XhbCourtRoomDao xhbCourtRoom) {
+        final CourtRoomDto dto = createCourtRoomDto();
+        dto.setId(xhbCourtRoom.getCourtRoomId().longValue());
+        dto.setCourtRoomName(xhbCourtRoom.getCourtRoomName());
+        dto.setDescription(xhbCourtRoom.getDescription());
+        dto.setCourtRoomNo(xhbCourtRoom.getCourtRoomNo());
+        return dto;
+    }
 }

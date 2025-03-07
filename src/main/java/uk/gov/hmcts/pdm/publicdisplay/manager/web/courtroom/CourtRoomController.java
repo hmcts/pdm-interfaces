@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.publicdisplay.common.exception.XpdmException;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CourtRoomDto;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/courtroom")
@@ -267,7 +269,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
     public DynamicDropdownList loadCourtRoomsForAmend(
         @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId) {
         final String methodName = "loadCourtRoomsForAmend";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         DynamicDropdownList result = createDynamicDropdownList();
         courtRoomPageStateHolder
             .setCourtRoomsList(courtRoomService.getCourtRooms(xhibitCourtSiteId));
@@ -292,14 +294,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
         @PathVariable("courtRoomId") @EncryptedFormat final Long courtRoomId) {
         final String methodName = "loadSelectedCourtRoomForAmend";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-        CourtRoomDto result = null;
-        for (CourtRoomDto dto : courtRoomPageStateHolder.getCourtRoomsList()) {
-            if (dto.getId().equals(courtRoomId)) {
-                LOGGER.info("Found CourtRoom");
-                result = dto;
-                break;
-            }
-        }
+        CourtRoomDto result = loadSelectedCourtRoom(courtRoomId);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
     }
@@ -316,7 +311,7 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
     public DynamicDropdownList loadCourtRoomsForDelete(
         @PathVariable("xhibitCourtSiteId") @EncryptedFormat final Long xhibitCourtSiteId) {
         final String methodName = "loadCourtRoomsForDelete";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
         DynamicDropdownList result = createDynamicDropdownList();
         courtRoomPageStateHolder
             .setCourtRoomsList(courtRoomService.getCourtRooms(xhibitCourtSiteId));
@@ -340,14 +335,8 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
     public CourtRoomDto loadSelectedCourtRoomForDelete(
         @PathVariable("courtRoomId") @EncryptedFormat final Long courtRoomId) {
         final String methodName = "loadSelectedCourtRoomForDelete";
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
-        CourtRoomDto result = null;
-        for (CourtRoomDto dto : courtRoomPageStateHolder.getCourtRoomsList()) {
-            if (dto.getId().equals(courtRoomId)) {
-                result = dto;
-                break;
-            }
-        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        CourtRoomDto result = loadSelectedCourtRoom(courtRoomId);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
     }
@@ -587,5 +576,25 @@ public class CourtRoomController extends CourtRoomPageStateSetter {
 
         // Get the selected CourtSite
         return populateSelectedCourtInPageStateHolder(courtRoomSearchCommand.getCourtId());
+    }
+    
+    private CourtRoomDto loadSelectedCourtRoom(Long courtRoomId) {
+        CourtRoomDto result = null;
+        // Get the courtId from the courtRoomId
+        if (courtRoomId != null) {
+            int courtId = 0;
+            Optional<XhbCourtSiteDao> courtSite = 
+                courtRoomService.getXhbCourtSiteFromCourtRoomId(courtRoomId);
+            if (courtSite.isPresent()) {
+                courtId = courtSite.get().getCourtId();
+            }
+            // Reload the courts and court sites
+            courtRoomPageStateHolder.setSites(courtRoomService.getCourtSites(courtId));
+            courtRoomPageStateHolder.setCourts(courtRoomService.getCourts());
+            
+            // Get the selected court room
+            result = courtRoomService.getCourtRoom(courtRoomId);
+        }
+        return result;
     }
 }

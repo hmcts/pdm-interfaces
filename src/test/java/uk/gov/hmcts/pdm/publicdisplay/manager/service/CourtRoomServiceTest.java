@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,6 +25,8 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("PMD.LawOfDemeter")
@@ -146,6 +149,78 @@ class CourtRoomServiceTest extends CourtRoomServiceEmptyTest {
         verify(mockEntityManager);
     }
 
+    @Test
+    void testGetXhbCourtSiteFromCourtRoomId() {
+        XhbCourtRoomDao xhbCourtRoomDao = new XhbCourtRoomDao();
+        xhbCourtRoomDao.setCourtSiteId(1);
+        
+        XhbCourtSiteDao xhbCourtSiteDao = new XhbCourtSiteDao();
+        
+        expect(mockCourtRoomRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockCourtRoomRepo.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbCourtRoomDao));
+        expect(mockCourtSiteRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockCourtSiteRepo.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbCourtSiteDao));
+        
+        replay(mockCourtRoomRepo);
+        replay(mockEntityManager);
+        replay(mockCourtSiteRepo);
+        
+        // Perform the test
+        final Optional<XhbCourtSiteDao> result = classUnderTest.getXhbCourtSiteFromCourtRoomId(1L);
+        
+        verify(mockCourtRoomRepo);
+        verify(mockEntityManager);
+        verify(mockCourtSiteRepo);
+        assertTrue(result.isPresent(), FALSE);
+    }
+    
+    @Test
+    void testGetXhbCourtSiteFromCourtRoomIdEmpty() {
+        XhbCourtRoomDao xhbCourtRoomDao = new XhbCourtRoomDao();
+        xhbCourtRoomDao.setCourtSiteId(1);
+        
+        expect(mockCourtRoomRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockCourtRoomRepo.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.empty());
+        
+        replay(mockCourtRoomRepo);
+        replay(mockEntityManager);
+        
+        // Perform the test
+        final Optional<XhbCourtSiteDao> result = classUnderTest.getXhbCourtSiteFromCourtRoomId(1L);
+        
+        verify(mockCourtRoomRepo);
+        verify(mockEntityManager);
+        assertTrue(result.isEmpty(), FALSE);
+    }
+    
+    @Test
+    void testGetCourtRoom() {
+        XhbCourtRoomDao xhbCourtRoomDao = new XhbCourtRoomDao();
+        xhbCourtRoomDao.setCourtRoomId(1);
+        xhbCourtRoomDao.setCourtRoomName(COURT_ROOM_NAME);
+        xhbCourtRoomDao.setDescription(DESCRIPTION);
+        xhbCourtRoomDao.setCourtRoomNo(1);
+        
+        expect(mockCourtRoomRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockCourtRoomRepo.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbCourtRoomDao));
+        
+        replay(mockCourtRoomRepo);
+        replay(mockEntityManager);
+        
+        final CourtRoomDto result = classUnderTest.getCourtRoom(1L);
+        
+        verify(mockCourtRoomRepo);
+        verify(mockEntityManager);
+        assertNotNull(result, NOT_NULL);
+    }
+    
     @Test
     void createDisplayTest() {
 
