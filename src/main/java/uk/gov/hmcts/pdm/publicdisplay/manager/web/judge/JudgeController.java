@@ -36,9 +36,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeDao;
 import uk.gov.hmcts.pdm.publicdisplay.common.exception.XpdmException;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefJudgeDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
@@ -264,22 +264,21 @@ public class JudgeController extends JudgePageStateSetter {
     public RefJudgeDto loadJudge(@PathVariable("refJudgeId") @EncryptedFormat final Integer refJudgeId) {
         final String methodName = "loadJudge";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        
+        // Reload the courtsites
+        judgePageStateHolder.setSites(refJudgeService.getCourtSites());
+        
+        // Get the Judge
         RefJudgeDto result = null;
-        LOGGER.debug("No of Judges = {}", judgePageStateHolder.getJudges().size());
-        for (RefJudgeDto dto : judgePageStateHolder.getJudges()) {
-            if (dto.getRefJudgeId().equals(refJudgeId)) {
-                LOGGER.info("Found Judge");
-                result = dto;
-                break;
-            }
+        if (refJudgeId != null) {
+            result = refJudgeService.getJudge(refJudgeId);
         }
+        
         // Get Judge Type description
-        LOGGER.debug("No of JudgeTypes = {}", judgePageStateHolder.getJudgeTypes().size());
-        for (RefSystemCodeDto dto : judgePageStateHolder.getJudgeTypes()) {
-            if (dto.getCode().equals(result.getJudgeType())) {
-                result.setJudgeTypeDeCode(dto.getDeCode());
-                LOGGER.info("Found JudgeType");
-                break;
+        if (result != null) {
+            XhbRefSystemCodeDao refSystemCode = refJudgeService.getJudgeType(result);
+            if (refSystemCode != null) {
+                result.setJudgeTypeDeCode(refSystemCode.getDeCode());
             }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
