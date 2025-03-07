@@ -252,12 +252,8 @@ public class DisplayController extends DisplayPageStateSetter {
         // Reload the display types
         displayPageStateHolder.setDisplayTypes(displayService.getDisplayTypes());
         DisplayDto result = null;
-        for (DisplayDto dto : displayPageStateHolder.getDisplays()) {
-            if (dto.getDisplayId().equals(displayId)) {
-                LOGGER.info("Found Display");
-                result = dto;
-                break;
-            }
+        if (displayId != null) {
+            result = displayService.getDisplay(displayId);
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;

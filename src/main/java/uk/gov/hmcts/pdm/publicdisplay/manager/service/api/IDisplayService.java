@@ -57,6 +57,13 @@ public interface IDisplayService {
         List<XhibitCourtSiteDto> xhibitCourtSites, List<RotationSetsDto> rotationSets);
 
     /**
+     * Retrieve the display for the id.
+     * 
+     * @return DisplayDto
+     */
+    DisplayDto getDisplay(Integer displayId);
+    
+    /**
      * Retrieves all display types.
      * 
      * @return List

@@ -427,7 +427,7 @@ class DisplayControllerTest extends DisplayControllerErrorTest {
         mockDisplayPageStateHolder.setSites(xhibitCourtSiteDtos);
         expect(mockDisplayService.getDisplayTypes()).andReturn(displayTypeDtos);
         mockDisplayPageStateHolder.setDisplayTypes(displayTypeDtos);
-        expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos);
+        expect(mockDisplayService.getDisplay(2)).andReturn(displayDtos.get(0));
         replay(mockDisplayPageStateHolder);
         replay(mockDisplayService);
 
