@@ -372,10 +372,14 @@ abstract class DisplayControllerErrorTest extends DisplayControllerBaseTest {
 
     @Test
     void loadDisplayNullTest() throws Exception {
+        final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = createCourtSiteDtoList();
         final List<DisplayDto> displayDtos = createDisplayDtoList();
 
+        expect(mockDisplayService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
+        mockDisplayPageStateHolder.setSites(xhibitCourtSiteDtos);
         expect(mockDisplayPageStateHolder.getDisplays()).andReturn(displayDtos);
         replay(mockDisplayPageStateHolder);
+        replay(mockDisplayService);
 
         // Perform the test
         final MvcResult results =

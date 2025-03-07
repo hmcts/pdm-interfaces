@@ -243,6 +243,8 @@ public class DisplayController extends DisplayPageStateSetter {
     public DisplayDto loadDisplay(@PathVariable("displayId") @EncryptedFormat final Integer displayId) {
         final String methodName = "loadDisplay";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        // Reload the courtsites
+        displayPageStateHolder.setSites(displayService.getCourtSites());
         DisplayDto result = null;
         for (DisplayDto dto : displayPageStateHolder.getDisplays()) {
             if (dto.getDisplayId().equals(displayId)) {
