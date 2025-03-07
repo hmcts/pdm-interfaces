@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.judge;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeDao;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefJudgeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
@@ -28,7 +30,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(EasyMockExtension.class)
@@ -162,11 +163,16 @@ abstract class JudgeControllerBaseTest extends AbstractJUnit {
     void loadJudgeTest() throws Exception {
         final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = createCourtSiteDtoList();
         final List<RefJudgeDto> refJudgeDtos = createRefJudgeDto();
-        final List<RefSystemCodeDto> refSystemCodeDtos = createRefSystemCodeDto();
+        final XhbRefSystemCodeDao xhbRefSystemCodeDao = new XhbRefSystemCodeDao();
 
-        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
-        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos).anyTimes();
-        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos).anyTimes();
+        expect(mockRefJudgeService.getCourtSites()).andReturn(xhibitCourtSiteDtos);
+        mockJudgePageStateHolder.setSites(xhibitCourtSiteDtos);
+        expectLastCall();
+        expect(mockRefJudgeService.getJudge(EasyMock.isA(Integer.class)))
+            .andReturn(refJudgeDtos.get(0));
+        expect(mockRefJudgeService.getJudgeType(refJudgeDtos.get(0))).andReturn(xhbRefSystemCodeDao);
+        
+        replay(mockRefJudgeService);
         replay(mockJudgePageStateHolder);
 
         // Perform the test
@@ -176,26 +182,7 @@ abstract class JudgeControllerBaseTest extends AbstractJUnit {
 
         assertEquals(refJudgeDtos.get(0).getJudgeTypeDeCode(),
             returnedRefJudgeDto.getJudgeTypeDeCode(), NOT_EQUAL);
-        verify(mockJudgePageStateHolder);
-    }
-
-    @Test
-    void loadJudgeErrorTest() throws Exception {
-        final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = createCourtSiteDtoList();
-        final List<RefJudgeDto> refJudgeDtos = createRefJudgeDto();
-        final List<RefSystemCodeDto> refSystemCodeDtos = createRefSystemCodeDto();
-
-        expect(mockJudgePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos).anyTimes();
-        expect(mockJudgePageStateHolder.getJudges()).andReturn(refJudgeDtos).anyTimes();
-        expect(mockJudgePageStateHolder.getJudgeTypes()).andReturn(refSystemCodeDtos).anyTimes();
-        replay(mockJudgePageStateHolder);
-
-        // Perform the test
-        final MvcResult results = mockMvc.perform(get(mappingNameAmendJudgeUrl + "/9")).andReturn();
-        String response = results.getResponse().getContentAsString();
-        RefJudgeDto returnedRefJudgeDto = new ObjectMapper().readValue(response, RefJudgeDto.class);
-
-        assertNull(returnedRefJudgeDto.getJudgeTypeDeCode(), NOT_NULL);
+        verify(mockRefJudgeService);
         verify(mockJudgePageStateHolder);
     }
 

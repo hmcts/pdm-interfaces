@@ -23,6 +23,7 @@
 
 package uk.gov.hmcts.pdm.publicdisplay.manager.service.api;
 
+import uk.gov.hmcts.pdm.business.entities.xhbrefsystemcode.XhbRefSystemCodeDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefJudgeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RefSystemCodeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -54,12 +55,26 @@ public interface IRefJudgeService {
     List<RefJudgeDto> getJudges(Long xhibitCourtSiteId);
 
     /**
+     * Retrieves a judge by ref judge id.
+     * 
+     * @return RefJudgeDto
+     */
+    RefJudgeDto getJudge(Integer refJudgeId);
+    
+    /**
      * Retrieves all judge types by court site id.
      * 
      * @return List
      */
     List<RefSystemCodeDto> getJudgeTypes(Long xhibitCourtSiteId);
 
+    /**
+     * Retrieves a judge type by refJudgeDto's courtId.
+     * 
+     * @return XhbRefSystemCodeDao
+     */
+    XhbRefSystemCodeDao getJudgeType(RefJudgeDto refJudgeDto);
+    
     /**
      * Update judge.
      *

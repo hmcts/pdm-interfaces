@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
 import jakarta.persistence.EntityManager;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,12 +32,17 @@ import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
 class RefJudgeServiceTest extends RefJudgeServiceUtility {
 
+    private static final String TYPE = "TYPE";
+    private static final String INV = "INV";
+    
     /**
      * Setup.
      */
@@ -166,6 +172,30 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
     }
 
     @Test
+    void testGetJudge() {
+        XhbRefJudgeDao xhbRefJudgeDao = new XhbRefJudgeDao();
+        
+        // Add the mock calls to child classes
+        expect(mockRefJudgeRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockRefJudgeRepo.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbRefJudgeDao));
+        
+        replay(mockRefJudgeRepo);
+        replay(mockEntityManager);
+        
+        // Perform the test
+        RefJudgeDto result = classUnderTest.getJudge(1);
+        
+        // Assert that the objects are as expected
+        assertNotNull(result, NULL);
+        
+        // Verify the expected mocks were called
+        verify(mockRefJudgeRepo);
+        verify(mockEntityManager);
+    }
+    
+    @Test
     void judgeTypesTest() {
 
         List<XhbRefSystemCodeDao> refSystemCodeDaos = createRefSystemCodeDao();
@@ -214,6 +244,46 @@ class RefJudgeServiceTest extends RefJudgeServiceUtility {
         verify(mockEntityManager);
     }
 
+    @Test
+    void testGetJudgeType() {
+        XhbRefSystemCodeDao xhbRefSystemCode = testGetJudgeTypeScenarios(TYPE, TYPE);
+        assertNotNull(xhbRefSystemCode, NULL);
+    }
+    
+    @Test
+    void testGetJudgeTypeNull() {
+        XhbRefSystemCodeDao xhbRefSystemCode = testGetJudgeTypeScenarios(TYPE, INV);
+        assertNull(xhbRefSystemCode, NOT_NULL);
+    }
+    
+    XhbRefSystemCodeDao testGetJudgeTypeScenarios(String firstType, String secondType) {
+        RefJudgeDto refJudgeDto = new RefJudgeDto();
+        refJudgeDto.setCourtId(1);
+        refJudgeDto.setJudgeType(firstType);
+        XhbRefSystemCodeDao xhbRefSystemCodeDao = new XhbRefSystemCodeDao();
+        xhbRefSystemCodeDao.setCode(secondType);
+        List<XhbRefSystemCodeDao> refSystemCodeDaos = new ArrayList<>();
+        refSystemCodeDaos.add(xhbRefSystemCodeDao);
+        
+        // Add the mock calls to child classes
+        expect(mockRefSystemCodeRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockRefSystemCodeRepository.findJudgeTypeByCourtId(EasyMock.isA(Integer.class)))
+            .andReturn(refSystemCodeDaos);
+        
+        replay(mockRefSystemCodeRepository);
+        replay(mockEntityManager);
+        
+        // Perform the test
+        XhbRefSystemCodeDao xhbRefSystemCode = classUnderTest.getJudgeType(refJudgeDto);
+        
+        // Verify the expected mocks were called
+        verify(mockRefSystemCodeRepository);
+        verify(mockEntityManager);
+        
+        return xhbRefSystemCode;
+    }
+    
     @Test
     void updateJudgeTest() {
 

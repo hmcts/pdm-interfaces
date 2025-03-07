@@ -28,6 +28,8 @@ abstract class RefJudgeServiceUtility extends AbstractJUnit {
 
     protected static final String NOT_EQUAL = "Not equal";
     protected static final String NOT_EMPTY = "Not empty";
+    protected static final String NULL = "Result is Null";
+    protected static final String NOT_NULL = "Result is Not Null";
     protected static final String FULL_LIST_TITLE_1 = "FullListTitle1";
 
     protected JudgeAmendCommand createJudgeAmendCommand() {

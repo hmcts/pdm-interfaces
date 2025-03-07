@@ -103,6 +103,21 @@ public class RefJudgeService extends RefJudgeServiceCreator implements IRefJudge
         return resultList;
     }
     
+    @Override
+    public RefJudgeDto getJudge(Integer refJudgeId) {
+        final String methodName = "getJudge";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final Optional<XhbRefJudgeDao> xhbRefJudgeDao =
+            getXhbRefJudgeRepository().findById(refJudgeId);
+        RefJudgeDto result = null;
+        if (xhbRefJudgeDao.isPresent()) {
+            LOGGER.debug("Judge returned with refJudgeId: {}", refJudgeId);
+            result = getDto(xhbRefJudgeDao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
+    
     /**
      * Gets the judge types by court site id.
      *
@@ -129,6 +144,19 @@ public class RefJudgeService extends RefJudgeServiceCreator implements IRefJudge
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
+    }
+    
+    @Override
+    public XhbRefSystemCodeDao getJudgeType(RefJudgeDto refJudgeDto) {
+        List<XhbRefSystemCodeDao> xhbRefSystemCodes =
+            getXhbRefSystemCodeRepository().findJudgeTypeByCourtId(refJudgeDto.getCourtId());
+        // Loop through Judge Types for specified court
+        for (XhbRefSystemCodeDao xhbRefSystemCode : xhbRefSystemCodes) {
+            if (refJudgeDto.getJudgeType().equals(xhbRefSystemCode.getCode())) {
+                return xhbRefSystemCode;
+            }
+        }
+        return null;
     }
     
     @Override
@@ -182,5 +210,27 @@ public class RefJudgeService extends RefJudgeServiceCreator implements IRefJudge
         // Save
         getXhbRefJudgeRepository().saveDao(judgeDao);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
+    
+    protected RefJudgeDto getDto(XhbRefJudgeDao dao) {
+        final RefJudgeDto dto = createRefJudgeDto();
+        dto.setRefJudgeId(dao.getRefJudgeId());
+        dto.setJudgeType(dao.getJudgeType());
+        dto.setCrestJudgeId(dao.getCrestJudgeId());
+        dto.setTitle(dao.getTitle());
+        dto.setFirstName(dao.getFirstName());
+        dto.setMiddleName(dao.getMiddleName());
+        dto.setSurname(dao.getSurname());
+        dto.setFullListTitle1(dao.getFullListTitle1());
+        dto.setFullListTitle2(dao.getFullListTitle2());
+        dto.setFullListTitle3(dao.getFullListTitle3());
+        dto.setStatsCode(dao.getStatsCode());
+        dto.setInitials(dao.getInitials());
+        dto.setHonours(dao.getHonours());
+        dto.setJudVers(dao.getJudVers());
+        dto.setObsInd(dao.getObsInd());
+        dto.setSourceTable(dao.getSourceTable());
+        dto.setCourtId(dao.getCourtId());
+        return dto;
     }
 }
