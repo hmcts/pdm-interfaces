@@ -34,6 +34,7 @@ import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationD
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeDao;
 import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -56,7 +57,7 @@ import java.util.Optional;
  */
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@SuppressWarnings("PMD.CouplingBetweenObjects")
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
 public class DisplayService extends DisplayServiceFinder implements IDisplayService {
 
     /**
@@ -82,14 +83,7 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
 
         if (!xhbDisplayList.isEmpty()) {
             for (XhbDisplayDao xhbDisplay : xhbDisplayList) {
-                final DisplayDto dto = createDisplayDto();
-                dto.setDisplayId(xhbDisplay.getDisplayId());
-                dto.setDescriptionCode(xhbDisplay.getDescriptionCode());
-                dto.setDisplayLocationId(xhbDisplay.getDisplayLocationId());
-                dto.setDisplayTypeId(xhbDisplay.getDisplayTypeId());
-                dto.setLocale(xhbDisplay.getLocale());
-                dto.setRotationSetId(xhbDisplay.getRotationSetId());
-                dto.setShowUnassignedYn(xhbDisplay.getShowUnassignedYn());
+                final DisplayDto dto = getDto(xhbDisplay);
                 // Display Type
                 if (displayTypes != null) {
                     dto.setDisplayType(getDisplayType(displayTypes, xhbDisplay.getDisplayTypeId()));
@@ -102,15 +96,56 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
                 if (rotationSets != null) {
                     dto.setRotationSet(getRotationSet(rotationSets, xhbDisplay.getRotationSetId()));
                 }
-
+                
                 resultList.add(dto);
             }
             // Sort by name
             Collections.sort(resultList, (obj1, obj2) -> String.CASE_INSENSITIVE_ORDER
                 .compare(obj1.getDescriptionCode(), obj2.getDescriptionCode()));
         }
-        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);   
         return resultList;
+    }
+
+    /**
+     * Retrieve the display for the id.
+     * 
+     * @return DisplayDto
+     */
+    @Override
+    public DisplayDto getDisplay(Integer displayId) {
+        final String methodName = "getDisplay";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final Optional<XhbDisplayDao> dao = getXhbDisplayRepository().findById(displayId);
+        DisplayDto result = null;
+        if (dao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Display found");
+            result = getDto(dao.get());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
+    }
+    
+    /**
+     * Retrieve the display location for the id.
+     * 
+     * @return DisplayLocationDto
+     */
+    @Override
+    public DisplayLocationDto getDisplayLocation(Integer displayLocationId) {
+        final String methodName = "getDisplayLocation";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        final Optional<XhbDisplayLocationDao> dao = getXhbDisplayLocationRepository().findById(displayLocationId);
+        DisplayLocationDto result = null;
+        if (dao.isPresent()) {
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " - Display Location found");
+            result =  createDisplayLocationDto();
+            result.setDisplayLocationId(dao.get().getDisplayLocationId());
+            result.setCourtSiteId(dao.get().getCourtSiteId());
+            result.setDescriptionCode(dao.get().getDescriptionCode());
+        }
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return result;
     }
 
     private DisplayTypeDto getDisplayType(final List<DisplayTypeDto> displayTypes,
@@ -260,7 +295,7 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         getXhbDisplayRepository().saveDao(displayDao);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
     }
-    
+
     @Override
     @Secured(UserRole.ROLE_ADMIN_VALUE)
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -277,5 +312,17 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
             getXhbDisplayRepository().deleteDao(existingDao);
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
+
+    private DisplayDto getDto(XhbDisplayDao xhbDisplay) {
+        final DisplayDto dto = createDisplayDto();
+        dto.setDisplayId(xhbDisplay.getDisplayId());
+        dto.setDescriptionCode(xhbDisplay.getDescriptionCode());
+        dto.setDisplayLocationId(xhbDisplay.getDisplayLocationId());
+        dto.setDisplayTypeId(xhbDisplay.getDisplayTypeId());
+        dto.setLocale(xhbDisplay.getLocale());
+        dto.setRotationSetId(xhbDisplay.getRotationSetId());
+        dto.setShowUnassignedYn(xhbDisplay.getShowUnassignedYn());
+        return dto;
     }
 }

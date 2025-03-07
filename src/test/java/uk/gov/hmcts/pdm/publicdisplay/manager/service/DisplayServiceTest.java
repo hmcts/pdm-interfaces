@@ -7,9 +7,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplay.XhbDisplayDao;
+import uk.gov.hmcts.pdm.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdisplaytype.XhbDisplayTypeDao;
 import uk.gov.hmcts.pdm.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayTypeDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.RotationSetsDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -17,6 +19,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -28,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class DisplayServiceTest extends DisplayCrudTest {
 
     @Test
@@ -285,6 +289,38 @@ class DisplayServiceTest extends DisplayCrudTest {
             assertNotNull(result, NOTNULL);
         }
     }
+    
+    @Test
+    void testGetDisplayLocation() {
+
+        XhbDisplayLocationDao displayLocationDao = new XhbDisplayLocationDao();
+        displayLocationDao.setDisplayLocationId(1);
+        displayLocationDao.setDescriptionCode("description code");
+
+        // Add the mock calls to child classes
+        expect(mockDispLocationRepo.getEntityManager()).andReturn(mockEntityManager)
+            .anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockDispLocationRepo.findById(displayLocationDao.getDisplayLocationId()))
+            .andReturn(Optional.of(displayLocationDao));
+
+        replay(mockDispLocationRepo);
+        replay(mockEntityManager);
+
+        // Perform the test
+        DisplayLocationDto results = classUnderTest.getDisplayLocation(1);
+
+        // Assert that the objects are as expected
+        assertEquals(results.getDisplayLocationId(), displayLocationDao.getDisplayLocationId(),
+            NOT_EQUAL);
+        assertEquals(results.getDescriptionCode(), displayLocationDao.getDescriptionCode(),
+            NOT_EQUAL);
+
+        // Verify the expected mocks were called
+        verify(mockDispLocationRepo);
+        verify(mockEntityManager);
+    }
+
 
     private XhbDisplayDao createDisplayDao() {
         XhbDisplayDao xhbDisplayDao = new XhbDisplayDao();

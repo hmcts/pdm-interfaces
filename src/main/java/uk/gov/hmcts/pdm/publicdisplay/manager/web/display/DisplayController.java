@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import uk.gov.hmcts.pdm.publicdisplay.common.exception.XpdmException;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.DisplayLocationDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.security.EncryptedFormat;
 
@@ -66,11 +67,12 @@ public class DisplayController extends DisplayPageStateSetter {
     private static final String ATTEMPT = "Attempt {}{}";
     private static final String POPULATING_COURTSITES = ", populating the CourtSites list";
     private static final String COURTSITES_POPULATED = "CourtSites list populated";
-    private static final String POPULATING_PAGESTATE_LISTS = ", populating the PageStateSelectionLists";
+    private static final String POPULATING_PAGESTATE_LISTS =
+        ", populating the PageStateSelectionLists";
     private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
-    
+
     private static final int MAX_NUM_OF_RETRIES = 5;
-    
+
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_DISPLAY = "display";
 
@@ -177,7 +179,7 @@ public class DisplayController extends DisplayPageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-    
+
     /**
      * Show amend display.
      *
@@ -208,14 +210,16 @@ public class DisplayController extends DisplayPageStateSetter {
 
         } else {
             // Populate the lists and set CourtSite
-            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(displaySearchCommand, true);
-            
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(displaySearchCommand, true);
+
             // Populate the relevant fields
             final DisplayAmendCommand displayCommand = new DisplayAmendCommand();
             displayCommand.setXhibitCourtSiteId(courtSite.getId());
 
             // Populate the model objects
-            model.addObject(COURTSITE_LIST, displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
+            model.addObject(COURTSITE_LIST,
+                displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
             model.addObject(DISPLAY_LIST, displayPageStateHolder.getDisplays());
             model.addObject(DISPLAY_TYPE_LIST, displayPageStateHolder.getDisplayTypes());
             model.addObject(ROTATION_SET_LIST, displayPageStateHolder.getRotationSets());
@@ -240,15 +244,26 @@ public class DisplayController extends DisplayPageStateSetter {
     @RequestMapping(value = MAPPING_AMEND_DISPLAY + "/{displayId}", method = RequestMethod.GET,
         produces = "application/json")
     @ResponseBody
-    public DisplayDto loadDisplay(@PathVariable("displayId") @EncryptedFormat final Integer displayId) {
+    public DisplayDto loadDisplay(
+        @PathVariable("displayId") @EncryptedFormat final Integer displayId) {
         final String methodName = "loadDisplay";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        // Reload the courtsites
+        displayPageStateHolder.setSites(displayService.getCourtSites());
+        // Reload the display types
+        displayPageStateHolder.setDisplayTypes(displayService.getDisplayTypes());
         DisplayDto result = null;
-        for (DisplayDto dto : displayPageStateHolder.getDisplays()) {
-            if (dto.getDisplayId().equals(displayId)) {
-                LOGGER.info("Found Display");
-                result = dto;
-                break;
+        if (displayId != null) {
+            result = displayService.getDisplay(displayId);
+        }
+        if (result != null) {
+            // Fetch the display location 
+            DisplayLocationDto displayLocation = displayService.getDisplayLocation(result.getDisplayLocationId());
+            if (displayLocation != null) {
+                // Determine the court site from the display location
+                Long xhibitCourtSiteId = Long.valueOf(displayLocation.getCourtSiteId());
+                displayPageStateHolder.setDisplays(displayService.getDisplays(xhibitCourtSiteId,
+                    null, displayPageStateHolder.getSites(), null));
             }
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
@@ -275,8 +290,9 @@ public class DisplayController extends DisplayPageStateSetter {
             // Default is to return to the amend display page to display errors
             model.setViewName(VIEW_NAME_AMEND_DISPLAY);
             XhibitCourtSiteDto courtSite = displayPageStateHolder.getCourtSite();
-            
-            model.addObject(COURTSITE_LIST, displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
+
+            model.addObject(COURTSITE_LIST,
+                displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
             model.addObject(DISPLAY_LIST, displayPageStateHolder.getDisplays());
             model.addObject(DISPLAY_TYPE_LIST, displayPageStateHolder.getDisplayTypes());
             model.addObject(ROTATION_SET_LIST, displayPageStateHolder.getRotationSets());
@@ -295,8 +311,9 @@ public class DisplayController extends DisplayPageStateSetter {
                 return viewDisplay(model, true);
             } catch (final DataAccessException | XpdmException ex) {
                 XhibitCourtSiteDto courtSite = displayPageStateHolder.getCourtSite();
-                
-                model.addObject(COURTSITE_LIST, displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
+
+                model.addObject(COURTSITE_LIST,
+                    displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
                 model.addObject(DISPLAY_LIST, displayPageStateHolder.getDisplays());
                 model.addObject(DISPLAY_TYPE_LIST, displayPageStateHolder.getDisplayTypes());
                 model.addObject(ROTATION_SET_LIST, displayPageStateHolder.getRotationSets());
@@ -341,14 +358,16 @@ public class DisplayController extends DisplayPageStateSetter {
 
         } else {
             // Populate the lists and set CourtSite
-            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(displaySearchCommand, true);
-            
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(displaySearchCommand, true);
+
             // Populate the relevant fields
             final DisplayCreateCommand displayCommand = new DisplayCreateCommand();
             displayCommand.setXhibitCourtSiteId(courtSite.getId());
 
             // Populate the model objects
-            model.addObject(COURTSITE_LIST, displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
+            model.addObject(COURTSITE_LIST,
+                displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
             model.addObject(DISPLAY_LIST, displayPageStateHolder.getDisplays());
             model.addObject(DISPLAY_TYPE_LIST, displayPageStateHolder.getDisplayTypes());
             model.addObject(ROTATION_SET_LIST, displayPageStateHolder.getRotationSets());
@@ -383,11 +402,13 @@ public class DisplayController extends DisplayPageStateSetter {
         // Default is to return to the create display page to display errors
         model.setViewName(VIEW_NAME_CREATE_DISPLAY);
 
-        displayCreateValidator.validate(displayCreateCommand, result, displayPageStateHolder.getDisplays());
+        displayCreateValidator.validate(displayCreateCommand, result,
+            displayPageStateHolder.getDisplays());
         if (result.hasErrors()) {
             XhibitCourtSiteDto courtSite = displayPageStateHolder.getCourtSite();
-            
-            model.addObject(COURTSITE_LIST, displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
+
+            model.addObject(COURTSITE_LIST,
+                displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
             model.addObject(DISPLAY_LIST, displayPageStateHolder.getDisplays());
             model.addObject(DISPLAY_TYPE_LIST, displayPageStateHolder.getDisplayTypes());
             model.addObject(ROTATION_SET_LIST, displayPageStateHolder.getRotationSets());
@@ -406,7 +427,8 @@ public class DisplayController extends DisplayPageStateSetter {
             } catch (final Exception ex) {
                 XhibitCourtSiteDto courtSite = displayPageStateHolder.getCourtSite();
                 // Reset the drop down lists
-                model.addObject(COURTSITE_LIST, displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
+                model.addObject(COURTSITE_LIST,
+                    displayPageStateHolder.getSitesBySelectedCourt(courtSite.getCourtId()));
                 model.addObject(DISPLAY_LIST, displayPageStateHolder.getDisplays());
                 model.addObject(DISPLAY_TYPE_LIST, displayPageStateHolder.getDisplayTypes());
                 model.addObject(ROTATION_SET_LIST, displayPageStateHolder.getRotationSets());
@@ -451,8 +473,9 @@ public class DisplayController extends DisplayPageStateSetter {
 
         } else {
             // Populate the lists and set CourtSite
-            final XhibitCourtSiteDto courtSite = populateListsAndSetCourtSite(displaySearchCommand, false);
-            
+            final XhibitCourtSiteDto courtSite =
+                populateListsAndSetCourtSite(displaySearchCommand, false);
+
             // Populate the relevant fields
             final DisplayDeleteCommand displayCommand = new DisplayDeleteCommand();
 
@@ -516,7 +539,7 @@ public class DisplayController extends DisplayPageStateSetter {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-    
+
     /**
      * Populate the court site lists.
      *
@@ -564,14 +587,14 @@ public class DisplayController extends DisplayPageStateSetter {
         DisplaySearchCommand displaySearchCommand, boolean isAmend) {
         // Populate the CourtSites list
         populateCourtSitesList();
-        
+
         // Get the selected CourtSite
-        final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-            displaySearchCommand.getXhibitCourtSiteId());
-        
+        final XhibitCourtSiteDto courtSite =
+            populateSelectedCourtSiteInPageStateHolder(displaySearchCommand.getXhibitCourtSiteId());
+
         // Populate the lists
         populatePageStateSelectionLists(displaySearchCommand, courtSite, isAmend);
-        
+
         return courtSite;
     }
 }
