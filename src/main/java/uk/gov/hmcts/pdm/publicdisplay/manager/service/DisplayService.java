@@ -152,6 +152,7 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         final Integer displayTypeId) {
         for (DisplayTypeDto displayTypeDto : displayTypes) {
             if (displayTypeDto.getDisplayTypeId().equals(displayTypeId)) {
+                LOGGER.debug("Found DisplayType");
                 return displayTypeDto;
             }
         }
@@ -163,6 +164,7 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         final Long xhibitCourtSiteId) {
         for (XhibitCourtSiteDto courtSiteDto : courtSites) {
             if (courtSiteDto.getId().equals(xhibitCourtSiteId)) {
+                LOGGER.debug("Found CourtSite");
                 return courtSiteDto;
             }
         }
@@ -173,6 +175,7 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         final Integer rotationSetId) {
         for (RotationSetsDto rotationSetsDto : rotationSets) {
             if (rotationSetsDto.getRotationSetId().equals(rotationSetId)) {
+                LOGGER.debug("Found RotationSet");
                 return rotationSetsDto;
             }
         }
