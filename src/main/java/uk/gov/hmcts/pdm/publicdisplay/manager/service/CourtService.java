@@ -68,11 +68,6 @@ public class CourtService extends CourtServiceCreator implements ICourtService {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return resultList;
     }
-
-    @Override
-    public Optional<XhbCourtSiteDao> getXhbCourtSiteDao(Integer xhibitCourtSiteId) {
-        return getXhbCourtSiteRepository().findById(xhibitCourtSiteId);
-    }
     
     @Override
     public XhibitCourtSiteDto getXhibitCourtSite(Integer xhibitCourtSiteId) {

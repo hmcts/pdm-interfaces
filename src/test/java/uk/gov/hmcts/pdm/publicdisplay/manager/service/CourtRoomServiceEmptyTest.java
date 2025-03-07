@@ -48,6 +48,7 @@ abstract class CourtRoomServiceEmptyTest extends AbstractJUnit {
     protected static final String NOT_EQUAL = "Not equal";
     protected static final String NOT_NULL = "Is null";
     protected static final String FALSE = "False";
+    protected static final String COURT_ROOM_NAME = "Court Room Name";
     protected static final String DESCRIPTION = "description";
 
 
