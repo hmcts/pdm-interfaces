@@ -82,7 +82,6 @@ public class DisplayPageStateHolder implements Serializable {
      * Reset all the variables.
      */
     public void reset() {
-        setDisplaySearchCommand(null);
         setCourtSite(null);
         setSites(new ArrayList<>());
         setDisplays(new ArrayList<>());

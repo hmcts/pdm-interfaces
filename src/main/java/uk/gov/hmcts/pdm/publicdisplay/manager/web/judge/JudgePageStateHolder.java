@@ -81,7 +81,6 @@ public class JudgePageStateHolder implements Serializable {
      */
     public void reset() {
         LOGGER.info("JudgePageStateHolder.reset() called. Resetting all variables.");
-        setJudgeSearchCommand(null);
         setCourtSite(null);
         setSites(new ArrayList<>());
         setJudges(new ArrayList<>());
