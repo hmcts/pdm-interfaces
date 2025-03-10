@@ -10,10 +10,10 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(EasyMockExtension.class)
@@ -70,16 +70,13 @@ class CourtAmendValidatorTest extends AbstractJUnit {
         final CourtAmendCommand courtAmendCommand = new CourtAmendCommand();
         courtAmendCommand.setCourtSiteCode("courtSiteCode");
         courtAmendCommand.setCourtSiteName("courtSiteName");
-        final CourtSearchCommand courtSearchCommand = new CourtSearchCommand();
-        courtSearchCommand.setCourtId(null);
         final BindingResult errors = new BeanPropertyBindingResult(courtAmendCommand, "courtAmendValidator");
 
-        expect(mockcourtPageStateHolder.getCourtSearchCommand()).andReturn(courtSearchCommand);
         replay(mockcourtPageStateHolder);
 
         classUnderTest.validate(courtAmendCommand, errors);
 
-        assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
+        assertFalse(errors.hasErrors(), FALSE);
         verify(mockcourtPageStateHolder);
     }
 }

@@ -38,9 +38,6 @@ public class CourtAmendValidator extends CourtSelectedValidator {
         } else if (courtAmendCommand.getCourtSiteCode() == null) {
             LOGGER.warn("validate method - Invalid court site code");
             errors.reject("courtAmendCommand.courtSiteCode.notBlank");
-        } else {
-            // Validate a court is selected
-            super.validate(getCourtPageStateHolder().getCourtSearchCommand(), errors);
         }
         LOGGER.info("validate method ends");
     }
