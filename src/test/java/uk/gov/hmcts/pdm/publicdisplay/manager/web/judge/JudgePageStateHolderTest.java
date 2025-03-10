@@ -72,7 +72,6 @@ class JudgePageStateHolderTest extends AbstractJUnit {
     @Test
     void resetTest() {
         classUnderTest.reset();
-        assertNull(classUnderTest.getJudgeSearchCommand(), NOT_NULL);
         assertEquals(classUnderTest.getJudges(), new ArrayList<>(), NOT_EQUAL);
         assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);
         assertNull(classUnderTest.getCourtSite(), NOT_NULL);

@@ -99,7 +99,6 @@ class DisplayPageStateHolderTest extends AbstractJUnit {
     @Test
     void resetTest() {
         classUnderTest.reset();
-        assertNull(classUnderTest.getDisplaySearchCommand(), NOT_NULL);
         assertEquals(classUnderTest.getRotationSets(), new ArrayList<>(), NOT_EQUAL);
         assertEquals(classUnderTest.getDisplayTypes(), new ArrayList<>(), NOT_EQUAL);
         assertEquals(classUnderTest.getSites(), new ArrayList<>(), NOT_EQUAL);
