@@ -10,7 +10,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,17 +68,14 @@ class JudgeTypeAmendValidatorTest extends AbstractJUnit {
         judgeTypeAmendCommand.setRefSystemCodeId(2);
         judgeTypeAmendCommand.setDescription("A description");
 
-        final JudgeTypeSearchCommand judgeTypeSearchCommand = new JudgeTypeSearchCommand();
-        judgeTypeSearchCommand.setXhibitCourtSiteId(1L);
-
         final JudgeTypePageStateHolder mockJudgeTypePageStateHolder =
                 EasyMock.createMock(JudgeTypePageStateHolder.class);
         ReflectionTestUtils.setField(classUnderTest, "judgeTypePageStateHolder", mockJudgeTypePageStateHolder);
 
         final BindingResult errors = new BeanPropertyBindingResult(judgeTypeAmendCommand, JUDGE_TYPE_AMEND_VALIDATOR);
 
-        expect(mockJudgeTypePageStateHolder.getJudgeTypeSearchCommand()).andReturn(judgeTypeSearchCommand);
         replay(mockJudgeTypePageStateHolder);
+        
         classUnderTest.validate(judgeTypeAmendCommand, errors);
 
         assertFalse(errors.hasErrors(), "Not false");
