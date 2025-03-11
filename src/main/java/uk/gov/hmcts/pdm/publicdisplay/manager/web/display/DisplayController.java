@@ -278,6 +278,12 @@ public class DisplayController extends DisplayPageStateSetter {
                     displayPageStateHolder.getDisplayTypes(), displayPageStateHolder.getSites(),
                     displayPageStateHolder.getRotationSets()));
             }
+            // Populate DisplayType & RotationSet Objects for the result - for delete screen
+            result.setDisplayType(displayService.getDisplayType(displayPageStateHolder.getDisplayTypes(),
+                result.getDisplayTypeId()));
+            
+            result.setRotationSet(displayService.getRotationSet(displayPageStateHolder.getRotationSets(),
+                result.getRotationSetId()));
         }
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return result;
