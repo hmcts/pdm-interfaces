@@ -445,7 +445,9 @@ class DisplayControllerTest extends DisplayControllerErrorTest {
             .andReturn(rotationSetsDtos);
         mockDisplayPageStateHolder.setRotationSets(rotationSetsDtos);
         expect(mockDisplayPageStateHolder.getDisplayTypes()).andReturn(displayTypeDtos).anyTimes();
-        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos);
+        expect(mockDisplayService.getDisplayType(displayTypeDtos, 12)).andReturn(displayTypeDtos.get(0));
+        expect(mockDisplayPageStateHolder.getRotationSets()).andReturn(rotationSetsDtos).anyTimes();
+        expect(mockDisplayService.getRotationSet(rotationSetsDtos, 12)).andReturn(rotationSetsDtos.get(0));
         replay(mockDisplayPageStateHolder);
         replay(mockDisplayService);
 

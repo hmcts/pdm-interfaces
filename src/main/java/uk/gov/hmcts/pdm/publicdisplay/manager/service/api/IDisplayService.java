@@ -50,6 +50,13 @@ public interface IDisplayService {
     List<XhibitCourtSiteDto> getCourtSites();
     
     /**
+     * Retrieves display type from passed in list and id.
+     * 
+     * @return DisplayTypeDto
+     */
+    DisplayTypeDto getDisplayType(List<DisplayTypeDto> displayTypes, Integer displayTypeId);
+    
+    /**
      * Retrieves court site from passed in list and id.
      * 
      * @return XhibitCourtSiteDto
@@ -57,6 +64,13 @@ public interface IDisplayService {
     XhibitCourtSiteDto getCourtSite(List<XhibitCourtSiteDto> courtSites,
         Long xhibitCourtSiteId);
 
+    /**
+     * Retrieves rotation set from passed in list and id.
+     * 
+     * @return RotationSetsDto
+     */
+    RotationSetsDto getRotationSet(List<RotationSetsDto> rotationSets, Integer rotationSetId);
+    
     /**
      * Retrieves all displays by court site id.
      * 

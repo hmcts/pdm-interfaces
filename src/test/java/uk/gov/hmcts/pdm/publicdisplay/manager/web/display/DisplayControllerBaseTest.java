@@ -141,6 +141,8 @@ abstract class DisplayControllerBaseTest extends AbstractJUnit {
         displayDto.setDisplayId(2);
         displayDto.setLocale(A_LOCALE);
         displayDto.setDisplayLocationId(1);
+        displayDto.setDisplayTypeId(12);
+        displayDto.setRotationSetId(12);
         return List.of(displayDto);
     }
 
@@ -153,6 +155,7 @@ abstract class DisplayControllerBaseTest extends AbstractJUnit {
     protected List<RotationSetsDto> createRotationSets() {
         RotationSetsDto rotationSetsDto = new RotationSetsDto();
         rotationSetsDto.setDefaultYn("yn");
+        rotationSetsDto.setRotationSetId(12);
         return List.of(rotationSetsDto);
     }
     
