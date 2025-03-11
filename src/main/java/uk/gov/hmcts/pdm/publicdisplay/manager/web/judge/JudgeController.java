@@ -414,6 +414,12 @@ public class JudgeController extends JudgePageStateSetter {
             try {
                 LOGGER.debug("{}{} - creating Judge", METHOD, methodName);
 
+                // If courtId is null from courtSite attempt to get it from the judges
+                if (judgePageStateHolder.getCourtSite() == null) {
+                    judgePageStateHolder.getCourtSite().setCourtId(
+                        judgePageStateHolder.getJudges().get(0).getCourtId());
+                }
+                
                 refJudgeService.createJudge(judgeCreateCommand, 
                     judgePageStateHolder.getCourtSite().getCourtId());
 
