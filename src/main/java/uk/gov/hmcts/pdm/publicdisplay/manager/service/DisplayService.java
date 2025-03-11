@@ -148,7 +148,8 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         return result;
     }
 
-    private DisplayTypeDto getDisplayType(final List<DisplayTypeDto> displayTypes,
+    @Override
+    public DisplayTypeDto getDisplayType(final List<DisplayTypeDto> displayTypes,
         final Integer displayTypeId) {
         for (DisplayTypeDto displayTypeDto : displayTypes) {
             if (displayTypeDto.getDisplayTypeId().equals(displayTypeId)) {
@@ -171,7 +172,8 @@ public class DisplayService extends DisplayServiceFinder implements IDisplayServ
         return null;
     }
 
-    private RotationSetsDto getRotationSet(final List<RotationSetsDto> rotationSets,
+    @Override
+    public RotationSetsDto getRotationSet(final List<RotationSetsDto> rotationSets,
         final Integer rotationSetId) {
         for (RotationSetsDto rotationSetsDto : rotationSets) {
             if (rotationSetsDto.getRotationSetId().equals(rotationSetId)) {
