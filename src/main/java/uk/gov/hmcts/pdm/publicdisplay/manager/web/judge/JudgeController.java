@@ -368,10 +368,13 @@ public class JudgeController extends JudgePageStateSetter {
             // Get the selected CourtSite
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 judgeSearchCommand.getXhibitCourtSiteId());
-
+            
+            LOGGER.info("CourtSite selected: {}{}{}", courtSite.getCourtSiteName(),
+                ", with id: ", courtSite.getCourtId());
+            
             // Populate the relevant fields
             final JudgeCreateCommand judgeCommand = new JudgeCreateCommand();
-
+            
             // Populate the model objects
             model.addObject(COURTSITE_LIST, judgePageStateHolder.getSites());
             model.addObject(JUDGE_TYPE_LIST, judgePageStateHolder.getJudgeTypes());
@@ -414,12 +417,6 @@ public class JudgeController extends JudgePageStateSetter {
             try {
                 LOGGER.debug("{}{} - creating Judge", METHOD, methodName);
 
-                // If courtId is null from courtSite attempt to get it from the judges
-                if (judgePageStateHolder.getCourtSite() == null) {
-                    judgePageStateHolder.getCourtSite().setCourtId(
-                        judgePageStateHolder.getJudges().get(0).getCourtId());
-                }
-                
                 refJudgeService.createJudge(judgeCreateCommand, 
                     judgePageStateHolder.getCourtSite().getCourtId());
 
