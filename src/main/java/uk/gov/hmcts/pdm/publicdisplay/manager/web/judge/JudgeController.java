@@ -369,6 +369,9 @@ public class JudgeController extends JudgePageStateSetter {
             final XhibitCourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
                 judgeSearchCommand.getXhibitCourtSiteId());
             
+            LOGGER.info("CourtSite selected: {}{}{}", courtSite.getCourtSiteName(),
+                ", with id: ", courtSite.getCourtId());
+            
             // Populate the relevant fields
             final JudgeCreateCommand judgeCommand = new JudgeCreateCommand();
             
