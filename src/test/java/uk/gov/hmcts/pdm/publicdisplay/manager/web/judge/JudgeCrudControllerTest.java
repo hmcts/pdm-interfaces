@@ -176,7 +176,7 @@ class JudgeCrudControllerTest extends JudgeShowControllerTest {
         mockJudgeCreateValidator.validate(capture(judgeCreateCommandCapture),
                 capture(capturedErrors), capture(refJudgeDtoCapture));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0));
+        expect(mockJudgePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0)).anyTimes();
         mockRefJudgeService.createJudge(capture(judgeCreateCommandCapture), eq(10));
         expectLastCall();
         expect(mockJudgePageStateHolder.getJudgeSearchCommand()).andReturn(null);
@@ -276,7 +276,7 @@ class JudgeCrudControllerTest extends JudgeShowControllerTest {
         mockJudgeCreateValidator.validate(capture(judgeCreateCommandCapture),
                 capture(capturedErrors), capture(refJudgeDtoCapture));
         expectLastCall();
-        expect(mockJudgePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0));
+        expect(mockJudgePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0)).anyTimes();
         mockRefJudgeService.createJudge(capture(judgeCreateCommandCapture), eq(10));
         expectLastCall().andThrow(new DataAccessException("Create Judge Exception") {});
         replay(mockJudgePageStateHolder);
