@@ -87,9 +87,6 @@ public class JudgeTypeCreateValidator extends JudgeTypeSelectedValidator {
             || EMPTY_STRING.equals(judgeTypeCreateCommand.getDescription())) {
             LOGGER.warn("validate method - Invalid description");
             errors.reject("judgeTypeAmendCommand.description.notBlank");
-        } else {
-            // Validate a judge type is selected
-            super.validate(getJudgeTypePageStateHolder().getJudgeTypeSearchCommand(), errors);
         }
         LOGGER.info("validate method ends");
     }
