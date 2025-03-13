@@ -36,6 +36,8 @@ public class JudgeTypeCreateCommand extends AbstractJudgeTypeCommand {
     /** The code field. */
     @NotBlank(message = "{judgeTypeCreateCommand.code.notBlank}")
     private String code;
+    
+    private int courtId;
 
     /**
      * Gets the code.
@@ -53,5 +55,23 @@ public class JudgeTypeCreateCommand extends AbstractJudgeTypeCommand {
      */
     public void setCode(String code) {
         this.code = code;
+    }
+
+    /**
+     * Gets the courtId.
+     *
+     * @return the courtId
+     */
+    public int getCourtId() {
+        return courtId;
+    }
+
+    /**
+     * Sets the courtId.
+     *
+     * @param courtId the courtId to set
+     */
+    public void setCourtId(int courtId) {
+        this.courtId = courtId;
     }
 }

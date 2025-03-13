@@ -137,8 +137,7 @@ abstract class JudgeTypeErrorControllerTest extends AbstractJUnit {
         mockJudgeTypeCreateValidator.validate(capture(capturedJudgeTypeCreateCommand),
             capture(capturedErrors), capture(capturedRefSysCodeDtos));
         expectLastCall();
-        expect(mockJudgeTypePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0));
-        mockRefJudgeTypeService.createJudgeType(capture(capturedJudgeTypeCreateCommand), eq(10));
+        mockRefJudgeTypeService.createJudgeType(capture(capturedJudgeTypeCreateCommand), eq(0));
         expectLastCall().andThrow(new DataAccessException("Create Judge Type Access Exception") {});
         expect(mockJudgeTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
         replay(mockJudgeTypeCreateValidator);
