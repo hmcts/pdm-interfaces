@@ -178,6 +178,9 @@
 							</spring:bind>
 						</div>
 
+						<%--Hidden fields here --%>
+						<form:hidden path="courtId" />
+
 						<div class="form-group">
 							<div class="col-md-12">																												
 							    <button id="btnCreateConfirm" class="btn btn-primary" name="btnCreateConfirm"><span class="glyphicon glyphicon-edit"></span> Create Judge</button>
@@ -185,7 +188,7 @@
 							</div>
 						</div>
 						<!-- /form-group -->
-									
+
 					</form:form>	
 					<!-- /form -->	
 					

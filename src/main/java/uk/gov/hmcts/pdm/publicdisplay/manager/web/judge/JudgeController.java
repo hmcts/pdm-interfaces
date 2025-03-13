@@ -373,7 +373,8 @@ public class JudgeController extends JudgePageStateSetter {
                 ", with id: ", courtSite.getCourtId());
             
             // Populate the relevant fields
-            final JudgeCreateCommand judgeCommand = new JudgeCreateCommand();
+            JudgeCreateCommand judgeCommand = new JudgeCreateCommand();
+            judgeCommand.setCourtId(courtSite.getCourtId());
             
             // Populate the model objects
             model.addObject(COURTSITE_LIST, judgePageStateHolder.getSites());
@@ -417,8 +418,7 @@ public class JudgeController extends JudgePageStateSetter {
             try {
                 LOGGER.debug("{}{} - creating Judge", METHOD, methodName);
 
-                refJudgeService.createJudge(judgeCreateCommand, 
-                    judgePageStateHolder.getCourtSite().getCourtId());
+                refJudgeService.createJudge(judgeCreateCommand, judgeCreateCommand.getCourtId());
 
                 // Add successMessage to model for display on page
                 model.addObject(SUCCESS_MESSAGE, "Judge has been created successfully.");
