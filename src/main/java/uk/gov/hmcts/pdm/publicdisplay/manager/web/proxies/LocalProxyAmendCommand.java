@@ -30,4 +30,14 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.proxies;
  *
  */
 public class LocalProxyAmendCommand extends AbstractLocalProxyCommand {
+    
+    private Long courtSiteId;
+
+    public Long getCourtSiteId() {
+        return courtSiteId;
+    }
+
+    public void setCourtSiteId(Long courtSiteId) {
+        this.courtSiteId = courtSiteId;
+    }
 }

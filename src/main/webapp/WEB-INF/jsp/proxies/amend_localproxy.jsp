@@ -126,6 +126,8 @@
 							</spring:bind>
 						</div>
 
+						<form:hidden path="courtSiteId" />
+
 						<div class="form-group">
 							<div class="col-md-12">
 								<button id="btnUpdate" class="btn btn-primary" name="btnUpdate" >

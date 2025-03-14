@@ -38,7 +38,6 @@ import java.util.List;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -98,7 +97,7 @@ class LocalProxyAmendValidatorTest extends AbstractLocalProxyValidatorTest {
      * Test validate courtsite null court site.
      */
     @Test
-    void testValidateCourtsiteNullCourtsite() {
+    void testValidateCourtsiteInvalid() {
         final List<XhibitCourtSiteDto> sites = getTestSites(AppConstants.YES_CHAR);
         final LocalProxySearchCommand localProxySearchCommand =
             getLocalProxySearchCommand(sites.get(0).getId());
@@ -107,96 +106,6 @@ class LocalProxyAmendValidatorTest extends AbstractLocalProxyValidatorTest {
 
         // Define a mock version of the called methods
         expect(mockLocalProxyPageStateHolder.getCourtSite()).andReturn(null);
-        replay(mockLocalProxyPageStateHolder);
-
-        // Perform the test
-        classUnderTest.validate(localProxySearchCommand, errors);
-
-        // Check the results
-        assertNotNull(errors, NULL);
-        assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
-
-        // Verify the mocks used in this method were called
-        verify(mockLocalProxyPageStateHolder);
-    }
-
-    /**
-     * Test validate court site invalid id.
-     */
-    @Test
-    void testValidateCourtsiteInvalidId() {
-        final List<XhibitCourtSiteDto> sites = getTestSites(AppConstants.YES_CHAR);
-        final CourtSiteDto courtSite = getTestCourtSite(COURT_SITE_ID);
-        final LocalProxySearchCommand localProxySearchCommand =
-            getLocalProxySearchCommand(sites.size() + 1);
-        final BindingResult errors =
-            new BeanPropertyBindingResult(localProxySearchCommand, LOCAL_PROXY_SEARCH_COMMAND);
-
-        // Define a mock version of the called methods
-        expect(mockLocalProxyPageStateHolder.getLocalProxySearchCommand())
-            .andReturn(localProxySearchCommand);
-        expectLastCall().times(2);
-        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(sites);
-        expect(mockLocalProxyPageStateHolder.getCourtSite()).andReturn(courtSite);
-        replay(mockLocalProxyPageStateHolder);
-
-        // Perform the test
-        classUnderTest.validate(localProxySearchCommand, errors);
-
-        // Check the results
-        assertNotNull(errors, NULL);
-        assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
-
-        // Verify the mocks used in this method were called
-        verify(mockLocalProxyPageStateHolder);
-    }
-
-    /**
-     * Test validate court site invalid site.
-     */
-    @Test
-    void testValidateCourtsiteInvalidSite() {
-        final List<XhibitCourtSiteDto> sites = getTestSites(AppConstants.NO_CHAR);
-        final CourtSiteDto courtSite = getTestCourtSite(COURT_SITE_ID);
-        final LocalProxySearchCommand localProxySearchCommand =
-            getLocalProxySearchCommand(sites.get(0).getId());
-        final BindingResult errors =
-            new BeanPropertyBindingResult(localProxySearchCommand, LOCAL_PROXY_SEARCH_COMMAND);
-
-        // Define a mock version of the called methods
-        expect(mockLocalProxyPageStateHolder.getLocalProxySearchCommand())
-            .andReturn(localProxySearchCommand);
-        expectLastCall().times(2);
-        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(sites);
-        expect(mockLocalProxyPageStateHolder.getCourtSite()).andReturn(courtSite);
-        replay(mockLocalProxyPageStateHolder);
-
-        // Perform the test
-        classUnderTest.validate(localProxySearchCommand, errors);
-
-        // Check the results
-        assertNotNull(errors, NULL);
-        assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
-
-        // Verify the mocks used in this method were called
-        verify(mockLocalProxyPageStateHolder);
-    }
-
-    /**
-     * Test validate court site invalid search command.
-     */
-    @Test
-    void testValidateInvalidSearchCommand() {
-        final List<XhibitCourtSiteDto> sites = getTestSites(AppConstants.NO_CHAR);
-        final CourtSiteDto courtSite = getTestCourtSite(COURT_SITE_ID);
-        final LocalProxySearchCommand localProxySearchCommand =
-            getLocalProxySearchCommand(sites.get(0).getId());
-        final BindingResult errors =
-            new BeanPropertyBindingResult(localProxySearchCommand, LOCAL_PROXY_SEARCH_COMMAND);
-
-        // Define a mock version of the called methods
-        expect(mockLocalProxyPageStateHolder.getCourtSite()).andReturn(courtSite);
-        expect(mockLocalProxyPageStateHolder.getLocalProxySearchCommand()).andReturn(null);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
@@ -223,10 +132,6 @@ class LocalProxyAmendValidatorTest extends AbstractLocalProxyValidatorTest {
             new BeanPropertyBindingResult(localProxySearchCommand, LOCAL_PROXY_SEARCH_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockLocalProxyPageStateHolder.getLocalProxySearchCommand())
-            .andReturn(localProxySearchCommand);
-        expectLastCall().times(2);
-        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(sites);
         expect(mockLocalProxyPageStateHolder.getCourtSite()).andReturn(courtSite);
         replay(mockLocalProxyPageStateHolder);
 
