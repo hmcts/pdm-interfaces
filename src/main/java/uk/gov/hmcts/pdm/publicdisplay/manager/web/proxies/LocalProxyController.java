@@ -48,7 +48,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/proxies")
-@SuppressWarnings("squid:S5145")
 public class LocalProxyController extends LocalProxyPageStateSetter {
 
     /** The Constant LOGGER. */
@@ -181,6 +180,9 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         // Ensure the search command is the latest
         localProxyPageStateHolder.setLocalProxySearchCommand(localProxySearchCommand);
 
+        // Retrieve and add the court sites & schedules to the pageStateHolder
+        setPageStateSelectionLists(true);
+        
         // Set the model and view for the search Local Proxy
         setModelForLocalProxyView(localProxySearchCommand, result, model);
 
@@ -207,12 +209,8 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         // Ensure the search command is the latest
         localProxyPageStateHolder.setLocalProxySearchCommand(localProxySearchCommand);
         
-        LOGGER.info("Court site Id from showAmendLocalProxy searchCommand: {}",
-            localProxySearchCommand.getXhibitCourtSiteId());
-        
         localProxySelectedValidator.validate(localProxySearchCommand, result);
         if (result.hasErrors()) {
-            LOGGER.info("{}{}", methodName, " result has errors, setting sites and going back to view local proxy");
             // Add the court site data to model
             LOGGER.debug(ADDING_COURTSITE_TO_MODEL, METHOD, methodName);
             model.addObject(COURTSITE_LIST, localProxyPageStateHolder.getSites());
