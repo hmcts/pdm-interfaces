@@ -58,13 +58,9 @@ public class LocalProxyAmendValidator extends LocalProxySelectedValidator {
     public void validate(final Object command, final Errors errors) {
         LOGGER.info("validate method starts");
 
-        if (getLocalProxyPageStateHolder().getCourtSite() == null
-            || getLocalProxyPageStateHolder().getLocalProxySearchCommand() == null) {
+        if (getLocalProxyPageStateHolder().getCourtSite() == null) {
             LOGGER.warn("validate method - Invalid value selected");
             errors.reject("localProxyCommand.xhibitCourtSiteId.notNull");
-        } else {
-            // Validate a registered local proxy is selected
-            super.validate(getLocalProxyPageStateHolder().getLocalProxySearchCommand(), errors);
         }
         LOGGER.info("validate method ends");
     }

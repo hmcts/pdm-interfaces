@@ -46,6 +46,14 @@ class ShowAmendLocalProxyTest extends UpdateLocalProxyTest {
         expectLastCall();
         mockLocalProxyPageStateHolder.setLocalProxySearchCommand(capture(capturedCommand));
         expectLastCall();
+        
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(xhibitCourtSites);
+        mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
+        mockLocalProxyPageStateHolder.setSchedules(schedules);
+        expectLastCall();
+        
         expect(mockLocalProxyPageStateHolder.getSchedules()).andReturn(schedules);
         expect(mockLocalProxyService.getCourtSiteByXhibitCourtSiteId(XHIBIT_COURT_SITE_ID))
             .andReturn(courtSite);
@@ -85,8 +93,17 @@ class ShowAmendLocalProxyTest extends UpdateLocalProxyTest {
         expectSelectedValidator(capturedCommand, capturedBindingResult, false);
         mockLocalProxyPageStateHolder.setLocalProxySearchCommand(capture(capturedCommand));
         expectLastCall();
+      
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(null);
+        mockLocalProxyPageStateHolder.setSites(null);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(null);
+        mockLocalProxyPageStateHolder.setSchedules(null);
+        expectLastCall();
+        
         expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites);
         expect(mockLocalProxyPageStateHolder.getSchedules()).andReturn(schedules);
+        replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
@@ -99,7 +116,7 @@ class ShowAmendLocalProxyTest extends UpdateLocalProxyTest {
         assertEquals(1, capturedBindingResult.getValue().getErrorCount(), NOT_EQUAL);
 
         // Verify the expected mocks were called
-        verify(mockProxySelectedValidator);
+        verify(mockLocalProxyService);
         verify(mockLocalProxyPageStateHolder);
     }
 

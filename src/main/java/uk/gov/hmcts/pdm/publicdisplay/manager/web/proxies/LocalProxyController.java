@@ -209,6 +209,9 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         // Ensure the search command is the latest
         localProxyPageStateHolder.setLocalProxySearchCommand(localProxySearchCommand);
         
+        // Retrieve and add the court sites & schedules to the pageStateHolder
+        setPageStateSelectionLists(true);
+        
         localProxySelectedValidator.validate(localProxySearchCommand, result);
         if (result.hasErrors()) {
             // Add the court site data to model
@@ -226,6 +229,7 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
 
             // Populate the relevant fields
             LocalProxyAmendCommand localProxyCommand = new LocalProxyAmendCommand();
+            localProxyCommand.setCourtSiteId(localProxySearchCommand.getXhibitCourtSiteId());
             localProxyCommand.setTitle(courtSite.getTitle());
             localProxyCommand.setScheduleId(courtSite.getScheduleId());
             localProxyCommand.setNotification(courtSite.getNotification());
@@ -265,6 +269,12 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         // Default is to return to the amend local proxy page to display errors
         model.setViewName(VIEW_NAME_AMEND_LOCAL_PROXY);
 
+        // Retrieve and add the court sites & schedules to the pageStateHolder
+        setPageStateSelectionLists(true);
+        
+        // Refreshing the courtSiteDto
+        populateSelectedCourtSiteInPageStateHolder(localProxyAmendCommand.getCourtSiteId());
+        
         localProxyAmendValidator.validate(localProxyAmendCommand, result);
         if (!result.hasErrors()) {
             try {
