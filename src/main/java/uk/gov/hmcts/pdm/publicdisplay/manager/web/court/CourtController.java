@@ -177,8 +177,10 @@ public class CourtController extends CourtPageStateSetter {
             courtPageStateHolder.setCourt(court);
 
             // Populate the relevant fields
-            final CourtCreateCommand courtCreateCommand = new CourtCreateCommand();
-
+            CourtCreateCommand courtCreateCommand = new CourtCreateCommand();
+            courtCreateCommand.setCourtId(court.getId());
+            courtCreateCommand.setAddressId(court.getAddressId());
+            
             // Populate the model objects
             model.addObject(COURTSITE_LIST, courtPageStateHolder.getSites());
             model.addObject(COURT, courtPageStateHolder.getCourt());
@@ -213,7 +215,7 @@ public class CourtController extends CourtPageStateSetter {
         model.setViewName(VIEW_NAME_CREATE_COURT);
 
         courtCreateValidator.validate(courtCreateCommand, result, courtService,
-            courtPageStateHolder.getCourt().getId());
+            courtCreateCommand.getCourtId());
         if (result.hasErrors()) {
             model.addObject(COURTSITE_LIST, courtPageStateHolder.getSites());
         } else {
@@ -221,8 +223,8 @@ public class CourtController extends CourtPageStateSetter {
                 LOGGER.debug("{}{} - creating Court", METHOD, methodName);
 
                 courtService.createCourt(courtCreateCommand,
-                    courtPageStateHolder.getCourt().getId(),
-                    courtPageStateHolder.getCourt().getAddressId());
+                    courtCreateCommand.getCourtId(),
+                    courtCreateCommand.getAddressId());
 
                 // Add successMessage to model for court on page
                 model.addObject(SUCCESS_MESSAGE, "Court has been created successfully.");

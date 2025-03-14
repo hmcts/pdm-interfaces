@@ -192,12 +192,11 @@ abstract class CourtControllerTest extends CourtControllerBase {
         final Capture<BindingResult> capturedErrors = newCapture();
         final List<CourtDto> courtDtos = getCourtDtoList();
 
-        expect(mockCourtPageStateHolder.getCourt()).andReturn(courtDtos.get(0)).times(3);
         mockCourtCreateValidator.validate(capture(capturedCourtCreateCommand), capture(capturedErrors), anyObject(),
                 anyInt());
         expectLastCall();
         replay(mockCourtCreateValidator);
-        mockCourtService.createCourt(capture(capturedCourtCreateCommand), eq(3), eq(1));
+        mockCourtService.createCourt(capture(capturedCourtCreateCommand), eq(3), eq(0));
         mockCourtPageStateHolder.reset();
         Capture<List<CourtDto>> capturedCourts = newCapture();
         expectLastCall();

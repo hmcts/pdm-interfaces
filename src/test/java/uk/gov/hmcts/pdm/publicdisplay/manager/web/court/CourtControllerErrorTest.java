@@ -75,10 +75,8 @@ class CourtControllerErrorTest extends CourtControllerTest {
     void createCourtSiteErrorTest() throws Exception {
         final Capture<CourtCreateCommand> capturedCourtCreateCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
-        final List<CourtDto> courtDtos = getCourtDtoList();
         final List<XhibitCourtSiteDto> xhibitCourtSiteDtos = List.of(new XhibitCourtSiteDto());
 
-        expect(mockCourtPageStateHolder.getCourt()).andReturn(courtDtos.get(0));
         mockCourtCreateValidator.validate(capture(capturedCourtCreateCommand),
             capture(capturedErrors), anyObject(), anyInt());
         expectLastCall().andAnswer((IAnswer<Void>) () -> {
@@ -112,14 +110,12 @@ class CourtControllerErrorTest extends CourtControllerTest {
     void createCourtSiteExceptionTest() throws Exception {
         final Capture<CourtCreateCommand> capturedCourtCreateCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
-        final List<CourtDto> courtDtos = getCourtDtoList();
 
-        expect(mockCourtPageStateHolder.getCourt()).andReturn(courtDtos.get(0)).times(3);
         mockCourtCreateValidator.validate(capture(capturedCourtCreateCommand),
             capture(capturedErrors), anyObject(), anyInt());
         expectLastCall();
         replay(mockCourtCreateValidator);
-        mockCourtService.createCourt(capture(capturedCourtCreateCommand), eq(3), eq(1));
+        mockCourtService.createCourt(capture(capturedCourtCreateCommand), eq(3), eq(0));
         expectLastCall().andThrow(new RuntimeException("Create Court Exception"));
         replay(mockCourtService);
         replay(mockCourtPageStateHolder);
