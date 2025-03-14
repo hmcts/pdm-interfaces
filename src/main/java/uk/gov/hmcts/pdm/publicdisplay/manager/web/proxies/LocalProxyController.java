@@ -48,6 +48,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/proxies")
+@SuppressWarnings("squid:S5145")
 public class LocalProxyController extends LocalProxyPageStateSetter {
 
     /** The Constant LOGGER. */
