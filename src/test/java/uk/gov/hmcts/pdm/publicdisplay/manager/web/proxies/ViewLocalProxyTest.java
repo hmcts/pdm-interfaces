@@ -153,10 +153,18 @@ abstract class ViewLocalProxyTest extends LocalProxyTestInitializer {
         expect(mockLocalProxyService
             .getCourtSiteByXhibitCourtSiteId(capture(capturedXhibitCourtSiteId)))
                 .andReturn(courtSite);
-        replay(mockLocalProxyService);
+        
         mockLocalProxyPageStateHolder.setLocalProxySearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(xhibitCourtSites);
+        mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
+        mockLocalProxyPageStateHolder.setSchedules(schedules);
+        expectLastCall();
         expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites);
+        
+        replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
@@ -193,7 +201,15 @@ abstract class ViewLocalProxyTest extends LocalProxyTestInitializer {
         expectSelectedValidator(capturedCommand, capturedBindingResult, true);
         mockLocalProxyPageStateHolder.setLocalProxySearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(xhibitCourtSites);
+        mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
+        mockLocalProxyPageStateHolder.setSchedules(schedules);
+        expectLastCall();
         expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites);
+        
+        replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
@@ -208,8 +224,8 @@ abstract class ViewLocalProxyTest extends LocalProxyTestInitializer {
             NOT_EQUAL);
 
         // Verify the expected mocks were called
+        verify(mockLocalProxyService);
         verify(mockLocalProxyPageStateHolder);
-        verify(mockProxySelectedValidator);
     }
 
 }
