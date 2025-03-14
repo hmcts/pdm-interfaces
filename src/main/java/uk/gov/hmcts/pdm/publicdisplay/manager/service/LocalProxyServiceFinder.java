@@ -43,6 +43,7 @@ public class LocalProxyServiceFinder extends LocalProxyServiceCreator {
      */
     protected static final Logger LOGGER = LoggerFactory.getLogger(LocalProxyServiceFinder.class);
     
+    @Override
     protected void clearRepositories() {
         xhbCourtSiteRepository = null;     
         xhbDispMgrCourtSiteRepository = null;
@@ -105,6 +106,7 @@ public class LocalProxyServiceFinder extends LocalProxyServiceCreator {
         return new ScheduleDto();
     }
 
+    @Override
     protected EntityManager getEntityManager() {
         if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
             clearRepositories();
@@ -113,6 +115,7 @@ public class LocalProxyServiceFinder extends LocalProxyServiceCreator {
         return entityManager;
     }
 
+    @Override
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbCourtSiteRepository)) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());

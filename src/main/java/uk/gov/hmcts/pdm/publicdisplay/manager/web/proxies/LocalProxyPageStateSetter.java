@@ -31,6 +31,32 @@ public class LocalProxyPageStateSetter {
      */
     @Autowired
     protected ILocalProxyService localProxyService;
+    
+    /**
+     * Sets the view page state selection lists.
+     */
+    protected void setViewPageStateSelectionLists() {
+        final String methodName = "setViewPageStateSelectionLists";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+
+        // Set the court site list
+        localProxyPageStateHolder.setSites(localProxyService.getCourtSites());
+
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
+    
+    /**
+     * Sets the amend page state selection lists.
+     */
+    protected void setAmendPageStateSelectionLists(Integer courtId) {
+        final String methodName = "setAmendPageStateSelectionLists";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+
+        // Set the court sites by courtId
+        localProxyPageStateHolder.setSites(localProxyService.getCourtSites(courtId));
+
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
 
     /**
      * Sets the page state selection lists.

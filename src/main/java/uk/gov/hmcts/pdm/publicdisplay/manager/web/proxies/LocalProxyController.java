@@ -48,6 +48,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/proxies")
+@SuppressWarnings({"PMD.TooManyMethods"})
 public class LocalProxyController extends LocalProxyPageStateSetter {
 
     /** The Constant LOGGER. */
@@ -61,6 +62,13 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
     private static final String SCHEDULE_LIST = "scheduleList";
     private static final String SUCCESS_MESSAGE = "successMessage";
     private static final String COMMAND = "command";
+    private static final String ATTEMPT = "Attempt {}{}";
+    private static final String POPULATING_COURTSITES = ", populating the CourtSites list";
+    private static final String COURTSITES_POPULATED = "CourtSites list populated";
+    private static final String POPULATING_PAGESTATE_LISTS =
+        ", populating the PageStateSelectionLists";
+    private static final String PAGESTATE_LISTS_POPULATED = "All PageStateSelectionLists populated";
+    private static final int MAX_NUM_OF_RETRIES = 5;
 
     /** The Constant for the JSP Folder. */
     private static final String FOLDER_PROXIES = "proxies";
@@ -217,10 +225,8 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
             model.setViewName(VIEW_NAME_VIEW_LOCAL_PROXY);
 
         } else {
-
-            // Get the selected CourtSite
-            final CourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
-                localProxySearchCommand.getXhibitCourtSiteId());
+            // Populate the lists and set CourtSite
+            final CourtSiteDto courtSite = populateListsAndSetCourtSite(localProxySearchCommand);
 
             // Populate the relevant fields
             final LocalProxyAmendCommand localProxyCommand = new LocalProxyAmendCommand();
@@ -518,6 +524,53 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         model.addObject(COMMAND, localProxySearchCommand);
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+    }
+    
+    /**
+     * Populate the court site lists.
+     *
+     */
+    private void populateCourtSitesList() {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_COURTSITES);
+            setViewPageStateSelectionLists();
+            if (!localProxyPageStateHolder.getSites().isEmpty()) {
+                LOGGER.info(COURTSITES_POPULATED);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Populate the page state selection lists.
+     *
+     * @param localProxySearchCommand the local proxy search command
+     */
+    private void populatePageStateSelectionLists(LocalProxySearchCommand localProxySearchCommand) {
+        for (int i = 0; i < MAX_NUM_OF_RETRIES; i++) {
+            LOGGER.info(ATTEMPT, i + 1, POPULATING_PAGESTATE_LISTS);
+            setAmendPageStateSelectionLists(
+                localProxySearchCommand.getXhibitCourtSiteId().intValue());
+            if (!localProxyPageStateHolder.getSites().isEmpty()) {
+                LOGGER.info(PAGESTATE_LISTS_POPULATED);
+                break;
+            }
+        }
+    }
+
+    private CourtSiteDto populateListsAndSetCourtSite(
+        LocalProxySearchCommand localProxySearchCommand) {
+        // Populate the CourtSites list
+        populateCourtSitesList();
+
+        // Get the selected CourtSite
+        final CourtSiteDto courtSite = populateSelectedCourtSiteInPageStateHolder(
+            localProxySearchCommand.getXhibitCourtSiteId());
+
+        // Populate the lists
+        populatePageStateSelectionLists(localProxySearchCommand);
+
+        return courtSite;
     }
 
 }

@@ -13,7 +13,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
 @Component
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-public class LocalProxyServiceCreator {
+public class LocalProxyServiceCreator extends AbstractService {
 
     /**
      * Gets the local proxy.
@@ -34,6 +34,7 @@ public class LocalProxyServiceCreator {
         return retVal;
     }
 
+    @Override
     protected XhibitCourtSiteDto createXhibitCourtSiteDto() {
         return new XhibitCourtSiteDto();
     }

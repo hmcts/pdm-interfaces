@@ -41,6 +41,21 @@ import java.util.List;
  *
  */
 public interface ILocalProxyService {
+    
+    /**
+     * Retrieves all court sites.
+     * 
+     * @return List
+     */
+    List<XhibitCourtSiteDto> getCourtSites();
+    
+    /**
+     * Retrieves all court sites.
+     * 
+     * @return List
+     */
+    List<XhibitCourtSiteDto> getCourtSites(Integer courtId);
+    
     /**
      * Retrieves all court sites with an associated local proxy.
      * 
