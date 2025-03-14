@@ -97,9 +97,11 @@
 										</spring:hasBindErrors>
 									</div>
 								</spring:bind>
-
-
 							</div>
+
+							<%--Hidden fields here --%>
+							<form:hidden path="courtId" />
+							<form:hidden path="addressId" />
 
 							<div class="form-group">
 								<div class="col-md-12">
