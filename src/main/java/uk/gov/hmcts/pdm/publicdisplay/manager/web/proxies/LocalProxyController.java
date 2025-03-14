@@ -48,6 +48,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/proxies")
+@SuppressWarnings("squid:S5145")
 public class LocalProxyController extends LocalProxyPageStateSetter {
 
     /** The Constant LOGGER. */
@@ -205,10 +206,13 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
 
         // Ensure the search command is the latest
         localProxyPageStateHolder.setLocalProxySearchCommand(localProxySearchCommand);
-
+        
+        LOGGER.info("Court site Id from showAmendLocalProxy searchCommand: {}",
+            localProxySearchCommand.getXhibitCourtSiteId());
+        
         localProxySelectedValidator.validate(localProxySearchCommand, result);
         if (result.hasErrors()) {
-
+            LOGGER.info("{}{}", methodName, " result has errors, setting sites and going back to view local proxy");
             // Add the court site data to model
             LOGGER.debug(ADDING_COURTSITE_TO_MODEL, METHOD, methodName);
             model.addObject(COURTSITE_LIST, localProxyPageStateHolder.getSites());
@@ -223,7 +227,7 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
                 localProxySearchCommand.getXhibitCourtSiteId());
 
             // Populate the relevant fields
-            final LocalProxyAmendCommand localProxyCommand = new LocalProxyAmendCommand();
+            LocalProxyAmendCommand localProxyCommand = new LocalProxyAmendCommand();
             localProxyCommand.setTitle(courtSite.getTitle());
             localProxyCommand.setScheduleId(courtSite.getScheduleId());
             localProxyCommand.setNotification(courtSite.getNotification());
@@ -505,7 +509,7 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         }
 
         final List<XhibitCourtSiteDto> courtSiteList = localProxyPageStateHolder.getSites();
-
+        
         // Add the court site data to model
         LOGGER.debug(ADDING_COURTSITE_TO_MODEL, METHOD, methodName);
         model.addObject(COURTSITE_LIST, courtSiteList);

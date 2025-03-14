@@ -71,7 +71,6 @@ public class LocalProxyPageStateHolder implements Serializable {
      * Reset all the variables.
      */
     public void reset() {
-        setLocalProxySearchCommand(null);
         setCourtSite(null);
         setSites(new ArrayList<>());
         setSchedules(new ArrayList<>());
