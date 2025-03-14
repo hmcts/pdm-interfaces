@@ -262,8 +262,7 @@ class JudgeTypeControllerTest extends JudgeTypeErrorControllerTest {
         mockJudgeTypeCreateValidator.validate(capture(capturedJudgeTypeCreateCommand),
             capture(capturedErrors), capture(capturedRefSysCodeDtos));
         expectLastCall();
-        expect(mockJudgeTypePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0));
-        mockRefJudgeTypeService.createJudgeType(capture(capturedJudgeTypeCreateCommand), eq(10));
+        mockRefJudgeTypeService.createJudgeType(capture(capturedJudgeTypeCreateCommand), eq(0));
         expectLastCall();
         mockJudgeTypePageStateHolder.reset();
         expectLastCall();

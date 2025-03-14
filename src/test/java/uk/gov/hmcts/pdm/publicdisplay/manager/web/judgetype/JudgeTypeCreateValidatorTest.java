@@ -105,13 +105,9 @@ class JudgeTypeCreateValidatorTest extends AbstractJUnit {
         final JudgeTypeCreateCommand judgeTypeCreateCommand = new JudgeTypeCreateCommand();
         judgeTypeCreateCommand.setCode("A different Code");
         judgeTypeCreateCommand.setDescription("A description");
-        final JudgeTypeSearchCommand judgeTypeSearchCommand = new JudgeTypeSearchCommand();
-        judgeTypeSearchCommand.setXhibitCourtSiteId(1L);
         final BindingResult errors =
             new BeanPropertyBindingResult(judgeTypeCreateCommand, JUDGE_TYPE_CREATE_VALIDATOR);
 
-        expect(mockJudgeTypePageStateHolder.getJudgeTypeSearchCommand())
-            .andReturn(judgeTypeSearchCommand);
         replay(mockJudgeTypePageStateHolder);
         classUnderTest.validate(judgeTypeCreateCommand, errors, refSystemCodeDtos);
 

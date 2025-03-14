@@ -89,9 +89,6 @@ public class CourtCreateValidator extends CourtSelectedValidator {
             String message = messageSource.getMessage("courtCreateCommand.courtSiteCode.exists",
                 null, Locale.getDefault());
             errors.rejectValue("courtSiteCode", null, message);
-        } else {
-            // Validate a court is selected
-            super.validate(getCourtPageStateHolder().getCourtSearchCommand(), errors);
         }
         LOGGER.info("validate method ends");
     }

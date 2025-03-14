@@ -338,8 +338,9 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
                 populateListsAndSetCourtSite(judgeTypeSearchCommand);
 
             // Populate the relevant fields
-            final JudgeTypeCreateCommand judgeTypeCommand = new JudgeTypeCreateCommand();
-
+            JudgeTypeCreateCommand judgeTypeCommand = new JudgeTypeCreateCommand();
+            judgeTypeCommand.setCourtId(courtSite.getCourtId());
+            
             // Populate the model objects
             model.addObject(COURTSITE_LIST, judgeTypePageStateHolder.getSites());
             model.addObject(JUDGE_TYPE_LIST, judgeTypePageStateHolder.getJudgeTypes());
@@ -382,8 +383,7 @@ public class JudgeTypeController extends JudgeTypePageStateSetter {
             try {
                 LOGGER.debug("{}{} - creating Judge type", METHOD, methodName);
 
-                refJudgeTypeService.createJudgeType(judgeTypeCreateCommand,
-                    judgeTypePageStateHolder.getCourtSite().getCourtId());
+                refJudgeTypeService.createJudgeType(judgeTypeCreateCommand, judgeTypeCreateCommand.getCourtId());
 
                 // Add successMessage to model for display on page
                 model.addObject(SUCCESS_MESSAGE, "Judge Type has been created successfully.");

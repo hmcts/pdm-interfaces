@@ -32,4 +32,13 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.judge;
  */
 public class JudgeCreateCommand extends AbstractJudgeCommand {
 
+    private int courtId;
+
+    public int getCourtId() {
+        return courtId;
+    }
+
+    public void setCourtId(int courtId) {
+        this.courtId = courtId;
+    }
 }
