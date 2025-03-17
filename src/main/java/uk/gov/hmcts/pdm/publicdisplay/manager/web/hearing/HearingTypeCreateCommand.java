@@ -35,6 +35,8 @@ public class HearingTypeCreateCommand extends AbstractHearingTypeCommand {
     
     @NotBlank(message = "{hearingTypeCreateCommand.hearingTypeCode.notBlank}")
     private String hearingTypeCode;
+    
+    private int courtId;
 
     public String getHearingTypeCode() {
         return hearingTypeCode;
@@ -42,5 +44,13 @@ public class HearingTypeCreateCommand extends AbstractHearingTypeCommand {
 
     public void setHearingTypeCode(String hearingTypeCode) {
         this.hearingTypeCode = hearingTypeCode;
+    }
+
+    public int getCourtId() {
+        return courtId;
+    }
+
+    public void setCourtId(int courtId) {
+        this.courtId = courtId;
     }
 }
