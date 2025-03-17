@@ -335,8 +335,9 @@ public class HearingTypeController extends HearingTypePageStateSetter {
                 populateListsAndSetCourtSite(hearingTypeSearchCommand);
 
             // Populate the relevant fields
-            final HearingTypeCreateCommand hearingTypeCreateCommand =
+            HearingTypeCreateCommand hearingTypeCreateCommand =
                 new HearingTypeCreateCommand();
+            hearingTypeCreateCommand.setCourtId(courtSite.getCourtId());
 
             // Populate the model objects
             model.addObject(COURTSITE_LIST, hearingTypePageStateHolder.getSites());
@@ -388,8 +389,7 @@ public class HearingTypeController extends HearingTypePageStateSetter {
             try {
                 LOGGER.debug("{}{} - creating Hearing Type", METHOD, methodName);
 
-                hearingTypeService.createHearingType(hearingTypeCreateCommand,
-                    hearingTypePageStateHolder.getCourtSite().getCourtId());
+                hearingTypeService.createHearingType(hearingTypeCreateCommand, hearingTypeCreateCommand.getCourtId());
 
                 // Add successMessage to model to show on page
                 model.addObject(SUCCESS_MESSAGE, "Hearing Type has been created successfully.");

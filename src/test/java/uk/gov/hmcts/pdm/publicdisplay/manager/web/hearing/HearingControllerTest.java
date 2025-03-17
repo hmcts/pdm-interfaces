@@ -428,8 +428,8 @@ class HearingControllerTest extends HearingErrorController {
         mockHearingTypeCreateValidator.validate(capture(hearingTypeCreateCommandCapture),
             capture(capturedErrors), capture(capturedHearingTypeList));
         expectLastCall();
-        expect(mockHearingTypePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0));
-        mockHearingTypeService.createHearingType(capture(hearingTypeCreateCommandCapture), eq(10));
+        
+        mockHearingTypeService.createHearingType(capture(hearingTypeCreateCommandCapture), eq(0));
         expectLastCall();
         mockHearingTypePageStateHolder.reset();
         expectLastCall();
@@ -438,6 +438,7 @@ class HearingControllerTest extends HearingErrorController {
         expectLastCall();
         expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
         expect(mockHearingTypePageStateHolder.getHearingSearchCommand()).andReturn(null);
+        
         replay(mockHearingTypeCreateValidator);
         replay(mockHearingTypePageStateHolder);
         replay(mockHearingTypeService);
@@ -461,6 +462,7 @@ class HearingControllerTest extends HearingErrorController {
             hearingTypeCreateCommandCapture.getValue().getHearingTypeCode(), NOT_EQUAL);
         assertEquals(4, capturedHearingTypeList.getValue().get(0).getListSequence(), NOT_EQUAL);
         assertEquals(8, capturedCourtSites.getValue().get(0).getId(), NOT_EQUAL);
+        
         verify(mockHearingTypePageStateHolder);
         verify(mockHearingTypeCreateValidator);
         verify(mockHearingTypeService);
@@ -480,10 +482,9 @@ class HearingControllerTest extends HearingErrorController {
         mockHearingTypeCreateValidator.validate(capture(hearingTypeCreateCommandCapture),
             capture(capturedErrors), capture(capturedHearingTypeList));
         expectLastCall();
-        mockHearingTypeService.createHearingType(capture(hearingTypeCreateCommandCapture), eq(10));
+        mockHearingTypeService.createHearingType(capture(hearingTypeCreateCommandCapture), eq(0));
         expectLastCall().andThrow(new DataAccessException("Create Hearing Type Exception") {});
-        expect(mockHearingTypePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0))
-            .times(2);
+        expect(mockHearingTypePageStateHolder.getCourtSite()).andReturn(xhibitCourtSiteDtos.get(0));
         expect(mockHearingTypePageStateHolder.getSites()).andReturn(xhibitCourtSiteDtos);
         expect(mockHearingTypeService.getAllCategories()).andReturn(categories);
         replay(mockHearingTypeCreateValidator);
