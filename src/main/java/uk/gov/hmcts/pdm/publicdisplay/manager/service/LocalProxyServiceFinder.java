@@ -100,11 +100,6 @@ public class LocalProxyServiceFinder extends LocalProxyServiceCreator {
         return scheduleDtos;
     }
 
-    @Override
-    protected ScheduleDto createScheduleDto() {
-        return new ScheduleDto();
-    }
-
     protected EntityManager getEntityManager() {
         if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
             clearRepositories();
