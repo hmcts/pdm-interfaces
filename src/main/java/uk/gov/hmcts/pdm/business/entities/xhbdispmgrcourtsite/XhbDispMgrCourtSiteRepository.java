@@ -66,12 +66,6 @@ public class XhbDispMgrCourtSiteRepository extends DispMgrCourtSiteConverter {
         XhbDispMgrCourtSiteDao dao = findDaoByXhibitCourtSiteId(xhibitCourtSiteId);
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         if (dao != null) {
-            if (dao.getXhbDispMgrCduDao() != null) {
-                for (XhbDispMgrCduDao cduDao : dao.getXhbDispMgrCduDao()) {
-                    // Make sure we have the latest version
-                    getEntityManager().refresh(cduDao);
-                }
-            }
             return getXhbCourtSiteRepository()
                 .convertDaoToCourtSiteBasicValue(dao.getXhbCourtSiteDao());
         } else {
