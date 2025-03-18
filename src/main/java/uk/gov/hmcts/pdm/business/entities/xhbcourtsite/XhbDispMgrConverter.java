@@ -118,6 +118,8 @@ public abstract class XhbDispMgrConverter extends AbstractRepository<XhbCourtSit
 
     private void convertXhbDispMgrLocalProxy(XhbDispMgrCourtSiteDao courtSiteDao,
         ICourtSite courtSite) {
+        final String methodName = "convertXhbDispMgrLocalProxy";
+        LOG.info(THREE_PARAMS, METHOD, methodName, STARTS);
         XhbDispMgrLocalProxyDao localProxyDao =
             getXhbDispMgrLocalProxyRepository().findByCourtSiteId(courtSiteDao.getId());
 
@@ -128,6 +130,7 @@ public abstract class XhbDispMgrConverter extends AbstractRepository<XhbCourtSit
                 XhbDispMgrLocalProxyRepository.getLocalProxyFromDao(localProxyDao);
             courtSite.setLocalProxy(localProxy);
         }
+        LOG.info(THREE_PARAMS, METHOD, methodName, ENDS);
     }
 
     protected XhbDispMgrLocalProxyRepository getXhbDispMgrLocalProxyRepository() {
