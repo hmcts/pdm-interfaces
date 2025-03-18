@@ -41,8 +41,7 @@ public abstract class CourtSiteConverter extends XhbDispMgrCourtSiteProcessor {
         final String methodName = "convertDaoToXhibitCourtSiteBasicValue";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
         Set<IUrlModel> urls = new HashSet<>();
-        // Make sure we have the latest version
-        getEntityManager().refresh(dao);
+
         IXhibitCourtSite xhibitCourtSite = getXhibitCourtSiteFromDao(dao);
 
         convertXhbCourtSiteWelsh(dao, xhibitCourtSite);
@@ -60,8 +59,7 @@ public abstract class CourtSiteConverter extends XhbDispMgrCourtSiteProcessor {
         final String methodName = "convertDaoToCourtSiteBasicValue";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
         ICourtSite courtSite = null;
-        // Make sure we have the latest version
-        getEntityManager().refresh(dao);
+
         IXhibitCourtSite xhibitCourtSite = getXhibitCourtSiteFromDao(dao);
 
         if (dao.getXhbCourtSiteWelshDao() != null) {
