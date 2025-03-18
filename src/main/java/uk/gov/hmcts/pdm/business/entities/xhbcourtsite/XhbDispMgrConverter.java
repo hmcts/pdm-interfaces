@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdm.business.entities.xhbcourtsite;
 
-
+import com.pdm.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,8 +124,6 @@ public abstract class XhbDispMgrConverter extends AbstractRepository<XhbCourtSit
             getXhbDispMgrLocalProxyRepository().findByCourtSiteId(courtSiteDao.getId());
 
         if (localProxyDao != null) {
-            // Make sure we have the latest version
-            getEntityManager().refresh(localProxyDao);
             ILocalProxy localProxy =
                 XhbDispMgrLocalProxyRepository.getLocalProxyFromDao(localProxyDao);
             courtSite.setLocalProxy(localProxy);
@@ -136,11 +134,10 @@ public abstract class XhbDispMgrConverter extends AbstractRepository<XhbCourtSit
     protected XhbDispMgrLocalProxyRepository getXhbDispMgrLocalProxyRepository() {
         final String methodName = "getXhbDispMgrLocalProxyRepository";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
-        if (xhbDispMgrLocalProxyRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbDispMgrLocalProxyRepository)) {
             xhbDispMgrLocalProxyRepository = new XhbDispMgrLocalProxyRepository(getEntityManager());
         }
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         return xhbDispMgrLocalProxyRepository;
     }
-
 }
