@@ -305,8 +305,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
      */
     @Test
     void testRestartAllCdusError() throws Exception {
-
-
         // Capture the cduCommand object
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -315,7 +313,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         replay(mockCduPageStateHolder);
         expectCduRestartAllValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(cdus);
@@ -361,7 +358,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         replay(mockCduPageStateHolder);
         expectCduRestartAllValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(cdus);

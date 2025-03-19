@@ -94,8 +94,8 @@ abstract class ShowCduTest extends TestCdus {
         expectLastCall().times(2);
         mockCduPageStateHolder.setCdus(emptyCdus);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(emptyCdus);
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(emptyCdus).anyTimes();
+        expect(mockCduPageStateHolder.getSites()).andReturn(sites).anyTimes();
         replay(mockCduPageStateHolder);
         expect(mockCduSearchValidator.isValid(cduSearchCommand)).andReturn(true);
         replay(mockCduSearchValidator);
@@ -429,7 +429,6 @@ abstract class ShowCduTest extends TestCdus {
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
 

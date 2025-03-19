@@ -79,7 +79,6 @@ public class CduPageStateHolder implements Serializable {
         setCdus(new ArrayList<>());
         setCdu(null);
         setAvailableUrls(new ArrayList<>());
-        setCduSearchCommand(null);
     }
 
     /**

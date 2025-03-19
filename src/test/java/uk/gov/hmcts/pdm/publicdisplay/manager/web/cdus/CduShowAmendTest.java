@@ -79,8 +79,8 @@ class CduShowAmendTest extends UpdateCduTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getSites()).andReturn(sites).anyTimes();
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, false);
 
