@@ -244,11 +244,9 @@ public class CdusControllerUtility {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Add the list of cdus to the model
-        LOGGER.info("CDU's for site: {}", cduPageStateHolder.getCdus().size());
         model.addObject("cduList", cduPageStateHolder.getCdus());
 
         // Set the list of court sites from the page holder
-        LOGGER.info("Court sites: {}", cduPageStateHolder.getSites().size());
         model.addObject("courtSiteList", cduPageStateHolder.getSites());
 
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
