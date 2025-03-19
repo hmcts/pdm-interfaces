@@ -68,8 +68,7 @@ public class CdusController extends CduRegistrationController {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Populate the sites list (this will be null from the dashboard as we are bypassing the
-        // page
-        // population)
+        // page population
         final List<XhibitCourtSiteDto> courtSiteList =
             localProxyService.getXhibitCourtSitesWithLocalProxy();
         cduPageStateHolder.setSites(courtSiteList);

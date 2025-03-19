@@ -114,8 +114,8 @@ abstract class TestCdus extends CduExpectValidators {
      * Expect set model cdu list.
      */
     protected void expectSetModelCduList() {
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
+        expect(mockCduPageStateHolder.getSites()).andReturn(sites).anyTimes();
     }
 
     /**

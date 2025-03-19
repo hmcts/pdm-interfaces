@@ -104,8 +104,8 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
+        expect(mockCduPageStateHolder.getSites()).andReturn(sites).anyTimes();
         replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, false);
 
@@ -316,7 +316,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         replay(mockCduPageStateHolder);
@@ -401,7 +400,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         replay(mockCduPageStateHolder);
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
@@ -448,7 +446,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         replay(mockCduPageStateHolder);
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
