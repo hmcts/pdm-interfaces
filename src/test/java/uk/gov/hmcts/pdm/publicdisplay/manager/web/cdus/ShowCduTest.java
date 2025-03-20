@@ -348,6 +348,9 @@ abstract class ShowCduTest extends TestCdus {
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         mockCduPageStateHolder.setCdus(null);
@@ -355,10 +358,13 @@ abstract class ShowCduTest extends TestCdus {
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
+        
         expectCduSearchValidator(capturedCommand, capturedErrors, true);
         expect(mockCduService.getCduByMacAddressWithLike(cdu.getMacAddress())).andReturn(cdus);
+        
+        replay(mockCduPageStateHolder);
         replay(mockCduService);
+        replay(mockLocalProxyService);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(mappingNameCdusUrl)
@@ -375,6 +381,7 @@ abstract class ShowCduTest extends TestCdus {
         verify(mockCduPageStateHolder);
         verify(mockCduSearchValidator);
         verify(mockCduService);
+        verify(mockLocalProxyService);
     }
 
     /**
@@ -390,13 +397,18 @@ abstract class ShowCduTest extends TestCdus {
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         mockCduPageStateHolder.setCdus(null);
         expectLastCall();
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduSearchValidator(capturedCommand, capturedErrors, false);
+        
+        replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(mappingNameCdusUrl)
@@ -410,6 +422,7 @@ abstract class ShowCduTest extends TestCdus {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchValidator);
+        verify(mockLocalProxyService);
     }
 
     /**
