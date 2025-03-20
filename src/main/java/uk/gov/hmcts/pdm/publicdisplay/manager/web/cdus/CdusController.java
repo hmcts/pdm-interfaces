@@ -95,6 +95,11 @@ public class CdusController extends CduRegistrationController {
         final String methodName = "searchForCdu";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // Populate the sites list
+        final List<XhibitCourtSiteDto> courtSiteList =
+            localProxyService.getXhibitCourtSitesWithLocalProxy();
+        cduPageStateHolder.setSites(courtSiteList);
+        
         // Set the model and view for the search CDU
         setModelForCduSearch(cduSearchCommand, result, model, true);
         model.addObject(COMMAND, cduSearchCommand);
