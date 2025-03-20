@@ -34,6 +34,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ILocalProxyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,9 +66,9 @@ abstract class CduSearchValidatorTest extends AbstractJUnit {
 
     /** The class under test. */
     protected CduSearchValidator classUnderTest;
-
-    /** The cdu page state holder. */
-    protected CduPageStateHolder mockCduPageStateHolder;
+    
+    /** The mock local proxy service. */
+    private ILocalProxyService mockLocalProxyService;
 
     /** The sites. */
     protected final List<XhibitCourtSiteDto> sites = getTestSites();
@@ -81,7 +82,7 @@ abstract class CduSearchValidatorTest extends AbstractJUnit {
         classUnderTest = new CduSearchValidator();
 
         // Setup the mock version of the called classes
-        mockCduPageStateHolder = createMock(CduPageStateHolder.class);
+        mockLocalProxyService = createMock(ILocalProxyService.class);
         MessageSource mockMessageSource = new ReloadableResourceBundleMessageSource() {
             @Override
             public String getMessageInternal(String code, Object[] args, Locale locale) {
@@ -90,7 +91,7 @@ abstract class CduSearchValidatorTest extends AbstractJUnit {
         };
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockCduPageStateHolder);
+        ReflectionTestUtils.setField(classUnderTest, "localProxyService", mockLocalProxyService);
         ReflectionTestUtils.setField(classUnderTest, "messageSource", mockMessageSource);
     }
 
@@ -113,8 +114,9 @@ abstract class CduSearchValidatorTest extends AbstractJUnit {
             new BeanPropertyBindingResult(cduSearchCommand, CDU_SEARCH_COMMAND);
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
-        replay(mockCduPageStateHolder);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        
+        replay(mockLocalProxyService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);
@@ -123,7 +125,7 @@ abstract class CduSearchValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), TRUE);
 
         // Verify the expected mocks were called
-        verify(mockCduPageStateHolder);
+        verify(mockLocalProxyService);
     }
 
     /**
@@ -137,8 +139,9 @@ abstract class CduSearchValidatorTest extends AbstractJUnit {
             new BeanPropertyBindingResult(cduSearchCommand, CDU_SEARCH_COMMAND);
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
-        replay(mockCduPageStateHolder);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        
+        replay(mockLocalProxyService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);

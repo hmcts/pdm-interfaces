@@ -32,6 +32,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ILocalProxyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +67,8 @@ class CduRestartAllValidatorTest extends AbstractJUnit {
     /** The class under test. */
     private CduRestartAllValidator classUnderTest;
 
-    /** The mock cdu page state holder. */
-    private CduPageStateHolder mockCduPageStateHolder;
+    /** The mock local proxy service. */
+    private ILocalProxyService mockLocalProxyService;
 
     /** The sites. */
     private final List<XhibitCourtSiteDto> sites = getTestSites();
@@ -81,10 +82,10 @@ class CduRestartAllValidatorTest extends AbstractJUnit {
         classUnderTest = new CduRestartAllValidator();
 
         // Setup the mock version of the called classes
-        mockCduPageStateHolder = createMock(CduPageStateHolder.class);
+        mockLocalProxyService = createMock(ILocalProxyService.class);
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockCduPageStateHolder);
+        ReflectionTestUtils.setField(classUnderTest, "localProxyService", mockLocalProxyService);
     }
 
     /**
@@ -106,8 +107,9 @@ class CduRestartAllValidatorTest extends AbstractJUnit {
             new BeanPropertyBindingResult(cduSearchCommand, CDU_SEARCH_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
-        replay(mockCduPageStateHolder);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        
+        replay(mockLocalProxyService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);
@@ -116,7 +118,7 @@ class CduRestartAllValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), "True");
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockLocalProxyService);
     }
 
     /**
@@ -129,8 +131,9 @@ class CduRestartAllValidatorTest extends AbstractJUnit {
             new BeanPropertyBindingResult(cduSearchCommand, CDU_SEARCH_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
-        replay(mockCduPageStateHolder);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        
+        replay(mockLocalProxyService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);
@@ -139,7 +142,7 @@ class CduRestartAllValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockLocalProxyService);
     }
 
     /**
@@ -169,8 +172,9 @@ class CduRestartAllValidatorTest extends AbstractJUnit {
             new BeanPropertyBindingResult(cduSearchCommand, CDU_SEARCH_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getSites()).andReturn(sites);
-        replay(mockCduPageStateHolder);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        
+        replay(mockLocalProxyService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);

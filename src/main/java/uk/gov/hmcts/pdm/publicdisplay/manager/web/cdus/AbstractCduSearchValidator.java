@@ -23,6 +23,8 @@
 
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
@@ -36,6 +38,10 @@ import java.util.List;
  * @author harrism
  */
 public abstract class AbstractCduSearchValidator extends AbstractCduValidator {
+    
+    /** The Constant LOGGER. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCduSearchValidator.class);
+    
     /*
      * (non-Javadoc)
      * 
@@ -73,8 +79,11 @@ public abstract class AbstractCduSearchValidator extends AbstractCduValidator {
      */
     protected boolean isValidCourtSiteSelected(final Long xhibitCourtSiteId) {
         boolean found = false;
-        final List<XhibitCourtSiteDto> sites = getCduPageStateHolder().getSites();
+        // Refresh the court site list using local proxy service
+        final List<XhibitCourtSiteDto> sites = localProxyService.getXhibitCourtSitesWithLocalProxy();
+        
         if (sites != null) {
+            LOGGER.info("isValidCourtSiteSelected court site list fetched: {}", sites.size());
             for (XhibitCourtSiteDto site : sites) {
                 if (site.getId().equals(xhibitCourtSiteId)) {
                     found = true;

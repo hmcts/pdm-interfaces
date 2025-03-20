@@ -303,8 +303,6 @@ public class CdusControllerUtility {
         // Ensure the search command is the latest
         cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
         
-        LOGGER.info("CduSearchCommand court site id: {}", cduSearchCommand.getXhibitCourtSiteId());
-        
         // Reset any previous search results and selected cdu
         cduPageStateHolder.setCdus(null);
         if (resetSelectionCriteria) {
