@@ -22,7 +22,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IUrlService;
 import java.util.Iterator;
 import java.util.List;
 
-@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.LooseCoupling", "squid:S5145"})
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.LooseCoupling"})
 public class CdusControllerUtility {
 
     /** The Constant LOGGER. */
@@ -302,8 +302,6 @@ public class CdusControllerUtility {
 
         // Ensure the search command is the latest
         cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
-        
-        LOGGER.info("CduSearchCommand court site id: {}", cduSearchCommand.getXhibitCourtSiteId());
         
         // Reset any previous search results and selected cdu
         cduPageStateHolder.setCdus(null);

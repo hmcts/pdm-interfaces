@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Validator;
 import uk.gov.hmcts.pdm.publicdisplay.common.util.AppConstants;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ILocalProxyService;
 
 import java.util.List;
 
@@ -40,6 +41,10 @@ public abstract class AbstractCduValidator implements Validator {
     /** The cdu page state holder. */
     @Autowired
     private CduPageStateHolder cduPageStateHolder;
+    
+    /** The localProxyService class. */
+    @Autowired
+    protected ILocalProxyService localProxyService;
 
     /**
      * Gets the cdu page state holder.
