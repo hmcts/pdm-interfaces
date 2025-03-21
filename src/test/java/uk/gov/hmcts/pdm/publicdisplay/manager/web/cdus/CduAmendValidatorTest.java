@@ -33,10 +33,10 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.common.util.AppConstants;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,9 +64,9 @@ class CduAmendValidatorTest extends AbstractJUnit {
 
     /** The class under test. */
     private CduAmendValidator classUnderTest;
-
-    /** The mock cdu page state holder. */
-    private CduPageStateHolder mockCduPageStateHolder;
+    
+    /** The mock cduService. */
+    private ICduService mockCduService;
 
     /**
      * Setup.
@@ -77,10 +77,10 @@ class CduAmendValidatorTest extends AbstractJUnit {
         classUnderTest = new CduAmendValidator();
 
         // Setup the mock version of the called classes
-        mockCduPageStateHolder = createMock(CduPageStateHolder.class);
+        mockCduService = createMock(ICduService.class);
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockCduPageStateHolder);
+        ReflectionTestUtils.setField(classUnderTest, "cduService", mockCduService);
     }
 
     /**
@@ -105,9 +105,9 @@ class CduAmendValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByCduId(cduCommand.getCduId())).andReturn(cdu);
+        
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -116,7 +116,7 @@ class CduAmendValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), "True");
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -132,9 +132,9 @@ class CduAmendValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByCduId(cduCommand.getCduId())).andReturn(cdu);
+        
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -143,7 +143,7 @@ class CduAmendValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), "True");
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -157,9 +157,9 @@ class CduAmendValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByCduId(cduCommand.getCduId())).andReturn(cdu);
+        
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -168,7 +168,7 @@ class CduAmendValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -181,8 +181,9 @@ class CduAmendValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdu()).andReturn(null);
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByCduId(cduCommand.getCduId())).andReturn(null);
+        
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -191,7 +192,7 @@ class CduAmendValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -202,6 +203,7 @@ class CduAmendValidatorTest extends AbstractJUnit {
      */
     private CduAmendCommand getTestCduAmendCommand(final Character offlineIndicator) {
         final CduAmendCommand cduCommand = new CduAmendCommand();
+        cduCommand.setCduId(1);
         cduCommand.setOfflineIndicator(offlineIndicator);
         return cduCommand;
     }

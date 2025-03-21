@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 
 /**
  * The Class CduAmendValidator.
@@ -57,14 +58,13 @@ public class CduAmendValidator extends AbstractCduValidator {
     @Override
     public void validate(final Object command, final Errors errors) {
         LOGGER.info("Validate method starts");
-
+        CduAmendCommand cduAmendCommand = (CduAmendCommand) command;
+        CduDto cduDto = cduService.getCduByCduId(cduAmendCommand.getCduId());
         // Validate a CDU has been selected from the list and that it is currently registered
-        if (getCduPageStateHolder().getCdu() == null
-            || !isRegisteredCdu(getCduPageStateHolder().getCdu())) {
+        if (cduDto == null || !isRegisteredCdu(cduDto)) {
             LOGGER.warn("validate method - Invalid value selected");
             errors.reject("cduSearchCommand.noselectionmade");
         }
-
         LOGGER.info("Validate method ends");
     }
 }

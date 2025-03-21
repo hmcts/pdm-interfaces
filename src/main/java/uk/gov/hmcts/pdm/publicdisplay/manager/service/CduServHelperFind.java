@@ -32,6 +32,20 @@ public class CduServHelperFind extends CduServHelperCrud {
     private List<String> ipValues;
 
 
+    public CduDto getCduByCduId(final int cduId) {
+        final String methodName = "getCduByCduId ";
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
+        
+        // First get the CduModel
+        final ICduModel cdu = getXhbDispMgrCduRepository().findByCduId(cduId);
+        // Convert this into a CduDto
+        final CduDto cduDto = createCduDto(cdu);
+        cduDto.setRegisteredIndicator(AppConstants.YES_CHAR);
+        
+        LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
+        return cduDto;
+    }
+    
     /*
      * (non-Javadoc)
      * 
