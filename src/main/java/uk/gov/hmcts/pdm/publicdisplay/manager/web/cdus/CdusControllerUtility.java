@@ -296,6 +296,11 @@ public class CdusControllerUtility {
         
         // Ensure the search command is the latest
         cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
+        
+        // Populate the cdus for this site
+        final List<CduDto> cduList = 
+            cduService.getCdusBySiteID(cduSearchCommand.getXhibitCourtSiteId());
+        cduPageStateHolder.setCdus(cduList);
     }
 
     /**

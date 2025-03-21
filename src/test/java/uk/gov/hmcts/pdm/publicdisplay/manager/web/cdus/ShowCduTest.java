@@ -211,9 +211,11 @@ abstract class ShowCduTest extends TestCdus {
         mockCduPageStateHolder.setSites(sites);
         expectLastCall();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
-        mockCduPageStateHolder.setCdus(null);
-        expectLastCall();
+        
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall().times(2);
+        mockCduPageStateHolder.setCdus(null);
         expectLastCall();
         expectSetModelCduList();
         replay(mockCduPageStateHolder);
@@ -257,6 +259,9 @@ abstract class ShowCduTest extends TestCdus {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         mockCduPageStateHolder.setSites(sites);
         expectLastCall();
         mockCduPageStateHolder.setCdus(null);
@@ -297,13 +302,15 @@ abstract class ShowCduTest extends TestCdus {
      */
     @Test
     void testSearchForCduDashboardRuntimeError() throws Exception {
-
         // Capture the cduCommand object and errors passed out
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         mockCduPageStateHolder.setSites(sites);
         expectLastCall();
@@ -354,10 +361,11 @@ abstract class ShowCduTest extends TestCdus {
         expectLastCall();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdus(null);
         expectLastCall();
         mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall();
+        expectLastCall().times(2);
         expectSetModelCduList();
         
         expectCduSearchValidator(capturedCommand, capturedErrors, true);
@@ -403,13 +411,15 @@ abstract class ShowCduTest extends TestCdus {
         expectLastCall();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(null);
         mockCduPageStateHolder.setCdus(null);
-        expectLastCall();
+        expectLastCall().times(2);
         expectSetModelCduList();
         expectCduSearchValidator(capturedCommand, capturedErrors, false);
         
         replay(mockCduPageStateHolder);
         replay(mockLocalProxyService);
+        replay(mockCduService);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(mappingNameCdusUrl)
@@ -424,6 +434,7 @@ abstract class ShowCduTest extends TestCdus {
         verify(mockCduPageStateHolder);
         verify(mockCduSearchValidator);
         verify(mockLocalProxyService);
+        verify(mockCduService);
     }
 
     /**
@@ -442,6 +453,9 @@ abstract class ShowCduTest extends TestCdus {
         mockCduPageStateHolder.setSites(null);
         expectLastCall().anyTimes();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
