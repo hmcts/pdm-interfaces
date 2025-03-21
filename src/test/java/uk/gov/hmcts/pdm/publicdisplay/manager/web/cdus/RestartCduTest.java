@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,12 +55,13 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
         expectLastCall();
+        
+        replay(mockCduPageStateHolder);
         replay(mockCduService);
 
         // Perform the test
@@ -141,16 +143,15 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
-        
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
-        
         expectLastCall().andThrow(dataRetrievalFailureException);
+        
+        replay(mockCduPageStateHolder);
         replay(mockCduService);
 
         // Perform the test
@@ -191,15 +192,14 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
-        
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
-        
         expectLastCall().andThrow(xpdmException);
+        
+        replay(mockCduPageStateHolder);
         replay(mockCduService);
 
         // Perform the test
