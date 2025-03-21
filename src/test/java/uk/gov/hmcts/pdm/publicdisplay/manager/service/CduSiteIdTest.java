@@ -1,11 +1,15 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdm.publicdisplay.common.json.CduJson;
 import uk.gov.hmcts.pdm.publicdisplay.common.util.AppConstants;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CduModel;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CourtSite;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.XhibitCourtSite;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICourtSite;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 
@@ -66,7 +70,30 @@ class CduSiteIdTest extends CduUpdateTest {
         verify(mockLocalProxyRestClient);
     }
 
-
+    @Test
+    void testGetCduByCduId() {
+        CduModel cduModel = new CduModel();
+        XhibitCourtSite xhibitCourtSite = new XhibitCourtSite();
+        CourtSite courtSite = new CourtSite();
+        courtSite.setXhibitCourtSite(xhibitCourtSite);
+        cduModel.setCourtSite(courtSite);
+        
+        // Add the mock calls to child classes
+        expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        expect(mockCduRepo.findByCduId(EasyMock.isA(Integer.class))).andReturn(cduModel);
+        
+        
+        replay(mockCduRepo);
+        replay(mockEntityManager);
+        
+        CduDto result = classUnderTest.getCduByCduId(0);
+        
+        verify(mockCduRepo);
+        verify(mockEntityManager);
+        assertNotNull(result, NULL);
+    }
+    
     /**
      * Gets the test cdu json.
      *
