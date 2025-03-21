@@ -43,14 +43,15 @@ class CduShowAmendTest extends UpdateCduTest {
         expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class)))
+            .andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
 
         replay(mockCduPageStateHolder);
         replay(mockCduService);
-        
+
         // Perform the test
         final MvcResult results =
             mockMvc.perform(post(mappingNameCdusUrl).param(BTN_SHOW_AMEND_CDU, BTN_SHOW_AMEND_CDU)
@@ -114,6 +115,9 @@ class CduShowAmendTest extends UpdateCduTest {
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(null);
+        mockCduPageStateHolder.setSites(null);
+        expectLastCall().anyTimes();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
@@ -133,6 +137,5 @@ class CduShowAmendTest extends UpdateCduTest {
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
     }
-
 
 }
