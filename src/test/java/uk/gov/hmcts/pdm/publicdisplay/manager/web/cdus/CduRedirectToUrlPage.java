@@ -48,6 +48,8 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
@@ -126,6 +128,8 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
@@ -172,6 +176,8 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andThrow(xpdmException);
@@ -217,6 +223,8 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
 
         replay(mockCduPageStateHolder);

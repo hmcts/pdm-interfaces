@@ -45,6 +45,7 @@ class CduShowAmendTest extends UpdateCduTest {
         expectLastCall().times(2);
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class)))
             .andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);

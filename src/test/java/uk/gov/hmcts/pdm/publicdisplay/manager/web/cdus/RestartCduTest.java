@@ -56,6 +56,8 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
@@ -130,8 +132,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
      */
     @Test
     void testRestartCduError() throws Exception {
-
-
         // Capture the cduCommand object
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -144,6 +144,8 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
@@ -180,7 +182,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
      */
     @Test
     void testRestartCduRuntimeError() throws Exception {
-
         // Capture the cduCommand object
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -193,6 +194,8 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
