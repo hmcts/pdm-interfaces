@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -442,8 +443,11 @@ abstract class ShowCduTest extends TestCdus {
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
+        
+        replay(mockCduPageStateHolder);
+        replay(mockCduService);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(mappingNameCdusUrl)
@@ -460,6 +464,7 @@ abstract class ShowCduTest extends TestCdus {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockCduService);
     }
 
 }

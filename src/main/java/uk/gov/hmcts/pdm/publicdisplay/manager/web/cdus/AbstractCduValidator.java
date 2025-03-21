@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Validator;
 import uk.gov.hmcts.pdm.publicdisplay.common.util.AppConstants;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ILocalProxyService;
 
 import java.util.List;
@@ -45,6 +46,10 @@ public abstract class AbstractCduValidator implements Validator {
     /** The localProxyService class. */
     @Autowired
     protected ILocalProxyService localProxyService;
+    
+    /** The CduService class. */
+    @Autowired
+    protected ICduService cduService;
 
     /**
      * Gets the cdu page state holder.
@@ -96,7 +101,8 @@ public abstract class AbstractCduValidator implements Validator {
      */
     private CduDto getCduFromSearchResults(final String selectedMacAddress) {
         CduDto selectedCdu = null;
-        final List<CduDto> cduList = cduPageStateHolder.getCdus();
+        // Call to CduService to fetch Cdu's by Mac address
+        final List<CduDto> cduList = cduService.getCduByMacAddressWithLike(selectedMacAddress);
         if (cduList != null) {
             for (CduDto cdu : cduList) {
                 if (cdu.getMacAddress().equals(selectedMacAddress)) {

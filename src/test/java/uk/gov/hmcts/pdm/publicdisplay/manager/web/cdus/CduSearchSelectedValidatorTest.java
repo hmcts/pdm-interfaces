@@ -23,6 +23,7 @@
 
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +64,9 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
 
     /** The class under test. */
     private CduSearchSelectedValidator classUnderTest;
-
-    /** The mock cdu page state holder. */
-    private CduPageStateHolder mockCduPageStateHolder;
+    
+    /** The mock cdu service. */
+    private ICduService mockCduService;
 
     /**
      * Setup.
@@ -75,10 +77,10 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
         classUnderTest = new CduSearchSelectedValidator();
 
         // Setup the mock version of the called classes
-        mockCduPageStateHolder = createMock(CduPageStateHolder.class);
+        mockCduService = createMock(ICduService.class);
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockCduPageStateHolder);
+        ReflectionTestUtils.setField(classUnderTest, "cduService", mockCduService);
     }
 
     /**
@@ -101,8 +103,8 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
         final List<CduDto> cdus = getTestCdus();
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);
@@ -111,7 +113,7 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), "True");
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -125,8 +127,8 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
         final List<CduDto> cdus = getTestCdus();
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);
@@ -135,7 +137,7 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -148,8 +150,8 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
             new BeanPropertyBindingResult(cduSearchCommand, CDU_SEARCH_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdus()).andReturn(null);
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(null);
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduSearchCommand, errors);
@@ -158,7 +160,7 @@ class CduSearchSelectedValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**

@@ -23,6 +23,7 @@
 
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.common.util.AppConstants;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +68,8 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
     /** The class under test. */
     private CduUnregisterValidator classUnderTest;
 
-    /** The mockcdu page state holder. */
-    private CduPageStateHolder mockcduPageStateHolder;
+    /** The ICduService. */
+    private ICduService mockCduService;
 
     /**
      * Setup.
@@ -78,10 +80,10 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         classUnderTest = new CduUnregisterValidator();
 
         // Setup the mock version of the called classes
-        mockcduPageStateHolder = createMock(CduPageStateHolder.class);
+        mockCduService = createMock(ICduService.class);
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockcduPageStateHolder);
+        ReflectionTestUtils.setField(classUnderTest, "cduService", mockCduService);
     }
 
     /**
@@ -104,9 +106,10 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockcduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectLastCall().times(2);
-        replay(mockcduPageStateHolder);
+        
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -116,7 +119,7 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), "True");
 
         // Verify the mocks used in this method were called
-        verify(mockcduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -130,9 +133,9 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockcduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectLastCall().times(2);
-        replay(mockcduPageStateHolder);
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -142,7 +145,7 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockcduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -157,8 +160,8 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockcduPageStateHolder.getCdus()).andReturn(cdus);
-        replay(mockcduPageStateHolder);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        replay(mockCduService);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -168,7 +171,7 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockcduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
