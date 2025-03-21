@@ -438,6 +438,9 @@ abstract class ShowCduTest extends TestCdus {
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(null);
+        mockCduPageStateHolder.setSites(null);
+        expectLastCall().anyTimes();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         mockCduPageStateHolder.setCdu(cdu);
@@ -446,6 +449,7 @@ abstract class ShowCduTest extends TestCdus {
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         
+        replay(mockLocalProxyService);
         replay(mockCduPageStateHolder);
         replay(mockCduService);
 

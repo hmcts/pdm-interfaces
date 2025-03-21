@@ -38,9 +38,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import uk.gov.hmcts.pdm.publicdisplay.common.exception.XpdmException;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 
-import java.util.List;
 /**
  * The Class CdusController.
  *
@@ -67,12 +65,6 @@ public class CdusController extends CduRegistrationController {
         final String methodName = "searchForCduFromDashboard";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
-        // Populate the sites list (this will be null from the dashboard as we are bypassing the
-        // page population
-        final List<XhibitCourtSiteDto> courtSiteList =
-            localProxyService.getXhibitCourtSitesWithLocalProxy();
-        cduPageStateHolder.setSites(courtSiteList);
-
         // Set the model and view for the cdu search
         setModelForCduSearch(cduSearchCommand, result, model, false);
         model.addObject(COMMAND, cduSearchCommand);
@@ -94,11 +86,6 @@ public class CdusController extends CduRegistrationController {
         final BindingResult result, final ModelAndView model) {
         final String methodName = "searchForCdu";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
-
-        // Populate the sites list
-        final List<XhibitCourtSiteDto> courtSiteList =
-            localProxyService.getXhibitCourtSitesWithLocalProxy();
-        cduPageStateHolder.setSites(courtSiteList);
         
         // Set the model and view for the search CDU
         setModelForCduSearch(cduSearchCommand, result, model, true);
@@ -123,7 +110,7 @@ public class CdusController extends CduRegistrationController {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Ensure the search command is the latest
-        cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
+        setCduSearchCommand(cduSearchCommand);
 
         // Business Specific validation for cdu search
         cduSearchSelectedValidator.validate(cduSearchCommand, result);

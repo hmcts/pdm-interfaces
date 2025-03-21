@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.gov.hmcts.pdm.publicdisplay.common.exception.XpdmException;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.UrlDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.XhibitCourtSiteDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ILocalProxyService;
 import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IUrlService;
@@ -286,6 +287,16 @@ public class CdusControllerUtility {
         LOGGER.info("new url list contains : {} elements", availableUrlList.size());
         return availableUrlList;
     }
+    
+    protected void setCduSearchCommand(final CduSearchCommand cduSearchCommand) {
+        // Populate the sites list
+        final List<XhibitCourtSiteDto> courtSiteList =
+            localProxyService.getXhibitCourtSitesWithLocalProxy();
+        cduPageStateHolder.setSites(courtSiteList);
+        
+        // Ensure the search command is the latest
+        cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
+    }
 
     /**
      * Gets the search for cdu model.
@@ -302,7 +313,7 @@ public class CdusControllerUtility {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Ensure the search command is the latest
-        cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
+        setCduSearchCommand(cduSearchCommand);
         
         // Reset any previous search results and selected cdu
         cduPageStateHolder.setCdus(null);
