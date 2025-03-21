@@ -157,10 +157,11 @@ public class CduAmendController extends CdusControllerUtility {
                 cduPageStateHolder.getCdu().getMacAddress());
 
             // Create a new CduAmendCommand object for the page
-            final CduAmendCommand cduAmendCommand = new CduAmendCommand();
+            CduAmendCommand cduAmendCommand = new CduAmendCommand();
 
             // Populate the relevant fields
             final CduDto cduDto = cduPageStateHolder.getCdu();
+            cduAmendCommand.setCduId(cduDto.getId().intValue());
             cduAmendCommand.setLocation(cduDto.getLocation());
             cduAmendCommand.setDescription(cduDto.getDescription());
             cduAmendCommand.setNotification(cduDto.getNotification());

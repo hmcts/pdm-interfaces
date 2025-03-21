@@ -197,6 +197,9 @@
 						</div>	
 						<!-- /form-group -->						
 							
+						<%--Hidden fields here --%>
+						<form:hidden path="cduId" />
+							
 						<div class="form-group">
 							<div class="col-md-12">																												
 							    <button id="btnUpdateCdu" class="btn btn-primary" name="btnUpdateCdu"><span class="glyphicon glyphicon-edit"></span> Update CDU</button>

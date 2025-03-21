@@ -34,11 +34,22 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  */
 public class CduAmendCommand extends AbstractCduCommand {
+    
+    private int cduId;
+    
     /** The offline indicator (Y or N). */
     // Defined as a String for the hibernate validator to work
     @NotBlank(message = "{cduCommand.offlineIndicator.notBlank}")
     @Pattern(regexp = "^[Y|N]{1}$", message = "{cduCommand.offlineIndicator.invalid}")
     private String offlineIndicator;
+    
+    public int getCduId() {
+        return cduId;
+    }
+
+    public void setCduId(int cduId) {
+        this.cduId = cduId;
+    }
 
     /**
      * getOfflineIndicator.

@@ -55,6 +55,14 @@ public interface ICduService {
     boolean isCduWithCduNumber(String cduNumber);
 
     /**
+     * Gets the cdu by cduId.
+     *
+     * @param cduId the cdu id
+     * @return the CduDto
+     */
+    CduDto getCduByCduId(int cduId);
+    
+    /**
      * Gets the cdu by mac address.
      *
      * @param macAddress the mac address
