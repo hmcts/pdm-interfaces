@@ -211,6 +211,7 @@ public class CdusControllerUtility {
         if (macAddress != null) {
             // Call to CduService to fetch Cdu's by Mac address
             final List<CduDto> cduList = cduService.getCduByMacAddressWithLike(macAddress);
+            cduPageStateHolder.setCdus(cduList);
             for (CduDto cdu : cduList) {
                 if (cdu.getMacAddress().equals(macAddress)) {
                     selectedCdu = cdu;
