@@ -111,6 +111,9 @@ public class CdusController extends CduRegistrationController {
 
         // Ensure the search command is the latest
         setCduSearchCommand(cduSearchCommand);
+        
+        // Refresh the list of CDU's
+        cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
 
         // Business Specific validation for cdu search
         cduSearchSelectedValidator.validate(cduSearchCommand, result);

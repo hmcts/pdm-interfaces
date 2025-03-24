@@ -61,8 +61,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockLocalProxyService.getCourtSiteByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
@@ -323,7 +321,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         expectSetModelCduList();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall().times(2);
         expectUnregisterCduValidator(capturedCommand, capturedErrors, true);
         mockCduService.unregisterCdu(cdu.getId());
         expectLastCall();
@@ -408,8 +405,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         expectLastCall();
         expectSetModelCduList();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall();
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
         mockCduService.unregisterCdu(cdu.getId());
@@ -456,8 +451,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         expectLastCall();
         expectSetModelCduList();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall();
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
         mockCduService.unregisterCdu(cdu.getId());
