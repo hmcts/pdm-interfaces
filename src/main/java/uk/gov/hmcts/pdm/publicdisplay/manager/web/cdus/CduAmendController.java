@@ -203,6 +203,11 @@ public class CduAmendController extends CdusControllerUtility {
 
         // Validate this selection is valid for amendment
         cduAmendValidator.validate(cduAmendCommand, result);
+        
+        // Refresh the CduDto object in the PageStateHolder
+        cduPageStateHolder.setCdu(cduService.getCduByCduId(cduAmendCommand.getCduId()));
+        LOGGER.info("CDU to update with Id: {}", cduPageStateHolder.getCdu().getId());
+        
         if (!result.hasErrors()) {
             try {
                 // Update the CDU
