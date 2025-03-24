@@ -56,8 +56,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall();
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
@@ -144,8 +142,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall();
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
@@ -194,8 +190,6 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        mockCduPageStateHolder.setCdus(cdus);
-        expectLastCall();
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(selectedCdus);
