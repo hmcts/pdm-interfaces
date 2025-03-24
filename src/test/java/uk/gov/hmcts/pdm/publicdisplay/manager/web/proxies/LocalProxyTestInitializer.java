@@ -160,7 +160,7 @@ abstract class LocalProxyTestInitializer extends LocalProxyControllerTestBase {
     protected void expectPageStateHolderSetSites() {
         mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
         expectLastCall();
-        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites);
+        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites).anyTimes();
     }
 
     /**

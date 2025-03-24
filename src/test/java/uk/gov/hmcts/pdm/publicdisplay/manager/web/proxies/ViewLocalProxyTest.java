@@ -110,7 +110,7 @@ abstract class ViewLocalProxyTest extends LocalProxyTestInitializer {
             .getCourtSiteByXhibitCourtSiteId(capture(capturedXhibitCourtSiteId)))
                 .andReturn(courtSite);
         expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy())
-            .andReturn(xhibitCourtSites);
+            .andReturn(xhibitCourtSites).anyTimes();
         expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
         replay(mockLocalProxyService);
         expectSetPageStateHolderSelectionLists();
@@ -156,13 +156,13 @@ abstract class ViewLocalProxyTest extends LocalProxyTestInitializer {
         
         mockLocalProxyPageStateHolder.setLocalProxySearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(xhibitCourtSites);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(xhibitCourtSites).anyTimes();
         mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
         expectLastCall();
         expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
         mockLocalProxyPageStateHolder.setSchedules(schedules);
         expectLastCall();
-        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites);
+        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites).anyTimes();
         
         replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
@@ -201,13 +201,13 @@ abstract class ViewLocalProxyTest extends LocalProxyTestInitializer {
         expectSelectedValidator(capturedCommand, capturedBindingResult, true);
         mockLocalProxyPageStateHolder.setLocalProxySearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(xhibitCourtSites);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(xhibitCourtSites).anyTimes();
         mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
         expectLastCall();
         expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
         mockLocalProxyPageStateHolder.setSchedules(schedules);
         expectLastCall();
-        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites);
+        expect(mockLocalProxyPageStateHolder.getSites()).andReturn(xhibitCourtSites).anyTimes();
         
         replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
