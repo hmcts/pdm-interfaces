@@ -516,8 +516,10 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
             model.addObject(COURTSITE, courtSite);
         }
 
-        final List<XhibitCourtSiteDto> courtSiteList = localProxyPageStateHolder.getSites();
-        
+        // retrieve the court sites
+        final List<XhibitCourtSiteDto> courtSiteList =
+            localProxyService.getXhibitCourtSitesWithLocalProxy();
+
         // Add the court site data to model
         LOGGER.debug(ADDING_COURTSITE_TO_MODEL, METHOD, methodName);
         model.addObject(COURTSITE_LIST, courtSiteList);
