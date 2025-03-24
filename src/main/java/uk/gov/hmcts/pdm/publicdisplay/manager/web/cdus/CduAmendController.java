@@ -36,8 +36,11 @@ public class CduAmendController extends CdusControllerUtility {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Ensure the search command is the latest
-        cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
-
+        setCduSearchCommand(cduSearchCommand);
+        
+        // Refresh the list of CDU's
+        cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
+        
         // Validate the selection
         cduSearchSelectedValidator.validate(cduSearchCommand, result);
         if (!result.hasErrors()) {
@@ -89,8 +92,11 @@ public class CduAmendController extends CdusControllerUtility {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Ensure the search command is the latest
-        cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
-
+        setCduSearchCommand(cduSearchCommand);
+        
+        // Refresh the list of CDU's
+        cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
+        
         // Validate the selection
         cduRestartAllValidator.validate(cduSearchCommand, result);
         if (!result.hasErrors()) {

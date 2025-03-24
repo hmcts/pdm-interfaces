@@ -55,6 +55,12 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
@@ -62,6 +68,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         expectLastCall();
         
         replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
 
         // Perform the test
@@ -80,6 +87,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockLocalProxyService);
         verify(mockCduService);
     }
 
@@ -101,10 +109,19 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, false);
-
+        
+        replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
+        replay(mockCduService);
+        
         // Perform the test
         final MvcResult results = mockMvc
             .perform(post(mappingNameCdusUrl).param(BTN_RESTART_CDU_CONFIRM, BTN_RESTART_CDU_CONFIRM)
@@ -121,6 +138,8 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockLocalProxyService);
+        verify(mockCduService);
     }
 
     /**
@@ -141,6 +160,12 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
@@ -150,6 +175,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         expectLastCall().andThrow(dataRetrievalFailureException);
         
         replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
 
         // Perform the test
@@ -168,6 +194,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockLocalProxyService);
         verify(mockCduService);
     }
 
@@ -189,6 +216,12 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectSetModelCduList();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
@@ -197,6 +230,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         expectLastCall().andThrow(xpdmException);
         
         replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
 
         // Perform the test
@@ -215,6 +249,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockLocalProxyService);
         verify(mockCduService);
     }
 
@@ -232,12 +267,20 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduRestartAllValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(cdus);
         expectLastCall();
+        
+        replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
 
         // Perform the test
@@ -255,6 +298,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
 
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
+        verify(mockLocalProxyService);
         verify(mockCduRestartAllValidator);
         verify(mockCduService);
     }
@@ -273,10 +317,19 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduRestartAllValidator(capturedCommand, capturedErrors, false);
 
+        replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
+        replay(mockCduService);
+        
         // Perform the test
         final MvcResult results = mockMvc.perform(
             post(mappingNameCdusUrl).param(BTN_RESTART_ALL_CDU_CONFIRM, BTN_RESTART_ALL_CDU_CONFIRM)
@@ -292,6 +345,8 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
 
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
+        verify(mockLocalProxyService);
+        verify(mockCduService);
         verify(mockCduRestartAllValidator);
     }
 
@@ -309,15 +364,21 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduRestartAllValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(cdus);
-        
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
-        
         expectLastCall().andThrow(dataRetrievalFailureException);
+        
+        replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
 
         // Perform the test
@@ -335,6 +396,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
 
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
+        verify(mockLocalProxyService);
         verify(mockCduRestartAllValidator);
         verify(mockCduService);
     }
@@ -354,14 +416,20 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectCduRestartAllValidator(capturedCommand, capturedErrors, true);
         mockCduService.restartCdu(cdus);
-        
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
-        
         expectLastCall().andThrow(xpdmException);
+        
+        replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
 
         // Perform the test
@@ -379,6 +447,7 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
 
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
+        verify(mockLocalProxyService);
         verify(mockCduRestartAllValidator);
         verify(mockCduService);
     }
