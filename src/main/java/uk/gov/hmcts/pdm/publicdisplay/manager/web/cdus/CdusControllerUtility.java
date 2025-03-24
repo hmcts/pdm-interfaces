@@ -211,7 +211,6 @@ public class CdusControllerUtility {
         if (macAddress != null) {
             // Call to CduService to fetch Cdu's by Mac address
             final List<CduDto> cduList = cduService.getCduByMacAddressWithLike(macAddress);
-            cduPageStateHolder.setCdus(cduList);
             for (CduDto cdu : cduList) {
                 if (cdu.getMacAddress().equals(macAddress)) {
                     selectedCdu = cdu;
@@ -297,11 +296,6 @@ public class CdusControllerUtility {
         
         // Ensure the search command is the latest
         cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
-        
-        // Populate the cdus for this site
-        final List<CduDto> cduList = 
-            cduService.getCdusBySiteID(cduSearchCommand.getXhibitCourtSiteId());
-        cduPageStateHolder.setCdus(cduList);
     }
 
     /**
