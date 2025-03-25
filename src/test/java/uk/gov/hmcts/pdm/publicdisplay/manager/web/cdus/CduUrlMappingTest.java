@@ -33,6 +33,8 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
     protected static final String BTN_ADD_MAPPING = "btnAddMapping";
 
     protected static final String URL_ID = "urlId";
+    
+    protected static final String CDU_ID = "cduId";
 
     protected static final String BTN_REMOVE_MAPPING_CONFIRM = "btnRemoveMappingConfirm";
 
@@ -66,10 +68,14 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
 
         // Add the mock calls to child classes
         expectMappingAddValidator(capturedCommand, capturedErrors, true);
+        
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
+        
         mockCduService.addMapping(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddress(cdu.getMacAddress())).andReturn(cdu);
-        replay(mockCduService);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
@@ -77,15 +83,18 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
-        replay(mockCduPageStateHolder);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andReturn(urls);
+        
+        replay(mockCduService);
+        replay(mockCduPageStateHolder);
         replay(mockUrlService);
 
         // Perform the test
         final MvcResult results =
             mockMvc.perform(post(viewNameMappingAddUrl).param(BTN_ADD_MAPPING, BTN_ADD_MAPPING)
-                .param(URL_ID, url.getId().toString())).andReturn();
+                .param(URL_ID, url.getId().toString())
+                .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);
@@ -113,28 +122,33 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
 
         // Add the mock calls to child classes
         expectMappingAddValidator(capturedCommand, capturedErrors, false);
-        mockCduService.addMapping(capture(capturedCommand));
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(4);
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
-        replay(mockCduPageStateHolder);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andReturn(urls);
+        
+        replay(mockCduService);
+        replay(mockCduPageStateHolder);
         replay(mockUrlService);
 
         // Perform the test
         final MvcResult results =
             mockMvc.perform(post(viewNameMappingAddUrl).param(BTN_ADD_MAPPING, BTN_ADD_MAPPING)
-                .param(URL_ID, url.getId().toString())).andReturn();
+                .param(URL_ID, url.getId().toString())
+                .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);
         assertEquals(1, capturedErrors.getValue().getErrorCount(), NOT_EQUAL);
 
         // Verify the expected mocks were called
+        verify(mockCduService);
         verify(mockMappingAddValidator);
         verify(mockCduPageStateHolder);
         verify(mockUrlService);
@@ -147,8 +161,6 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
      */
     @Test
     void testAddUrlMappingSaveError() throws Exception {
-
-
         // Capture the cduCommand object and errors passed out
         final Capture<MappingCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -156,28 +168,31 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         // Add the mock calls to child classes
         mockMappingAddValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
-        replay(mockMappingAddValidator);
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduService.addMapping(capture(capturedCommand));
-        
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
-        
         expectLastCall().andThrow(dataRetrievalFailureException);
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(4);
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
-        replay(mockCduPageStateHolder);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andReturn(urls);
+        
+        replay(mockMappingAddValidator);
+        replay(mockCduService);
+        replay(mockCduPageStateHolder);
         replay(mockUrlService);
 
         // Perform the test
         final MvcResult results =
             mockMvc.perform(post(viewNameMappingAddUrl).param(BTN_ADD_MAPPING, BTN_ADD_MAPPING)
-                .param(URL_ID, url.getId().toString())).andReturn();
+                .param(URL_ID, url.getId().toString())
+                .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);
@@ -205,27 +220,30 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         // Add the mock calls to child classes
         mockMappingAddValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
-        replay(mockMappingAddValidator);
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduService.addMapping(capture(capturedCommand));
-        
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
-        
         expectLastCall().andThrow(xpdmException);
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(4);
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
-        replay(mockCduPageStateHolder);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andReturn(urls);
+        
+        replay(mockMappingAddValidator);
+        replay(mockCduService);
+        replay(mockCduPageStateHolder);
         replay(mockUrlService);
 
         // Perform the test
         final MvcResult results =
             mockMvc.perform(post(viewNameMappingAddUrl).param(BTN_ADD_MAPPING, BTN_ADD_MAPPING)
-                .param(URL_ID, url.getId().toString())).andReturn();
+                .param(URL_ID, url.getId().toString())
+                .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);
@@ -251,20 +269,25 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
 
         // Add the mock calls to child classes
         expectMappingRemoveValidator(capturedCommand, capturedErrors, true);
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduService.removeMapping(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddress(cdu.getMacAddress())).andReturn(cdu);
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
+        
+        replay(mockCduService);
         replay(mockCduPageStateHolder);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(viewNameMappingRemoveUrl)
             .param(BTN_REMOVE_MAPPING_CONFIRM, BTN_REMOVE_MAPPING_CONFIRM)
-            .param(URL_ID, url.getId().toString())).andReturn();
+            .param(URL_ID, url.getId().toString())
+            .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);
@@ -275,6 +298,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         // Verify the expected mocks were called
         verify(mockMappingRemoveValidator);
         verify(mockCduService);
+        verify(mockCduPageStateHolder);
     }
 
     /**
@@ -290,16 +314,19 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
 
         // Add the mock calls to child classes
         expectMappingRemoveValidator(capturedCommand, capturedErrors, false);
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
+        
+        replay(mockCduService);
         replay(mockCduPageStateHolder);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(viewNameMappingRemoveUrl)
             .param(BTN_REMOVE_MAPPING_CONFIRM, BTN_REMOVE_MAPPING_CONFIRM)
-            .param(URL_ID, url.getId().toString())).andReturn();
+            .param(URL_ID, url.getId().toString())
+            .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);
@@ -307,6 +334,8 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
 
         // Verify the expected mocks were called
         verify(mockMappingRemoveValidator);
+        verify(mockCduService);
+        verify(mockCduPageStateHolder);
     }
 
     /**
@@ -316,8 +345,6 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
      */
     @Test
     void testRemoveUrlMappingDeleteError() throws Exception {
-
-
         // Capture the cduCommand object and errors passed out
         final Capture<MappingCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -325,21 +352,24 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         // Add the mock calls to child classes
         mockMappingRemoveValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
-        replay(mockMappingRemoveValidator);
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduService.removeMapping(capture(capturedCommand));
-        
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
-        
         expectLastCall().andThrow(dataRetrievalFailureException);
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
+        
+        replay(mockMappingRemoveValidator);
+        replay(mockCduService);
         replay(mockCduPageStateHolder);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(viewNameMappingRemoveUrl)
             .param(BTN_REMOVE_MAPPING_CONFIRM, BTN_REMOVE_MAPPING_CONFIRM)
-            .param(URL_ID, url.getId().toString())).andReturn();
+            .param(URL_ID, url.getId().toString())
+            .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);
@@ -358,7 +388,6 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
      */
     @Test
     void testRemoveUrlMappingRuntimeError() throws Exception {
-
         // Capture the cduCommand object and errors passed out
         final Capture<MappingCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -366,20 +395,23 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         // Add the mock calls to child classes
         mockMappingRemoveValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
-        replay(mockMappingRemoveValidator);
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduService.removeMapping(capture(capturedCommand));
-        
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
-        
         expectLastCall().andThrow(xpdmException);
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
+        
+        replay(mockMappingRemoveValidator);
+        replay(mockCduService);
         replay(mockCduPageStateHolder);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(post(viewNameMappingRemoveUrl)
             .param(BTN_REMOVE_MAPPING_CONFIRM, BTN_REMOVE_MAPPING_CONFIRM)
-            .param(URL_ID, url.getId().toString())).andReturn();
+            .param(URL_ID, url.getId().toString())
+            .param(CDU_ID, cdu.getId().toString())).andReturn();
 
         // Assert that the objects are as expected
         assertNotNull(results, NULL);

@@ -29,7 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.UrlDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IUrlService;
 
 import java.util.List;
 
@@ -38,11 +41,15 @@ public abstract class AbstractMappingValidator implements Validator {
     /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMappingValidator.class);
 
-    /** The cdu page state holder. */
+    /** The CduService class. */
     @Autowired
-    protected CduPageStateHolder cduPageStateHolder;
+    protected ICduService cduService;
+    
+    /** The UrlService class. */
+    @Autowired
+    protected IUrlService urlService;
 
-    protected abstract List<UrlDto> getUrlList();
+    protected abstract List<UrlDto> getUrlList(CduDto cduDto);
 
     /*
      * (non-Javadoc)
@@ -66,18 +73,20 @@ public abstract class AbstractMappingValidator implements Validator {
 
         final MappingCommand mappingCommand = (MappingCommand) command;
 
+        // Get Cdu by CduId
+        CduDto cduDto = cduService.getCduByCduId(mappingCommand.getCduId().intValue());
+        
         // Validate the cduId matches the one selected
         if (mappingCommand.getCduId() == null
-            || !cduPageStateHolder.getCdu().getId().equals(mappingCommand.getCduId())) {
+            || !cduDto.getId().equals(mappingCommand.getCduId())) {
             LOGGER.info("validate method - No value selected");
             errors.reject("cduSearchCommand.noselectionmade");
 
             // Validate the selected url is from the list
-        } else if (!isUrlValid(mappingCommand.getUrlId())) {
+        } else if (!isUrlValid(mappingCommand.getUrlId(), cduDto)) {
             LOGGER.warn("validate method - Invalid value selected");
             errors.reject("mappingCommand.valuenotsupplied");
         }
-
         LOGGER.info("validate method ends");
     }
 
@@ -87,9 +96,9 @@ public abstract class AbstractMappingValidator implements Validator {
      * @param urlId the url id
      * @return true, if is url valid
      */
-    protected boolean isUrlValid(final Long urlId) {
+    protected boolean isUrlValid(final Long urlId, CduDto cduDto) {
         boolean found = false;
-        final List<UrlDto> urlList = getUrlList();
+        final List<UrlDto> urlList = getUrlList(cduDto);
         for (UrlDto url : urlList) {
             if (url.getId().equals(urlId)) {
                 found = true;
