@@ -72,9 +72,12 @@ public abstract class AbstractMappingValidator implements Validator {
         LOGGER.info("validate method starts");
 
         final MappingCommand mappingCommand = (MappingCommand) command;
-
+        CduDto cduDto = new CduDto();
+        
         // Get Cdu by CduId
-        CduDto cduDto = cduService.getCduByCduId(mappingCommand.getCduId().intValue());
+        if (mappingCommand.getCduId() != null) {
+            cduDto = cduService.getCduByCduId(mappingCommand.getCduId().intValue());
+        }
         
         // Validate the cduId matches the one selected
         if (mappingCommand.getCduId() == null

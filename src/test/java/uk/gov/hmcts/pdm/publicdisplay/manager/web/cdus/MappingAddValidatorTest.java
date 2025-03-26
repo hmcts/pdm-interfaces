@@ -33,6 +33,8 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.UrlDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.IUrlService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +80,11 @@ abstract class MappingAddValidatorTest extends AbstractJUnit {
     /** The class under test. */
     protected MappingAddValidator classUnderTest;
 
-    /** The mock lcduPageStateHolder. */
-    protected CduPageStateHolder mockcduPageStateHolder;
+    /** The cdu service. */
+    protected ICduService mockCduService;
+    
+    /** The url service. */
+    protected IUrlService mockUrlService;
 
     /**
      * Setup.
@@ -90,10 +95,12 @@ abstract class MappingAddValidatorTest extends AbstractJUnit {
         classUnderTest = new MappingAddValidator();
 
         // Setup the mock version of the called classes
-        mockcduPageStateHolder = createMock(CduPageStateHolder.class);
+        mockCduService = createMock(ICduService.class);
+        mockUrlService = createMock(IUrlService.class);
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockcduPageStateHolder);
+        ReflectionTestUtils.setField(classUnderTest, "cduService", mockCduService);
+        ReflectionTestUtils.setField(classUnderTest, "urlService", mockUrlService);
     }
 
     /**
@@ -113,11 +120,12 @@ abstract class MappingAddValidatorTest extends AbstractJUnit {
         final MappingCommand mappingCommand = getTestMappingCommand(INVALIDCDU_ID, VALIDURL_ID);
         final BindingResult errors = new BeanPropertyBindingResult(mappingCommand, MAPPING_COMMAND);
         final CduDto cdu = getTestCdu(VALIDCDU_ID);
-
+        
         // Define a mock version of the called methods
-        expect(mockcduPageStateHolder.getCdu()).andReturn(cdu);
-        replay(mockcduPageStateHolder);
+        expect(mockCduService.getCduByCduId(3)).andReturn(cdu);
 
+        replay(mockCduService);
+        
         // Perform the test
         classUnderTest.validate(mappingCommand, errors);
 
@@ -126,7 +134,7 @@ abstract class MappingAddValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockcduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**

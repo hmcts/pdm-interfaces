@@ -33,13 +33,13 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.UrlDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,8 +56,8 @@ class MappingRemoveValidatorTest extends AbstractJUnit {
     /** The class under test. */
     private MappingRemoveValidator classUnderTest;
 
-    /** The mock cdu page state holder. */
-    private CduPageStateHolder mockCduPageStateHolder;
+    /** The cdu service. */
+    protected ICduService mockCduService;
 
     private static final String NOT_EQUAL = "Not equal";
 
@@ -74,10 +74,10 @@ class MappingRemoveValidatorTest extends AbstractJUnit {
         classUnderTest = new MappingRemoveValidator();
 
         // Setup the mock version of the called classes
-        mockCduPageStateHolder = createMock(CduPageStateHolder.class);
+        mockCduService = createMock(ICduService.class);
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockCduPageStateHolder);
+        ReflectionTestUtils.setField(classUnderTest, "cduService", mockCduService);
     }
 
     /**
@@ -100,9 +100,7 @@ class MappingRemoveValidatorTest extends AbstractJUnit {
         final CduDto cdu = getTestCdu(1L, getTestUrls());
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
+        expectCduServiceCalls(cdu);
 
         // Perform the test
         classUnderTest.validate(mappingCommand, errors);
@@ -111,7 +109,7 @@ class MappingRemoveValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), TRUE);
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
     /**
@@ -141,9 +139,7 @@ class MappingRemoveValidatorTest extends AbstractJUnit {
         final CduDto cdu = getTestCdu(1L, getTestUrls());
 
         // Define a mock version of the called methods
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
+        expectCduServiceCalls(cdu);
 
         // Perform the test
         classUnderTest.validate(mappingCommand, errors);
@@ -152,9 +148,15 @@ class MappingRemoveValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduPageStateHolder);
+        verify(mockCduService);
     }
 
+    
+    private void expectCduServiceCalls(CduDto cdu) {
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        replay(mockCduService);
+    }
+    
     /**
      * Gets the test mapping remove.
      *

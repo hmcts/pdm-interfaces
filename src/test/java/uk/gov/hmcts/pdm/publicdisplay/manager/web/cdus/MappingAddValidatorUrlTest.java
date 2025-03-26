@@ -32,10 +32,8 @@ class MappingAddValidatorUrlTest extends MappingAddValidatorTest {
         final CduDto cdu = getTestCdu(mappingCommand.getCduId());
 
         // Define a mock version of the called methods
-        expect(mockcduPageStateHolder.getCdu()).andReturn(cdu);
-        expect(mockcduPageStateHolder.getAvailableUrls()).andReturn(getTestUrls());
-        replay(mockcduPageStateHolder);
-
+        expectCduAndUrlServiceCalls(cdu);
+        
         // Perform the test
         classUnderTest.validate(mappingCommand, errors);
 
@@ -44,7 +42,8 @@ class MappingAddValidatorUrlTest extends MappingAddValidatorTest {
         assertFalse(errors.hasErrors(), TRUE);
 
         // Verify the mocks used in this method were called
-        verify(mockcduPageStateHolder);
+        verify(mockCduService);
+        verify(mockUrlService);
     }
 
     /**
@@ -57,9 +56,7 @@ class MappingAddValidatorUrlTest extends MappingAddValidatorTest {
         final CduDto cdu = getTestCdu(mappingCommand.getCduId());
 
         // Define a mock version of the called methods
-        expect(mockcduPageStateHolder.getCdu()).andReturn(cdu);
-        expect(mockcduPageStateHolder.getAvailableUrls()).andReturn(getTestUrls());
-        replay(mockcduPageStateHolder);
+        expectCduAndUrlServiceCalls(cdu);
 
         // Perform the test
         classUnderTest.validate(mappingCommand, errors);
@@ -69,7 +66,8 @@ class MappingAddValidatorUrlTest extends MappingAddValidatorTest {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockcduPageStateHolder);
+        verify(mockCduService);
+        verify(mockUrlService);
     }
 
     /**
@@ -82,9 +80,7 @@ class MappingAddValidatorUrlTest extends MappingAddValidatorTest {
         final CduDto cdu = getTestCdu(VALIDCDU_ID);
 
         // Define a mock version of the called methods
-        expect(mockcduPageStateHolder.getCdu()).andReturn(cdu);
-        expect(mockcduPageStateHolder.getAvailableUrls()).andReturn(getTestUrls());
-        replay(mockcduPageStateHolder);
+        expectCduAndUrlServiceCalls(cdu);
 
         // Perform the test
         classUnderTest.validate(mappingCommand, errors);
@@ -94,7 +90,14 @@ class MappingAddValidatorUrlTest extends MappingAddValidatorTest {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockcduPageStateHolder);
+        verify(mockCduService);
+        verify(mockUrlService);
     }
-
+    
+    private void expectCduAndUrlServiceCalls(CduDto cdu) {
+        expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
+        expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getCourtSiteId())).andReturn(getTestUrls());
+        replay(mockCduService);
+        replay(mockUrlService);
+    }
 }
