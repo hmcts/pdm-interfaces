@@ -124,6 +124,10 @@ public class CduUrlManagementController extends CduAmendController {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         mappingRemoveValidator.validate(mappingCommand, result);
+        
+        // Refresh the page state Cdu in case validation fails
+        cduPageStateHolder.setCdu(cduService.getCduByCduId(mappingCommand.getCduId().intValue()));
+        
         if (!result.hasErrors()) {
             try {
                 LOGGER.info("CDU id : {} Url id : {} have been selected", mappingCommand.getCduId(),
@@ -169,6 +173,10 @@ public class CduUrlManagementController extends CduAmendController {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         mappingAddValidator.validate(mappingCommand, result);
+        
+        // Refresh the page state Cdu in case validation fails
+        cduPageStateHolder.setCdu(cduService.getCduByCduId(mappingCommand.getCduId().intValue()));
+        
         if (!result.hasErrors()) {
             try {
                 LOGGER.info("CDU id : {} Url id : {} have been selected", mappingCommand.getCduId(),
@@ -206,7 +214,4 @@ public class CduUrlManagementController extends CduAmendController {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return model;
     }
-
-
-
 }

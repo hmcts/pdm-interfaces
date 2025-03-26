@@ -25,6 +25,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
 
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.UrlDto;
 
 import java.util.List;
@@ -38,7 +39,8 @@ import java.util.List;
 public class MappingRemoveValidator extends AbstractMappingValidator {
 
     @Override
-    protected List<UrlDto> getUrlList() {
-        return cduPageStateHolder.getCdu().getUrls();
+    protected List<UrlDto> getUrlList(CduDto cduDto) {
+        // Get the urls for this Cdu
+        return cduDto.getUrls();
     }
 }
