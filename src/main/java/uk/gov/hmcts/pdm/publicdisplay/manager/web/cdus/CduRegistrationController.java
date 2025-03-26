@@ -34,8 +34,11 @@ public class CduRegistrationController extends CduUrlManagementController {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Ensure the search command is the latest
-        cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
-
+        setCduSearchCommand(cduSearchCommand);
+        
+        // Refresh the Cdu List
+        cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
+        
         LOGGER.info("{}{} - selected mac address : {}", METHOD, methodName,
             cduSearchCommand.getSelectedMacAddress());
 
@@ -57,8 +60,8 @@ public class CduRegistrationController extends CduUrlManagementController {
             cduRegisterCommand.setNotification(siteDto.getNotification());
             final CduDto cduDto = cduPageStateHolder.getCdu();
 
-            model.addObject(COMMAND, cduDto);
-            model.addObject("cduRegisterCommand", cduRegisterCommand);
+            model.addObject(CDU, cduDto);
+            model.addObject(COMMAND, cduRegisterCommand);
             LOGGER.debug("{}{} cduDto and cduRegisterCommand added to model", METHOD, methodName);
 
             // Set the view name

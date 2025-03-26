@@ -58,7 +58,13 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
@@ -105,12 +111,21 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(null)).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         expect(mockCduPageStateHolder.getSites()).andReturn(sites).anyTimes();
+        
         replay(mockCduPageStateHolder);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, false);
+        replay(mockLocalProxyService);
+        replay(mockCduService);
 
         // Perform the test
         final MvcResult results =
@@ -124,6 +139,8 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockLocalProxyService);
+        verify(mockCduService);
     }
 
     /**
