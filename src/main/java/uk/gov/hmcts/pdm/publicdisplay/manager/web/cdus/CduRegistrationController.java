@@ -36,7 +36,7 @@ public class CduRegistrationController extends CduUrlManagementController {
         // Ensure the search command is the latest
         setCduSearchCommand(cduSearchCommand);
         
-        // Refresh the Cdu List
+        // Refresh the Cdu list in case validation fails
         cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
         
         LOGGER.info("{}{} - selected mac address : {}", METHOD, methodName,
