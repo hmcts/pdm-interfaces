@@ -42,6 +42,9 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(cdu.getXhibitCourtSiteId())).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(3);
         mockCduPageStateHolder.setCdu(cdu);
@@ -89,9 +92,14 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
-        replay(mockCduPageStateHolder);
+        expect(mockCduService.getCdusBySiteID(cdu.getXhibitCourtSiteId())).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, false);
 
+        replay(mockCduPageStateHolder);
+        replay(mockCduService);
+        
         // Perform the test
         final MvcResult results = mockMvc.perform(post(mappingNameCdusUrl).param(BTN_MANAGE_URL, ADD)
             .param(XHIBIT_COURTSITE_ID, cdu.getXhibitCourtSiteId().toString())
@@ -105,6 +113,7 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockCduService);
     }
 
     /**
@@ -114,13 +123,15 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
      */
     @Test
     void testRedirectToUrlPageAddGetError() throws Exception {
-        
         // Capture the cduCommand object and errors passed out
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(cdu.getXhibitCourtSiteId())).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
@@ -167,6 +178,9 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(cdu.getXhibitCourtSiteId())).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
@@ -210,6 +224,9 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
 
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
+        expectLastCall();
+        expect(mockCduService.getCdusBySiteID(cdu.getXhibitCourtSiteId())).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         mockCduPageStateHolder.setCdu(cdu);

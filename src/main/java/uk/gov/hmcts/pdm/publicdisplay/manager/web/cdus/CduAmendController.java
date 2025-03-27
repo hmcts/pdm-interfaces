@@ -150,6 +150,9 @@ public class CduAmendController extends CdusControllerUtility {
 
         // Ensure the search command is the latest
         cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
+        
+        // Refresh the list of CDU's
+        cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
 
         cduSearchSelectedValidator.validate(cduSearchCommand, result);
         if (result.hasErrors()) {

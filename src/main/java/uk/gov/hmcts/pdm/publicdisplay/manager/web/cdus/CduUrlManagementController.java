@@ -45,6 +45,9 @@ public class CduUrlManagementController extends CduAmendController {
 
         // Set a default view
         model.setViewName(VIEW_NAME_CDUS);
+        
+        // Refresh the list of CDU's
+        cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
 
         cduSearchSelectedValidator.validate(cduSearchCommand, result);
         if (!result.hasErrors()) {
