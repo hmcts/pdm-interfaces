@@ -102,7 +102,7 @@ public abstract class AbstractCduValidator implements Validator {
     private CduDto getCduFromSearchResults(final String selectedMacAddress) {
         CduDto selectedCdu = null;
         // Call to CduService to fetch Cdu's by Mac address
-        final List<CduDto> cduList = cduService.getCduByMacAddressWithLike(selectedMacAddress);
+        final List<CduDto> cduList = cduPageStateHolder.getCdus();
         if (cduList != null) {
             for (CduDto cdu : cduList) {
                 if (cdu.getMacAddress().equals(selectedMacAddress)) {

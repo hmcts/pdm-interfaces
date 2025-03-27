@@ -29,7 +29,7 @@ public class CduServHelperCrud extends CduServHelperRepos {
     protected static final String STARTS = " - starts";
     protected static final String ENDS = " - ends";
     private static final String CDU = " - cdu ";
-    private static final Character NO_CHAR = 'N';
+    protected static final Character NO_CHAR = 'N';
     private static final Character YES_CHAR = 'Y';
 
     /**
@@ -91,7 +91,6 @@ public class CduServHelperCrud extends CduServHelperRepos {
         return cduDto;
     }
     
-
     private UrlDto getUrlDto() {
         return new UrlDto();
     }

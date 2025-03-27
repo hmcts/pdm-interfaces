@@ -54,10 +54,15 @@ public class CduRegistrationController extends CduUrlManagementController {
                 cduPageStateHolder.getCdu().getMacAddress());
 
             // Create a new CduRegisterCommand object for the page
-            final CduRegisterCommand cduRegisterCommand = new CduRegisterCommand();
+            CduRegisterCommand cduRegisterCommand = new CduRegisterCommand();
             final CourtSiteDto siteDto = localProxyService
                 .getCourtSiteByXhibitCourtSiteId(cduSearchCommand.getXhibitCourtSiteId());
+            
             cduRegisterCommand.setNotification(siteDto.getNotification());
+            cduRegisterCommand.setCourtSiteId(cduPageStateHolder.getCdu().getCourtSiteId());
+            cduRegisterCommand.setIpAddress(cduPageStateHolder.getCdu().getIpAddress());
+            cduRegisterCommand.setMacAddress(cduPageStateHolder.getCdu().getMacAddress());
+            
             final CduDto cduDto = cduPageStateHolder.getCdu();
 
             model.addObject(CDU, cduDto);
@@ -92,7 +97,11 @@ public class CduRegistrationController extends CduUrlManagementController {
         model.setViewName(VIEW_NAME_REGISTER_CDU);
         LOGGER.info(THREE_PARAMS, METHOD, methodName, VIEW_SET);
 
+        // Create a CduDto object using fields from the CduRegisterCommand
+        cduPageStateHolder.setCdu(cduService.createCduDtoFromRegisterCommand(cduRegisterCommand));
+        
         cduRegisterValidator.validate(cduRegisterCommand, result);
+        
         if (!result.hasErrors()) {
             try {
                 LOGGER.debug("{}{} - registering CDU", METHOD, methodName);

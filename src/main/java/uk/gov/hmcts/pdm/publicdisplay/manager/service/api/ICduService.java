@@ -87,6 +87,14 @@ public interface ICduService {
     List<CduDto> getCdusBySiteID(Long courtSiteId);
 
     /**
+     * Creates a CduDto using CduRegisterCommand.
+     *
+     * @param cduRegisterCommand the cdu register command
+     * @return the CduDto
+     */
+    CduDto createCduDtoFromRegisterCommand(CduRegisterCommand cduRegisterCommand);
+    
+    /**
      * Register cdu.
      *
      * @param cduDto the cdu dto
