@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
 import org.easymock.Capture;
-import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +46,7 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         expectLastCall().times(3);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
@@ -125,7 +124,7 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         expectLastCall();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
@@ -161,7 +160,6 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
      */
     @Test
     void testRedirectToUrlPageAddRuntimeError() throws Exception {
-
         // Capture the cduCommand object and errors passed out
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -171,7 +169,7 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         expectLastCall();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expect(mockUrlService.getUrlsByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andThrow(xpdmException);
@@ -216,7 +214,7 @@ abstract class CduRedirectToUrlPage extends CduUrlMappingTest {
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
 
         replay(mockCduPageStateHolder);

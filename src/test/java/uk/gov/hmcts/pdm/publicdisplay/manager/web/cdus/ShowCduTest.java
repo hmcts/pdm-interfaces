@@ -447,7 +447,6 @@ abstract class ShowCduTest extends TestCdus {
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         
         replay(mockLocalProxyService);
