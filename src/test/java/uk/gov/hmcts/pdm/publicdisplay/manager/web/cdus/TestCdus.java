@@ -28,6 +28,8 @@ abstract class TestCdus extends CduExpectValidators {
 
     protected static final String COMMAND = "command";
 
+    protected static final String CDU = "cdu";
+    
     protected static final String MAC_ADDRESS = "macAddress";
 
     protected static final String LOCATION_STRING = "location";
@@ -82,9 +84,9 @@ abstract class TestCdus extends CduExpectValidators {
      */
     protected void assertCduRegisterModel(final Map modelMap) {
         final CduRegisterCommand cduCommand =
-            (CduRegisterCommand) modelMap.get("cduRegisterCommand");
+            (CduRegisterCommand) modelMap.get(COMMAND);
         assertTrue(cduCommand instanceof CduRegisterCommand, FALSE);
-        assertEquals(cdu, modelMap.get(COMMAND), NOT_EQUAL);
+        assertEquals(cdu, modelMap.get(CDU), NOT_EQUAL);
         // test the notification filed default correctly
         assertEquals(courtSiteDto.getNotification(), cduCommand.getNotification(), NOT_EQUAL);
 

@@ -162,7 +162,7 @@ public class CduServHelperFind extends CduServHelperCrud {
 
         CduJson cduJson1 = createCduJson("CDU_1", "00:00:00:00:00:01", ipValues.get(0), FAKE_TITLE,
             "CROWN COURT", "NOWHERE", "FAKE NOTIFICATION", Long.valueOf(123));
-        populateCduJson(cduJson1, 'N', 'G', Long.valueOf(1), "FAKE_USERNAME", 'Y');
+        populateCduJson(cduJson1, 'N', 'G', Long.valueOf(1), "FAKE_USERNAME", 'N');
 
         CduJson cduJson2 = createCduJson("CDU_2", "00:00:00:00:00:02", ipValues.get(1), FAKE_TITLE,
             "THE WAITING ROOM", "BRISTOL", THIS_DOES_NOT_EXIST, Long.valueOf(123));
