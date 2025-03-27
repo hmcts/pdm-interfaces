@@ -76,10 +76,6 @@ public class CduRegisterValidator extends AbstractCduValidator {
 
         final CduRegisterCommand cduCommand = (CduRegisterCommand) command;
         
-        LOGGER.info("Cdu Register Validator, the cdu to process: {}{}{}",
-            getCduPageStateHolder().getCdu().getCduNumber(), " with Site Id: ",
-            getCduPageStateHolder().getCdu().getCourtSiteId());
-        
         // Validate a CDU has been selected from the list and that it is not currently registered
         if (getCduPageStateHolder().getCdu() == null
             || isRegisteredCdu(getCduPageStateHolder().getCdu())) {
