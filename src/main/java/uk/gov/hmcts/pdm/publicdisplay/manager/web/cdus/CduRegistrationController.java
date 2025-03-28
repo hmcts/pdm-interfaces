@@ -152,6 +152,9 @@ public class CduRegistrationController extends CduUrlManagementController {
         // Ensure the search command is the latest
         cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
 
+        // Refresh the Cdu list in case validation fails
+        cduPageStateHolder.setCdus(getCduList(cduSearchCommand));
+        
         cduUnregisterValidator.validate(cduSearchCommand, result);
         if (!result.hasErrors()) {
             try {

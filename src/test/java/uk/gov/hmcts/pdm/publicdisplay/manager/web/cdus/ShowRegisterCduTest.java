@@ -340,8 +340,9 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus).times(2);
         mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall().times(2);
         expectUnregisterCduValidator(capturedCommand, capturedErrors, true);
         mockCduService.unregisterCdu(cdu.getId());
         expectLastCall();
@@ -387,10 +388,14 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         expectSetModelCduList();
-        replay(mockCduPageStateHolder);
         expectUnregisterCduValidator(capturedCommand, capturedErrors, false);
 
+        replay(mockCduPageStateHolder);
+        replay(mockCduService);
+        
         // Perform the test
         final MvcResult results =
             mockMvc
@@ -407,6 +412,7 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduUnregisterValidator);
+        verify(mockCduService);
     }
 
     /**
@@ -423,6 +429,8 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
+        expect(mockCduService.getCduByMacAddressWithLike(MAC_ADDRESS)).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
         mockCduService.unregisterCdu(cdu.getId());
@@ -467,6 +475,8 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
+        expect(mockCduService.getCduByMacAddressWithLike(MAC_ADDRESS)).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
         mockCduService.unregisterCdu(cdu.getId());
