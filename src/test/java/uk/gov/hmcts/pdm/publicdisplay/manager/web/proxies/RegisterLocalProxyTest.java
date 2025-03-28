@@ -77,18 +77,22 @@ abstract class RegisterLocalProxyTest extends UnregisterLocalProxyTest {
         final Capture<BindingResult> capturedBindingResult = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
+            .andReturn(xhibitCourtSites).times(2);
+        mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules).times(2);
+        mockLocalProxyPageStateHolder.setSchedules(schedules);
         mockProxyRegisterValidator.validate(capture(capturedCommand),
             capture(capturedBindingResult));
         expectLastCall();
-        replay(mockProxyRegisterValidator);
-        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
-            .andReturn(xhibitCourtSites);
         mockLocalProxyService.registerLocalProxy(capture(capturedCommand));
-        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
         expectLastCall();
-        replay(mockLocalProxyService);
         expectSetPageStateHolderSelectionLists();
         expect(mockLocalProxyPageStateHolder.getSchedules()).andReturn(schedules);
+        
+        replay(mockProxyRegisterValidator);
+        replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
@@ -129,16 +133,21 @@ abstract class RegisterLocalProxyTest extends UnregisterLocalProxyTest {
         final Capture<BindingResult> capturedBindingResult = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
+            .andReturn(xhibitCourtSites).times(2);
+        mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules).times(2);
+        mockLocalProxyPageStateHolder.setSchedules(schedules);
+        expectLastCall();
         mockProxyRegisterValidator.validate(capture(capturedCommand),
             capture(capturedBindingResult));
         expectLastCall();
-        replay(mockProxyRegisterValidator);
-        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
-            .andReturn(xhibitCourtSites);
-        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
-        replay(mockLocalProxyService);
         expectSetPageStateHolderSelectionLists();
         expect(mockLocalProxyPageStateHolder.getSchedules()).andReturn(schedules);
+        
+        replay(mockProxyRegisterValidator);
+        replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
@@ -153,6 +162,7 @@ abstract class RegisterLocalProxyTest extends UnregisterLocalProxyTest {
 
         // Verify the expected mocks were called
         verify(mockProxyRegisterValidator);
+        verify(mockLocalProxyService);
         verify(mockLocalProxyPageStateHolder);
     }
 
@@ -163,28 +173,29 @@ abstract class RegisterLocalProxyTest extends UnregisterLocalProxyTest {
      */
     @Test
     void testRegisterLocalProxyPostSaveError() throws Exception {
-
-
         // Capture the cduCommand object and errors passed out
         final Capture<LocalProxyRegisterCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedBindingResult = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
+            .andReturn(xhibitCourtSites).times(2);
+        mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules).times(2);
+        mockLocalProxyPageStateHolder.setSchedules(schedules);
         mockProxyRegisterValidator.validate(capture(capturedCommand),
             capture(capturedBindingResult));
         expectLastCall();
-        replay(mockProxyRegisterValidator);
-        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
-            .andReturn(xhibitCourtSites);
-
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException("Mock data access exception");
         mockLocalProxyService.registerLocalProxy(capture(capturedCommand));
         expectLastCall().andThrow(dataRetrievalFailureException);
-        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
-        replay(mockLocalProxyService);
         expectSetPageStateHolderSelectionLists();
         expect(mockLocalProxyPageStateHolder.getSchedules()).andReturn(schedules);
+        
+        replay(mockProxyRegisterValidator);
+        replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
@@ -220,26 +231,28 @@ abstract class RegisterLocalProxyTest extends UnregisterLocalProxyTest {
      */
     @Test
     void testRegisterLocalProxyPostRuntimeError() throws Exception {
-
         // Capture the cduCommand object and errors passed out
         final Capture<LocalProxyRegisterCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedBindingResult = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
+            .andReturn(xhibitCourtSites).times(2);
+        mockLocalProxyPageStateHolder.setSites(xhibitCourtSites);
+        expectLastCall();
+        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules).times(2);
+        mockLocalProxyPageStateHolder.setSchedules(schedules);
         mockProxyRegisterValidator.validate(capture(capturedCommand),
             capture(capturedBindingResult));
         expectLastCall();
-        replay(mockProxyRegisterValidator);
-        expect(mockLocalProxyService.getXhibitCourtSitesWithoutLocalProxy())
-            .andReturn(xhibitCourtSites);
-
         XpdmException xpdmException = new XpdmException("Mock runtime exception");
         mockLocalProxyService.registerLocalProxy(capture(capturedCommand));
         expectLastCall().andThrow(xpdmException);
-        expect(mockLocalProxyService.getPowerSaveSchedules()).andReturn(schedules);
-        replay(mockLocalProxyService);
         expectSetPageStateHolderSelectionLists();
         expect(mockLocalProxyPageStateHolder.getSchedules()).andReturn(schedules);
+        
+        replay(mockProxyRegisterValidator);
+        replay(mockLocalProxyService);
         replay(mockLocalProxyPageStateHolder);
 
         // Perform the test
