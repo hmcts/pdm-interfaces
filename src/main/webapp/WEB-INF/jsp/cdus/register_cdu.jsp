@@ -190,8 +190,13 @@
 						</spring:bind>
 						
 						</div>	
-						<!-- /form-group -->						
-							
+						<!-- /form-group -->		
+						
+						<%--Hidden fields here --%>
+						<form:hidden path="courtSiteId" />
+						<form:hidden path="ipAddress" />
+						<form:hidden path="macAddress" />
+										
 						<div class="form-group">
 							<div class="col-md-12">																												
 							    <button id="btnRegisterCdu" class="btn btn-primary" name="btnRegisterCdu" ><span class="glyphicon glyphicon-plus-sign"></span> Register this CDU</button>

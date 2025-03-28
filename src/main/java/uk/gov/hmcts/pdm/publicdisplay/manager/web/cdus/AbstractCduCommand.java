@@ -99,6 +99,15 @@ public class AbstractCduCommand {
     @Min(value = WEIGHTING_MIN, message = "{cduCommand.weighting.invalid}")
     @Max(value = WEIGHTING_MAX, message = "{cduCommand.weighting.invalid}")
     private Long weighting;
+    
+    /** Court Site Id. */
+    private Long courtSiteId;
+    
+    /** Mac Address. */
+    private String macAddress;
+    
+    /** Ip Address. */
+    private String ipAddress;
 
     /**
      * Gets the title.
@@ -207,4 +216,60 @@ public class AbstractCduCommand {
     public void setWeighting(final Long weighting) {
         this.weighting = weighting;
     }
+
+    /**
+     * Gets the courtSiteId.
+     *
+     * @return the courtSiteId
+     */
+    public Long getCourtSiteId() {
+        return courtSiteId;
+    }
+
+    /**
+     * Sets the courtSiteId.
+     *
+     * @param courtSiteId the courtSiteId to set
+     */
+    public void setCourtSiteId(Long courtSiteId) {
+        this.courtSiteId = courtSiteId;
+    }
+
+    /**
+     * Gets the macAddress.
+     *
+     * @return the macAddress
+     */
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    /**
+     * Sets the macAddress.
+     *
+     * @param macAddress the macAddress to set
+     */
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    /**
+     * Gets the ipAddress.
+     *
+     * @return the ipAddress
+     */
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    /**
+     * Sets the ipAddress.
+     *
+     * @param ipAddress the ipAddress to set
+     */
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+    
+    
 }

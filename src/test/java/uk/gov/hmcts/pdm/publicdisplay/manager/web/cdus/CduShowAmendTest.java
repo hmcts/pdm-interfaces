@@ -41,10 +41,12 @@ class CduShowAmendTest extends UpdateCduTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(null)).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class)))
-            .andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
@@ -84,11 +86,17 @@ class CduShowAmendTest extends UpdateCduTest {
         // Add the mock calls to child classes
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
+        expect(mockCduService.getCdusBySiteID(null)).andReturn(cdus);
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall();
         expect(mockCduPageStateHolder.getSites()).andReturn(sites).anyTimes();
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
-        replay(mockCduPageStateHolder);
+        
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, false);
 
+        replay(mockCduPageStateHolder);
+        replay(mockCduService);
+        
         // Perform the test
         final MvcResult results =
             mockMvc.perform(post(mappingNameCdusUrl).param(BTN_SHOW_AMEND_CDU, BTN_SHOW_AMEND_CDU)
@@ -101,6 +109,7 @@ class CduShowAmendTest extends UpdateCduTest {
         // Verify the expected mocks were called
         verify(mockCduPageStateHolder);
         verify(mockCduSearchSelectedValidator);
+        verify(mockCduService);
     }
 
     /**

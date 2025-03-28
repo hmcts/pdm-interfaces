@@ -29,6 +29,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 abstract class CduRegistrationTest extends CduServiceTestBase {
 
     /**
+     * Test createCduDtoFromRegisterCommand.
+     */
+    @Test
+    void testCreateCduDtoFromRegisterCommand() {
+        // Local variables
+        final CduDto cduDto = cduDtos.get(0);
+        final CduRegisterCommand cduCommand = getTestCduRegisterCommand(cduDto.getId());
+        
+        // Perform the test
+        CduDto result = classUnderTest.createCduDtoFromRegisterCommand(cduCommand);
+        
+        // Assert that the objects are as expected
+        assertNotNull(result, NULL);
+    }
+    
+    /**
      * Test register cdu valid.
      */
     @Test

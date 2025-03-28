@@ -66,15 +66,15 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockLocalProxyService.getCourtSiteByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andReturn(courtSiteDto);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
+        expectLastCall().anyTimes();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
-
+        
         replay(mockLocalProxyService);
         replay(mockCduPageStateHolder);
         replay(mockCduService);
@@ -157,25 +157,28 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
+        expect(mockCduService.createCduDtoFromRegisterCommand(capture(capturedCommand))).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduRegisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
-        replay(mockCduRegisterValidator);
         mockCduService.registerCdu(capture(capturedCdu), capture(capturedCommand));
         expectLastCall();
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
 
         // Redirecting screen back to showCduSearch
         expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
         expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
-        replay(mockLocalProxyService);
         mockCduPageStateHolder.reset();
         expectLastCall();
         mockCduPageStateHolder.setSites(sites);
         expectLastCall();
         expectSetModelCduList();
 
+        replay(mockCduRegisterValidator);
+        replay(mockCduService);
+        replay(mockLocalProxyService);
         replay(mockCduPageStateHolder);
 
         // Perform the test
@@ -238,26 +241,26 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
      */
     @Test
     void testRegisterCduSaveError() throws Exception {
-
-
         // Capture the cduCommand object and errors passed out
         final Capture<CduDto> capturedCdu = newCapture();
         final Capture<CduRegisterCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduService.createCduDtoFromRegisterCommand(capture(capturedCommand))).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduRegisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
-        replay(mockCduRegisterValidator);
         mockCduService.registerCdu(capture(capturedCdu), capture(capturedCommand));
-        
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
-        
         expectLastCall().andThrow(dataRetrievalFailureException);
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
+        
+        replay(mockCduRegisterValidator);
+        replay(mockCduService);
         replay(mockCduPageStateHolder);
 
         // Perform the test
@@ -284,24 +287,25 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
      */
     @Test
     void testRegisterCduRuntimeError() throws Exception {
-
         // Capture the cduCommand object and errors passed out
         final Capture<CduDto> capturedCdu = newCapture();
         final Capture<CduRegisterCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
 
         // Add the mock calls to child classes
+        expect(mockCduService.createCduDtoFromRegisterCommand(capture(capturedCommand))).andReturn(cdu);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         mockCduRegisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
-        replay(mockCduRegisterValidator);
         mockCduService.registerCdu(capture(capturedCdu), capture(capturedCommand));
-        
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
-        
         expectLastCall().andThrow(xpdmException);
-        replay(mockCduService);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
+        
+        replay(mockCduRegisterValidator);
+        replay(mockCduService);
         replay(mockCduPageStateHolder);
 
         // Perform the test
@@ -341,7 +345,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         expectUnregisterCduValidator(capturedCommand, capturedErrors, true);
         mockCduService.unregisterCdu(cdu.getId());
         expectLastCall();
-        expect(mockCduService.getCduByMacAddressWithLike(cdu.getMacAddress())).andReturn(cdus);
         
         replay(mockCduPageStateHolder);
         replay(mockCduService);
@@ -413,7 +416,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
      */
     @Test
     void testUnregisterCduSaveError() throws Exception {
-
         // Capture the cduCommand object and errors passed out
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -421,7 +423,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
         mockCduService.unregisterCdu(cdu.getId());
@@ -459,7 +460,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
      */
     @Test
     void testUnregisterCduRuntimeError() throws Exception {
-
         // Capture the cduCommand object and errors passed out
         final Capture<CduSearchCommand> capturedCommand = newCapture();
         final Capture<BindingResult> capturedErrors = newCapture();
@@ -467,7 +467,6 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
         expectSetModelCduList();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         mockCduUnregisterValidator.validate(capture(capturedCommand), capture(capturedErrors));
         expectLastCall();
         mockCduService.unregisterCdu(cdu.getId());

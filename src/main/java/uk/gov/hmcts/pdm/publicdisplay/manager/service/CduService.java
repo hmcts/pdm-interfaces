@@ -85,6 +85,28 @@ public class CduService extends CduServHelperSave implements ICduService {
         return getXhbDispMgrCduRepository().isCduWithCduNumber(cduNumber);
     }
 
+    /**
+     * Creates the cdu dto.
+     *
+     * @param cduRegisterCommand the cduRegisterCommand
+     * @return the cdu dto
+     */
+    @Override
+    public CduDto createCduDtoFromRegisterCommand(CduRegisterCommand cduRegisterCommand) {
+        final CduDto cduDto = new CduDto();
+        cduDto.setCduNumber(cduRegisterCommand.getCduNumber());
+        cduDto.setCourtSiteId(cduRegisterCommand.getCourtSiteId());
+        cduDto.setDescription(cduRegisterCommand.getDescription());
+        cduDto.setNotification(cduRegisterCommand.getNotification());
+        cduDto.setIpAddress(cduRegisterCommand.getIpAddress());
+        cduDto.setLocation(cduRegisterCommand.getLocation());
+        cduDto.setMacAddress(cduRegisterCommand.getMacAddress());
+        cduDto.setRefresh(cduRegisterCommand.getRefresh());
+        cduDto.setWeighting(cduRegisterCommand.getWeighting());
+        cduDto.setRegisteredIndicator(NO_CHAR);
+        return cduDto;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -141,8 +163,7 @@ public class CduService extends CduServHelperSave implements ICduService {
         } else {
             // already exists - i.e. it is registered
             // Still need to ensure it is registered on the Local Proxy
-            LOGGER.debug("{}{}{}{}", METHOD, methodName, " cdu found for Mac Address ",
-                cduDto.getMacAddress());
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " cdu found with this Mac Address already.");
 
             final boolean isCduWithCduNumber =
                 getXhbDispMgrCduRepository().isCduWithCduNumber(cduCommand.getCduNumber());

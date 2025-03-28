@@ -23,7 +23,6 @@
 
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
-import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,14 +33,12 @@ import org.springframework.validation.BindingResult;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.common.util.AppConstants;
 import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
-import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,8 +65,8 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
     /** The class under test. */
     private CduUnregisterValidator classUnderTest;
 
-    /** The ICduService. */
-    private ICduService mockCduService;
+    /** The mock cdu page state holder. */
+    private CduPageStateHolder mockCduPageStateHolder;
 
     /**
      * Setup.
@@ -80,10 +77,10 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         classUnderTest = new CduUnregisterValidator();
 
         // Setup the mock version of the called classes
-        mockCduService = createMock(ICduService.class);
+        mockCduPageStateHolder = createMock(CduPageStateHolder.class);
 
         // Map the mock to the class under tests called class
-        ReflectionTestUtils.setField(classUnderTest, "cduService", mockCduService);
+        ReflectionTestUtils.setField(classUnderTest, "cduPageStateHolder", mockCduPageStateHolder);
     }
 
     /**
@@ -106,11 +103,9 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        expectLastCall().times(2);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).times(2);
+        replay(mockCduPageStateHolder);
         
-        replay(mockCduService);
-
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
 
@@ -119,7 +114,7 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         assertFalse(errors.hasErrors(), "True");
 
         // Verify the mocks used in this method were called
-        verify(mockCduService);
+        verify(mockCduPageStateHolder);
     }
 
     /**
@@ -133,9 +128,8 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        expectLastCall().times(2);
-        replay(mockCduService);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).times(2);
+        replay(mockCduPageStateHolder);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -145,7 +139,7 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduService);
+        verify(mockCduPageStateHolder);
     }
 
     /**
@@ -160,8 +154,8 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         final BindingResult errors = new BeanPropertyBindingResult(cduCommand, CDU_COMMAND);
 
         // Define a mock version of the called methods
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
-        replay(mockCduService);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        replay(mockCduPageStateHolder);
 
         // Perform the test
         classUnderTest.validate(cduCommand, errors);
@@ -171,7 +165,7 @@ class CduUnregisterValidatorTest extends AbstractJUnit {
         assertEquals(1, errors.getErrorCount(), NOT_EQUAL);
 
         // Verify the mocks used in this method were called
-        verify(mockCduService);
+        verify(mockCduPageStateHolder);
     }
 
     /**
