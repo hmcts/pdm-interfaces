@@ -329,6 +329,9 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         // Ensure the search command is the latest
         localProxyPageStateHolder.setLocalProxySearchCommand(localProxySearchCommand);
 
+        // Retrieve and add the court sites & schedules to the pageStateHolder
+        setPageStateSelectionLists(true);
+        
         // Business Specific validation for local proxy
         localProxyUnregisterValidator.validate(localProxySearchCommand, result);
         if (!result.hasErrors()) {
@@ -448,6 +451,9 @@ public class LocalProxyController extends LocalProxyPageStateSetter {
         final String methodName = "registerlocalproxy (POST)";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        // retrieve and add the court sites to the pageStateHolder
+        setPageStateSelectionLists(false);
+        
         // Business Specific validation for local proxy
         localProxyRegisterValidator.validate(localProxyRegisterCommand, result);
         if (!result.hasErrors()) {
