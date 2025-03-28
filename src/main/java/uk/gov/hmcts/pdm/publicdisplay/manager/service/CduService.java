@@ -163,8 +163,7 @@ public class CduService extends CduServHelperSave implements ICduService {
         } else {
             // already exists - i.e. it is registered
             // Still need to ensure it is registered on the Local Proxy
-            LOGGER.debug("{}{}{}{}", METHOD, methodName, " cdu found for Mac Address ",
-                cduDto.getMacAddress());
+            LOGGER.debug(THREE_PARAMS, METHOD, methodName, " cdu found with this Mac Address already.");
 
             final boolean isCduWithCduNumber =
                 getXhbDispMgrCduRepository().isCduWithCduNumber(cduCommand.getCduNumber());
