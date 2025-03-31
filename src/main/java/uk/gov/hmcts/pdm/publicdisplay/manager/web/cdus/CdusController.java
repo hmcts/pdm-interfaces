@@ -47,6 +47,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 
 @Controller
 @RequestMapping("/cdus")
+@SuppressWarnings("squid:S5145")
 public class CdusController extends CduRegistrationController {
     /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(CdusController.class);
