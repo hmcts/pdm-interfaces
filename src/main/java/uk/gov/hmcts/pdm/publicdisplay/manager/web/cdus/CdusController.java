@@ -146,6 +146,8 @@ public class CdusController extends CduRegistrationController {
         final String methodName = "getCduScreenShot";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduPageStateHolder.getCduSearchCommand());
+        
         // Throw 404 exception if cdu is invalid
         if (cduPageStateHolder.getCdu() == null
             || !cduSearchSelectedValidator.isValid(cduPageStateHolder.getCduSearchCommand())) {
