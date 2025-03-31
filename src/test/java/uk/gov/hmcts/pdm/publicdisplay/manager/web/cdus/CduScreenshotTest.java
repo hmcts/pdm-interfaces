@@ -31,7 +31,7 @@ abstract class CduScreenshotTest extends RestartCduTest {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(2);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         replay(mockCduPageStateHolder);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(false);
@@ -59,7 +59,6 @@ abstract class CduScreenshotTest extends RestartCduTest {
     @Test
     void testGetCduScreenshotNullCduError() throws Exception {
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(null);
         expect(mockCduPageStateHolder.getCdu()).andReturn(null);
         expectLastCall();
         replay(mockCduPageStateHolder);
@@ -90,7 +89,7 @@ abstract class CduScreenshotTest extends RestartCduTest {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(2);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
         replay(mockCduPageStateHolder);
@@ -132,7 +131,7 @@ abstract class CduScreenshotTest extends RestartCduTest {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(2);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
         replay(mockCduPageStateHolder);
