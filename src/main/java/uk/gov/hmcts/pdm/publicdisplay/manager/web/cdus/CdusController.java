@@ -47,6 +47,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 
 @Controller
 @RequestMapping("/cdus")
+@SuppressWarnings("squid:S5145")
 public class CdusController extends CduRegistrationController {
     /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(CdusController.class);
@@ -142,11 +143,12 @@ public class CdusController extends CduRegistrationController {
      */
     @RequestMapping(value = MAPPING_CDU_SCREENSHOT, method = RequestMethod.GET,
         produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<ByteArrayResource> getCduScreenshot() throws NoHandlerFoundException {
+    public ResponseEntity<ByteArrayResource> getCduScreenshot(final CduSearchCommand cduSearchCommand)
+        throws NoHandlerFoundException {
         final String methodName = "getCduScreenShot";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
-        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduPageStateHolder.getCduSearchCommand());
+        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduSearchCommand);
         
         // Throw 404 exception if cdu is invalid
         if (cduPageStateHolder.getCdu() == null
