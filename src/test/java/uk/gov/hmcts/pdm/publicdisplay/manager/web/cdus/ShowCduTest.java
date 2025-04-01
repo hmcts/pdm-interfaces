@@ -440,7 +440,7 @@ abstract class ShowCduTest extends TestCdus {
         mockCduPageStateHolder.setSites(null);
         expectLastCall().anyTimes();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
-        expectLastCall();
+        expectLastCall().times(2);
         expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();

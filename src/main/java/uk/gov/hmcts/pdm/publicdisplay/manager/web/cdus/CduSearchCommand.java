@@ -56,7 +56,20 @@ public class CduSearchCommand implements Serializable {
      */
     @EncryptedFormat
     private String selectedMacAddress;
+    
+    /** 
+     * The court site id. 
+     */
+    @EncryptedFormat
+    private Long courtSiteId;
 
+    /**
+     * ipAddress of the CDU.
+     */
+    @EncryptedFormat
+    private String ipAddress;
+    
+    
     /**
      * getXhibitCourtSiteId.
      * 
@@ -111,4 +124,39 @@ public class CduSearchCommand implements Serializable {
         this.selectedMacAddress = selectedMacAddress;
     }
 
+    /**
+     * getCourtSiteId.
+     * 
+     * @return the courtSiteId
+     */
+    public Long getCourtSiteId() {
+        return courtSiteId;
+    }
+
+    /**
+     * setCourtSiteId.
+     * 
+     * @param courtSiteId the courtSiteId to set
+     */
+    public void setCourtSiteId(Long courtSiteId) {
+        this.courtSiteId = courtSiteId;
+    }
+
+    /**
+     * getIpAddress.
+     * 
+     * @return the ipAddress
+     */
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    /**
+     * setIpAddress.
+     * 
+     * @param ipAddress the ipAddress to set
+     */
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 }
