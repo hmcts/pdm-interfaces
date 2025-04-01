@@ -31,10 +31,14 @@ abstract class CduScreenshotTest extends RestartCduTest {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(3);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        replay(mockCduPageStateHolder);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(false);
+        
+        replay(mockCduPageStateHolder);
         replay(mockCduSearchSelectedValidator);
 
         // Perform the test
@@ -58,9 +62,15 @@ abstract class CduScreenshotTest extends RestartCduTest {
      */
     @Test
     void testGetCduScreenshotNullCduError() throws Exception {
+        final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
         // Add the mock calls to child classes
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(2);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(null);
         expectLastCall();
+        
         replay(mockCduPageStateHolder);
 
         // Perform the test
@@ -84,22 +94,21 @@ abstract class CduScreenshotTest extends RestartCduTest {
      */
     @Test
     void testGetCduScreenshotError() throws Exception {
-
-
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
-
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(3);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
-        
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
-        
         expect(mockCduService.getCduScreenshot(cdu)).andThrow(dataRetrievalFailureException);
-        replay(mockCduService);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(true);
+        
+        replay(mockCduPageStateHolder);
+        replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
 
         // Perform the test
@@ -116,8 +125,6 @@ abstract class CduScreenshotTest extends RestartCduTest {
         verify(mockCduPageStateHolder);
         verify(mockCduService);
         verify(mockCduSearchSelectedValidator);
-
-
     }
 
     /**
@@ -127,20 +134,21 @@ abstract class CduScreenshotTest extends RestartCduTest {
      */
     @Test
     void testGetCduScreenshotRuntimeError() throws Exception {
-
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(3);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
-        
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
-        
         expect(mockCduService.getCduScreenshot(cdu)).andThrow(xpdmException);
-        replay(mockCduService);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(true);
+        
+        replay(mockCduPageStateHolder);
+        replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
 
         // Perform the test
@@ -158,5 +166,4 @@ abstract class CduScreenshotTest extends RestartCduTest {
         verify(mockCduService);
         verify(mockCduSearchSelectedValidator);
     }
-
 }

@@ -460,13 +460,17 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         final byte[] cduScreenshot = getTestByteArray();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(3);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        mockCduPageStateHolder.setCdu(cdu);
+        expectLastCall();
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
         expectLastCall().times(2);
-        replay(mockCduPageStateHolder);
         expect(mockCduService.getCduScreenshot(cdu)).andReturn(cduScreenshot);
-        replay(mockCduService);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(true);
+        
+        replay(mockCduPageStateHolder);
+        replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
 
         // Perform the test

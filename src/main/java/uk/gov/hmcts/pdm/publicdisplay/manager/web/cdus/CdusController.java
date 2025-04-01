@@ -125,6 +125,15 @@ public class CdusController extends CduRegistrationController {
             final CduDto cdu =
                 populateSelectedCduInPageStateHolder(cduSearchCommand.getSelectedMacAddress());
 
+            // Set the fields for screenshot and update searchCommand instance in pageStateHolder
+            cduSearchCommand.setCourtSiteId(cdu.getCourtSiteId());
+            cduSearchCommand.setIpAddress(cdu.getIpAddress());
+            cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
+            
+            // Remove below logs once testing is done
+            LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand court site id: ",
+                cduSearchCommand.getCourtSiteId());
+            
             LOGGER.info("{}{} - Adding cdu to model", METHOD, methodName);
             model.addObject(CDU, cdu);
             model.addObject(COMMAND, cduSearchCommand);
@@ -143,12 +152,16 @@ public class CdusController extends CduRegistrationController {
      */
     @RequestMapping(value = MAPPING_CDU_SCREENSHOT, method = RequestMethod.GET,
         produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<ByteArrayResource> getCduScreenshot(final CduSearchCommand cduSearchCommand)
+    public ResponseEntity<ByteArrayResource> getCduScreenshot()
         throws NoHandlerFoundException {
         final String methodName = "getCduScreenShot";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
-        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduSearchCommand);
+        // Remove below logs after testing
+        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduPageStateHolder.getCduSearchCommand());
+        
+        // Populate the CDU in the page state holder
+        populateSelectedCduInPageStateHolder(cduPageStateHolder.getCduSearchCommand().getSelectedMacAddress());
         
         // Throw 404 exception if cdu is invalid
         if (cduPageStateHolder.getCdu() == null
