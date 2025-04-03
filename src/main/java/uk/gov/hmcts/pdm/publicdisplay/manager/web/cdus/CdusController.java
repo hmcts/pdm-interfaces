@@ -52,6 +52,8 @@ public class CdusController extends CduRegistrationController {
     /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(CdusController.class);
 
+    private String testLine;
+    
     /**
      * Search for cdu.
      *
@@ -128,11 +130,12 @@ public class CdusController extends CduRegistrationController {
             // Set the fields for screenshot and update searchCommand instance in pageStateHolder
             cduSearchCommand.setCourtSiteId(cdu.getCourtSiteId());
             cduSearchCommand.setIpAddress(cdu.getIpAddress());
+            cduSearchCommand.setSelectedMacAddress(cdu.getMacAddress());
             cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
             
             // Remove below logs once testing is done
-            LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand court site id: ",
-                cduSearchCommand.getCourtSiteId());
+            testLine = methodName;
+            LOGGER.info("Set the testLine in: {}", methodName);
             
             LOGGER.info("{}{} - Adding cdu to model", METHOD, methodName);
             model.addObject(CDU, cdu);
@@ -157,6 +160,8 @@ public class CdusController extends CduRegistrationController {
         final String methodName = "getCduScreenShot";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
+        LOGGER.info("Testline value in Screenshot: {}", testLine);
+        
         // Remove below logs after testing
         LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduPageStateHolder.getCduSearchCommand());
         
