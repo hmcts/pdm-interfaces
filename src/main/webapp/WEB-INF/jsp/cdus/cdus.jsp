@@ -232,6 +232,12 @@
 																			</c:forEach>
 																		</ul>
 																	</c:if>
+																	
+																	<%--Hidden fields here--%>
+																	<form:hidden path="courtSiteId" />
+																	<form:hidden path="ipAddress" />
+																	<form:hidden path="selectedMacAddress" />
+																	
 																	<div class="btn-group">
 																		<a href="#" class="btn btn-primary" id="lnkScreenshot">
 																			<span class="glyphicon glyphicon-picture"></span>&nbsp;Show CDU Screenshot</a>

@@ -149,15 +149,16 @@ public class CdusController extends CduRegistrationController {
      * @return the cdu screen shot
      * @throws NoSuchRequestHandlingMethodException the no such request handling method exception
      */
-    @RequestMapping(value = MAPPING_CDU_SCREENSHOT, method = RequestMethod.GET,
+    @RequestMapping(value = MAPPING_CDU_SCREENSHOT, method = RequestMethod.GET, 
         produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<ByteArrayResource> getCduScreenshot()
+    public ResponseEntity<ByteArrayResource> getCduScreenshot(final CduSearchCommand cduSearchCommand)
         throws NoHandlerFoundException {
         final String methodName = "getCduScreenShot";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Remove below logs after testing
-        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduPageStateHolder.getCduSearchCommand());
+        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduSearchCommand);
+        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand CourtSiteId: ", cduSearchCommand.getCourtSiteId());
         
         // Populate the CDU in the page state holder
         populateSelectedCduInPageStateHolder(cduPageStateHolder.getCduSearchCommand().getSelectedMacAddress());
@@ -190,5 +191,4 @@ public class CdusController extends CduRegistrationController {
         LOGGER.info(THREE_PARAMS, METHOD, methodName, ENDS);
         return response;
     }
-
 }
