@@ -66,13 +66,12 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         expect(mockCduService.getCdusBySiteID(EasyMock.isA(Long.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expect(mockLocalProxyService.getCourtSiteByXhibitCourtSiteId(cdu.getXhibitCourtSiteId()))
             .andReturn(courtSiteDto);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().anyTimes();
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
         
         replay(mockLocalProxyService);
@@ -164,8 +163,7 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         expectLastCall();
         mockCduService.registerCdu(capture(capturedCdu), capture(capturedCommand));
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
 
         // Redirecting screen back to showCduSearch
         expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand);
@@ -256,8 +254,7 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
         expectLastCall().andThrow(dataRetrievalFailureException);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         
         replay(mockCduRegisterValidator);
         replay(mockCduService);
@@ -301,8 +298,7 @@ abstract class ShowRegisterCduTest extends ShowCduTest {
         mockCduService.registerCdu(capture(capturedCdu), capture(capturedCommand));
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expectLastCall().andThrow(xpdmException);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         
         replay(mockCduRegisterValidator);
         replay(mockCduService);

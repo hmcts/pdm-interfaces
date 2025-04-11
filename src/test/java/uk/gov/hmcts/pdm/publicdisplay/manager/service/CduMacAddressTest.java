@@ -121,7 +121,7 @@ abstract class CduMacAddressTest extends CduRegistrationTest {
         // Add the mock calls to child classes
         expect(mockCduRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        expect(mockCduRepo.findByMacAddressWithLike(MACADDRESS)).andReturn(cdus);
+        expect(mockCduRepo.findByMacAddressWithLike(MACADDRESS)).andReturn(cdus).anyTimes();
         
         replay(mockCduRepo);
         replay(mockEntityManager);

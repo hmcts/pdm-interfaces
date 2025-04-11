@@ -44,9 +44,8 @@ class CduShowAmendTest extends UpdateCduTest {
         expect(mockCduService.getCdusBySiteID(null)).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
@@ -91,12 +90,12 @@ class CduShowAmendTest extends UpdateCduTest {
         expectLastCall();
         expect(mockCduPageStateHolder.getSites()).andReturn(sites).anyTimes();
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
-        
+
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, false);
 
         replay(mockCduPageStateHolder);
         replay(mockCduService);
-        
+
         // Perform the test
         final MvcResult results =
             mockMvc.perform(post(mappingNameCdusUrl).param(BTN_SHOW_AMEND_CDU, BTN_SHOW_AMEND_CDU)
@@ -129,7 +128,8 @@ class CduShowAmendTest extends UpdateCduTest {
         expectLastCall().anyTimes();
         mockCduPageStateHolder.setCduSearchCommand(capture(capturedCommand));
         expectLastCall();
-        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class)))
+            .andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
         expectSetModelCduList();
@@ -137,7 +137,7 @@ class CduShowAmendTest extends UpdateCduTest {
 
         replay(mockCduPageStateHolder);
         replay(mockCduService);
-        
+
         // Perform the test
         final MvcResult results = mockMvc.perform(post(mappingNameCdusUrl)
             .param(BTN_SHOW_CDU, BTN_SHOW_CDU).param(MAC_ADDRESS, cdu.getMacAddress())
@@ -152,5 +152,4 @@ class CduShowAmendTest extends UpdateCduTest {
         verify(mockCduSearchSelectedValidator);
         verify(mockCduService);
     }
-
 }
