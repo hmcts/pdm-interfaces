@@ -214,11 +214,13 @@ public class CdusControllerUtility {
                 LOGGER.info("No CDUs for the selected macAddress");
             }
             final List<CduDto> cduList = cduPageStateHolder.getCdus();
-            for (CduDto cdu : cduList) {
-                if (cdu.getMacAddress().equals(macAddress)) {
-                    selectedCdu = cdu;
-                    LOGGER.info("Found CDU for selected macAddress");
-                    break;
+            if (cduList != null) {
+                for (CduDto cdu : cduList) {
+                    if (cdu.getMacAddress().equals(macAddress)) {
+                        selectedCdu = cdu;
+                        LOGGER.info("Found CDU for selected macAddress");
+                        break;
+                    }
                 }
             }
         }
