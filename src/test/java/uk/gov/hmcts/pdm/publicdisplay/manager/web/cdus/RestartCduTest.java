@@ -466,12 +466,18 @@ abstract class RestartCduTest extends CduRedirectToUrlPage {
         expectLastCall().anyTimes();
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall().anyTimes();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCduSearchCommand(EasyMock.isA(CduSearchCommand.class));
+        expectLastCall().anyTimes();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         expect(mockCduService.getCduScreenshot(cdu)).andReturn(cduScreenshot);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(true);
         
         replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
 

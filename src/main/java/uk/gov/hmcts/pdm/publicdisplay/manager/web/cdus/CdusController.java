@@ -151,13 +151,15 @@ public class CdusController extends CduRegistrationController {
      */
     @RequestMapping(value = MAPPING_CDU_SCREENSHOT, method = RequestMethod.GET,
         produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<ByteArrayResource> getCduScreenshot()
+    public ResponseEntity<ByteArrayResource> getCduScreenshot(final CduSearchCommand cduSearchCommand,
+        final BindingResult result, final ModelAndView model)
         throws NoHandlerFoundException {
         final String methodName = "getCduScreenShot";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
-        // Remove below logs after testing
-        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduPageStateHolder.getCduSearchCommand());
+        // Ensure the search command is the latest
+        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduSearchCommand);
+        setCduSearchCommand(cduSearchCommand);
         
         // Repopulate the cdu list
         cduPageStateHolder.setCdus(getCduList(cduPageStateHolder.getCduSearchCommand()));
