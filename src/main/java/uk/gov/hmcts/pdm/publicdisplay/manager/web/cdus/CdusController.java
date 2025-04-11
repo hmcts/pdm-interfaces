@@ -159,6 +159,9 @@ public class CdusController extends CduRegistrationController {
         // Remove below logs after testing
         LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduPageStateHolder.getCduSearchCommand());
         
+        // Repopulate the cdu list
+        cduPageStateHolder.setCdus(getCduList(cduPageStateHolder.getCduSearchCommand()));
+        
         // Populate the CDU in the page state holder
         populateSelectedCduInPageStateHolder(cduPageStateHolder.getCduSearchCommand().getSelectedMacAddress());
         
