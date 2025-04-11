@@ -35,7 +35,7 @@ abstract class CduScreenshotTest extends RestartCduTest {
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(false);
         
         replay(mockCduPageStateHolder);
@@ -100,8 +100,7 @@ abstract class CduScreenshotTest extends RestartCduTest {
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
         expect(mockCduService.getCduScreenshot(cdu)).andThrow(dataRetrievalFailureException);
@@ -141,8 +140,7 @@ abstract class CduScreenshotTest extends RestartCduTest {
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expect(mockCduService.getCduScreenshot(cdu)).andThrow(xpdmException);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(true);

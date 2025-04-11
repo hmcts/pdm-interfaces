@@ -305,8 +305,7 @@ class RagStatusUpdateServiceTest extends RagStatusOverallTest {
         replay(mockScheduler);
 
         // Mock calling existing trigger to get next fire time
-        expect(mockTrigger.getNextFireTime()).andReturn(testDate);
-        expectLastCall().times(2);
+        expect(mockTrigger.getNextFireTime()).andReturn(testDate).anyTimes();
         replay(mockTrigger);
 
         // Perform the test

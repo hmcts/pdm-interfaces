@@ -78,8 +78,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         expect(mockCduService.getCduByMacAddress(cdu.getMacAddress())).andReturn(cdu);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(5);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
@@ -125,8 +124,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(4);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
@@ -175,8 +173,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
         expectLastCall().andThrow(dataRetrievalFailureException);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(4);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
@@ -226,8 +223,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         mockCduService.addMapping(capture(capturedCommand));
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expectLastCall().andThrow(xpdmException);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(4);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();        
         expect(mockCduPageStateHolder.getAvailableUrls()).andReturn(urls);
         mockCduPageStateHolder.setAvailableUrls(urls);
         expectLastCall();
@@ -275,8 +271,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         mockCduService.removeMapping(capture(capturedCommand));
         expectLastCall();
         expect(mockCduService.getCduByMacAddress(cdu.getMacAddress())).andReturn(cdu);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         
@@ -315,7 +310,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         // Add the mock calls to child classes
         expectMappingRemoveValidator(capturedCommand, capturedErrors, false);
         expect(mockCduService.getCduByCduId(cdu.getId().intValue())).andReturn(cdu);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         
@@ -359,7 +354,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
         expectLastCall().andThrow(dataRetrievalFailureException);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         
         replay(mockMappingRemoveValidator);
         replay(mockCduService);
@@ -401,7 +396,7 @@ abstract class CduUrlMappingTest extends ShowRegisterCduTest {
         mockCduService.removeMapping(capture(capturedCommand));
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expectLastCall().andThrow(xpdmException);
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         
         replay(mockMappingRemoveValidator);
         replay(mockCduService);

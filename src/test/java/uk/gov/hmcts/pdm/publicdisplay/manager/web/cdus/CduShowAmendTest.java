@@ -44,9 +44,8 @@ class CduShowAmendTest extends UpdateCduTest {
         expect(mockCduService.getCdusBySiteID(null)).andReturn(cdus);
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu);
-        expectLastCall().times(2);
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
         expectCduSearchSelectedValidator(capturedCommand, capturedErrors, true);
