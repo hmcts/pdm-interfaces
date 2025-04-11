@@ -107,7 +107,7 @@ abstract class CduScreenshotTest extends RestartCduTest {
         expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).anyTimes();
         expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
-        expectLastCall();
+        expectLastCall().anyTimes();
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall().anyTimes();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
@@ -147,10 +147,13 @@ abstract class CduScreenshotTest extends RestartCduTest {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(3);
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).anyTimes();
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
-        expectLastCall();
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall().anyTimes();
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expect(mockCduService.getCduScreenshot(cdu)).andThrow(xpdmException);
