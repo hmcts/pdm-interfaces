@@ -38,11 +38,17 @@ abstract class CduScreenshotTest extends RestartCduTest {
         expectLastCall().anyTimes();
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall().anyTimes();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCduSearchCommand(EasyMock.isA(CduSearchCommand.class));
+        expectLastCall().anyTimes();
         expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(false);
         
         replay(mockCduPageStateHolder);
+        replay(mockLocalProxyService);
         replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
 
@@ -77,7 +83,13 @@ abstract class CduScreenshotTest extends RestartCduTest {
         mockCduPageStateHolder.setCdus(cdus);
         expectLastCall().anyTimes();
         expect(mockCduPageStateHolder.getCdu()).andReturn(null).anyTimes();
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCduSearchCommand(EasyMock.isA(CduSearchCommand.class));
+        expectLastCall().anyTimes();
         
+        replay(mockLocalProxyService);
         replay(mockCduPageStateHolder);
         replay(mockCduService);
 
@@ -116,7 +128,13 @@ abstract class CduScreenshotTest extends RestartCduTest {
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
         expect(mockCduService.getCduScreenshot(cdu)).andThrow(dataRetrievalFailureException);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(true);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCduSearchCommand(EasyMock.isA(CduSearchCommand.class));
+        expectLastCall().anyTimes();
         
+        replay(mockLocalProxyService);
         replay(mockCduPageStateHolder);
         replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
@@ -158,7 +176,13 @@ abstract class CduScreenshotTest extends RestartCduTest {
         XpdmException xpdmException = new XpdmException(MOCK_RUNTIME_EXCEPTION);
         expect(mockCduService.getCduScreenshot(cdu)).andThrow(xpdmException);
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(true);
+        expect(mockLocalProxyService.getXhibitCourtSitesWithLocalProxy()).andReturn(sites);
+        mockCduPageStateHolder.setSites(sites);
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCduSearchCommand(EasyMock.isA(CduSearchCommand.class));
+        expectLastCall().anyTimes();
         
+        replay(mockLocalProxyService);
         replay(mockCduPageStateHolder);
         replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
