@@ -46,7 +46,7 @@ public class CdusControllerUtility {
 
     /** The Constant for the JSP Folder. */
     protected static final String FOLDER_CDUS = "cdus";
-    
+
     /**
      * View Cdus Url.
      */
@@ -210,14 +210,14 @@ public class CdusControllerUtility {
         CduDto selectedCdu = null;
         if (macAddress != null) {
             // Call to CduService to fetch Cdu's by Mac address
-            if (cduPageStateHolder.getCdus().isEmpty()) {
-                LOGGER.info("No CDUs for the selected macAddress"); 
+            if (cduPageStateHolder.getCdus() == null || cduPageStateHolder.getCdus().isEmpty()) {
+                LOGGER.info("No CDUs for the selected macAddress");
             }
             final List<CduDto> cduList = cduPageStateHolder.getCdus();
             for (CduDto cdu : cduList) {
                 if (cdu.getMacAddress().equals(macAddress)) {
                     selectedCdu = cdu;
-                    LOGGER.info("Found CDU for selected macAddress"); 
+                    LOGGER.info("Found CDU for selected macAddress");
                     break;
                 }
             }
@@ -291,13 +291,13 @@ public class CdusControllerUtility {
         LOGGER.info("new url list contains : {} elements", availableUrlList.size());
         return availableUrlList;
     }
-    
+
     protected void setCduSearchCommand(final CduSearchCommand cduSearchCommand) {
         // Populate the sites list
         final List<XhibitCourtSiteDto> courtSiteList =
             localProxyService.getXhibitCourtSitesWithLocalProxy();
         cduPageStateHolder.setSites(courtSiteList);
-        
+
         // Ensure the search command is the latest
         cduPageStateHolder.setCduSearchCommand(cduSearchCommand);
     }
@@ -318,7 +318,7 @@ public class CdusControllerUtility {
 
         // Ensure the search command is the latest
         setCduSearchCommand(cduSearchCommand);
-        
+
         // Reset any previous search results and selected cdu
         cduPageStateHolder.setCdus(null);
         if (resetSelectionCriteria) {

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.cdus;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,14 +32,18 @@ abstract class CduScreenshotTest extends RestartCduTest {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
 
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(3);
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).anyTimes();
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
-        expectLastCall();
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall().anyTimes();
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         expect(mockCduSearchSelectedValidator.isValid(cduSearchCommand)).andReturn(false);
         
         replay(mockCduPageStateHolder);
+        replay(mockCduService);
         replay(mockCduSearchSelectedValidator);
 
         // Perform the test
@@ -64,14 +69,17 @@ abstract class CduScreenshotTest extends RestartCduTest {
     void testGetCduScreenshotNullCduError() throws Exception {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(2);
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).anyTimes();
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         mockCduPageStateHolder.setCdu(cdu);
-        expectLastCall();
-        expect(mockCduPageStateHolder.getCdu()).andReturn(null);
-        expectLastCall();
+        expectLastCall().anyTimes();
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall().anyTimes();
+        expect(mockCduPageStateHolder.getCdu()).andReturn(null).anyTimes();
         
         replay(mockCduPageStateHolder);
+        replay(mockCduService);
 
         // Perform the test
         final MvcResult results = mockMvc.perform(get(viewNameCduScreenshot)).andReturn();
@@ -96,10 +104,13 @@ abstract class CduScreenshotTest extends RestartCduTest {
     void testGetCduScreenshotError() throws Exception {
         final CduSearchCommand cduSearchCommand = getTestCduSearchCommand();
         // Add the mock calls to child classes
-        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).times(3);
-        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus);
+        expect(mockCduPageStateHolder.getCduSearchCommand()).andReturn(cduSearchCommand).anyTimes();
+        expect(mockCduPageStateHolder.getCdus()).andReturn(cdus).anyTimes();
         mockCduPageStateHolder.setCdu(cdu);
         expectLastCall();
+        mockCduPageStateHolder.setCdus(cdus);
+        expectLastCall().anyTimes();
+        expect(mockCduService.getCduByMacAddressWithLike(EasyMock.isA(String.class))).andReturn(cdus);
         expect(mockCduPageStateHolder.getCdu()).andReturn(cdu).anyTimes();
         DataRetrievalFailureException dataRetrievalFailureException =
             new DataRetrievalFailureException(MOCK_DATA_EXCEPTION);
