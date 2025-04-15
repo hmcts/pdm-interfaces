@@ -232,10 +232,7 @@
 																			</c:forEach>
 																		</ul>
 																	</c:if>
-																	<div class="btn-group">
-																		<a href="#" class="btn btn-primary" id="lnkScreenshot">
-																			<span class="glyphicon glyphicon-picture"></span>&nbsp;Show CDU Screenshot</a>
-																	</div>
+																	
 																</div>
 															</div>
 														</div>
@@ -361,6 +358,23 @@
 
 						</form:form>
 						<!-- end of form -->
+						
+						<!-- Separate form for cdu screenshot, target is set to _blank to open the screenshot in a new window -->
+						<form:form name="screenshotForm" modelAttribute="command" action="/cdus/screenshot" target="_blank" method="GET">
+							<%--Hidden fields here --%>
+							<form:hidden path="xhibitCourtSiteId" />
+							<form:hidden path="courtSiteId" />
+							<form:hidden path="ipAddress" />
+							<form:hidden path="selectedMacAddress" />
+							<!-- Only show screenshot button if a cdu is selected -->
+							<c:if test="${not empty cdu}">
+								<button class="btn btn-primary">
+									<span class="glyphicon glyphicon-picture" onclick="screenshotForm.submit()"> </span>
+									Show CDU Screenshot
+								</button>
+							</c:if>
+						</form:form>
+						
 					</div>
 					<!-- /col-md-12 -->
                 </div>

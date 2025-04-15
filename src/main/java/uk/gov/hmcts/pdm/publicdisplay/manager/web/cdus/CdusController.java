@@ -32,6 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,7 +48,6 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
 
 @Controller
 @RequestMapping("/cdus")
-@SuppressWarnings("squid:S5145")
 public class CdusController extends CduRegistrationController {
     /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(CdusController.class);
@@ -151,14 +151,13 @@ public class CdusController extends CduRegistrationController {
      */
     @RequestMapping(value = MAPPING_CDU_SCREENSHOT, method = RequestMethod.GET,
         produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<ByteArrayResource> getCduScreenshot(final CduSearchCommand cduSearchCommand,
-        final BindingResult result, final ModelAndView model)
+    public ResponseEntity<ByteArrayResource> getCduScreenshot(@ModelAttribute(COMMAND) 
+        CduSearchCommand cduSearchCommand)
         throws NoHandlerFoundException {
         final String methodName = "getCduScreenShot";
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Ensure the search command is the latest
-        LOGGER.info(THREE_PARAMS, methodName, " CduSearchCommand state: ", cduSearchCommand);
         setCduSearchCommand(cduSearchCommand);
         
         // Repopulate the cdu list
