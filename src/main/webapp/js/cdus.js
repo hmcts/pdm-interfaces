@@ -24,6 +24,7 @@ $(document).ready(function () {
 		clearMessages();
 		$('#macAddress').val('');
 		$('#cduSearchResults').hide();
+		$('#btnCduScreenshot').hide();
 		console.log(e.type + ' handler for element id : ' + elementId + " completes");
 	});
 	
@@ -36,6 +37,7 @@ $(document).ready(function () {
 		clearMessages();
 		$('#selectSite').val('');
 		$('#cduSearchResults').hide();
+		$('#btnCduScreenshot').hide();
 		console.log(e.type + ' handler for element id : ' + elementId + " completes");
 	});
 
@@ -47,6 +49,7 @@ $(document).ready(function () {
 		console.log(e.type + ' handler for element id : ' + elementId + " starts");
 		btnHandler();
 		$('#cduInformation').hide();
+		$('#btnCduScreenshot').hide();
 		console.log(e.type + ' handler for element id : ' + elementId + " completes");
 	});
 	

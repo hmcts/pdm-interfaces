@@ -368,7 +368,7 @@
 							<form:hidden path="selectedMacAddress" />
 							<!-- Only show screenshot button if a cdu is selected -->
 							<c:if test="${not empty cdu}">
-								<button class="btn btn-primary">
+								<button id="btnCduScreenshot" class="btn btn-primary">
 									<span class="glyphicon glyphicon-picture" onclick="screenshotForm.submit()"> </span>
 									Show CDU Screenshot
 								</button>
