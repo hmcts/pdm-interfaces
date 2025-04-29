@@ -83,7 +83,7 @@ class CookieUtilsTest extends AbstractJUnit {
     void testAddCookie() {
         boolean result = false;
         try {
-            CookieUtils.addCookie(mockHttpServletResponse, NAME, VALUE, 180);
+            CookieUtils.addCookie(mockHttpServletResponse, NAME, VALUE, 600);
             result = true;
         } catch (Exception ex) {
             fail(ex.getMessage());
