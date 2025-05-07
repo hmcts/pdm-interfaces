@@ -24,7 +24,7 @@ public class LocalProxyRestCduFinder extends LocalProxyRestClientRequest {
     private static final String SCREENSHOT_CDU_SERVICE = "screenshotCDU";
 
     /** The Constant SCREENSHOT_CDU_PATH. */
-    private static final String SCREENSHOT_CDU_PATH = "screenshot";
+    private static final String SCREENSHOT_CDU_PATH = "/screenshot";
 
     /** The Constant LIST_CDU_SERVICE. */
     private static final String LIST_CDU_SERVICE = "listCDU";
