@@ -23,12 +23,15 @@
 
 package uk.gov.hmcts.pdm.business.entities.xhbcourtsite;
 
+import com.pdm.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -44,17 +47,21 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICourtSite;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IXhibitCourtSite;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 
 /**
  * Unit test for XhbCourtSiteRepositoryTest.
  *
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbCourtSiteRepositoryTest extends AbstractJUnit {
@@ -137,6 +144,49 @@ class XhbCourtSiteRepositoryTest extends AbstractJUnit {
 
         // Verify
         assertTrue(result, TRUE);
+    }
+
+
+    @Test
+    void testFindAllReturnsNonObsoleteCourtSites() {
+        // Arrange
+        XhbCourtSiteDao courtSite1 = new XhbCourtSiteDao();
+        courtSite1.setId(1);
+        courtSite1.setCourtSiteName("CourtSite A");
+        courtSite1.setObsInd(null); // Not obsolete
+
+        XhbCourtSiteDao courtSite2 = new XhbCourtSiteDao();
+        courtSite2.setId(2);
+        courtSite2.setCourtSiteName("CourtSite B");
+        courtSite2.setObsInd("N");
+
+        List<XhbCourtSiteDao> expectedList = Arrays.asList(courtSite1, courtSite2);
+
+        String expectedHql =
+            "FROM uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao e "
+                + "WHERE e.obsInd IS NULL OR e.obsInd <> 'Y'";
+        Query mockQuery = Mockito.mock(Query.class);
+
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            // Tell AbstractRepository that our EntityManager is not active
+            mockedStatic.when(() -> EntityManagerUtil.isEntityManagerActive(mockEntityManager))
+                .thenReturn(false);
+            // Force fallback path to return mockEntityManager
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(mockEntityManager.createQuery(expectedHql)).thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(expectedList);
+
+            // Act
+            List<XhbCourtSiteDao> result = classUnderTest.findAll();
+
+            // Assert
+            assertNotNull(result, NOT_NULL);
+            assertEquals(2, result.size(), EQUAL);
+            assertEquals("CourtSite A", result.get(0).getCourtSiteName(), EQUAL);
+            assertEquals("CourtSite B", result.get(1).getCourtSiteName(), EQUAL);
+        }
     }
 
 
