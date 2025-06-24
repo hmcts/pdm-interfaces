@@ -158,4 +158,25 @@ public class XhbCourtSiteRepository extends CourtSiteConverter {
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         return results;
     }
+
+    /**
+     * Overridden findAll method to return all XhbCourtSiteDao objects that are not marked as
+     * obsolete.
+     * 
+     * @return List of XhbCourtSiteDao objects.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<XhbCourtSiteDao> findAll() {
+
+        final String methodName = "findAll";
+        LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
+
+        String hql =
+            "FROM " + getDaoClass().getName() + " e WHERE e.obsInd IS NULL OR e.obsInd <> 'Y'";
+        Query query = getEntityManager().createQuery(hql);
+
+        LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
+        return query.getResultList();
+    }
 }
