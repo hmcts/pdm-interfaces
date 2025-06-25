@@ -52,6 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author pattersone
  *
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class LocalProxyUnregisterValidatorTest extends AbstractLocalProxyValidatorTest {
 

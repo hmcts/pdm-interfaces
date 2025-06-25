@@ -51,6 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class PropertyServiceTest extends AbstractJUnit {
 

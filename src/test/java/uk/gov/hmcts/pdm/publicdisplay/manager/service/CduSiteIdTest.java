@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * The Class CduSiteIdTest.
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CduSiteIdTest extends CduUpdateTest {
 

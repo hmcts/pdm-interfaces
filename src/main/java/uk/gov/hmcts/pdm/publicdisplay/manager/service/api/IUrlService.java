@@ -33,6 +33,7 @@ import java.util.List;
  *
  * @author groenm
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface IUrlService {
 
     /**

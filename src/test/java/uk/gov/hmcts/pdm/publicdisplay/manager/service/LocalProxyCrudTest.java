@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * The Class LocalProxyCrudTest.
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 abstract class LocalProxyCrudTest extends LocalProxyRestClientTest {
 
     /**

@@ -72,7 +72,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author harrism
  */
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbDispMgrCourtSiteRepositoryTest extends AbstractJUnit {

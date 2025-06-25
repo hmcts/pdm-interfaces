@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The Class CduScreenshotTest.
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 abstract class CduScreenshotTest extends CduNumberTest {
 

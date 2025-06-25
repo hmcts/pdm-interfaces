@@ -83,8 +83,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.LawOfDemeter",
-    "PMD.CouplingBetweenObjects", "PMD.TooManyMethods", "PMD.LooseCoupling"})
+@SuppressWarnings({"PMD"})
 class WebSecurityConfigTest extends AbstractJUnit {
 
     private static final String NOTNULL = "Result is Null";

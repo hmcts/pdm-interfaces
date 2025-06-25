@@ -57,7 +57,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 class LogonControllerTest extends AbstractJUnit {
 
     private static final String NOT_EQUAL = "Not equal";

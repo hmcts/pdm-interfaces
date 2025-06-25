@@ -49,6 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * 
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class LocalProxyAmendValidatorTest extends AbstractLocalProxyValidatorTest {
     /** The Constant COURT_SITE_ID. */
