@@ -36,6 +36,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -43,8 +44,10 @@ import org.mockito.quality.Strictness;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -71,8 +74,15 @@ import java.io.IOException;
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * The Class WebSecurityConfig.
@@ -315,6 +325,113 @@ class WebSecurityConfigTest extends AbstractJUnit {
             fail(ex.getMessage());
         }
         return result;
+    }
+
+    @Test
+    void testSuccessHandlerSetsAuthenticationAndRedirects() throws Exception {
+        // Mock static context holder
+        var contextMocked = mockStatic(SecurityContextHolder.class);
+        contextMocked.when(SecurityContextHolder::getContext).thenReturn(mockSecurityContext);
+
+        when(mockAuthentication.getPrincipal()).thenReturn(mockPrincipal);
+        when(mockPrincipal.getIdToken()).thenReturn(mockToken);
+        when(mockToken.getTokenValue()).thenReturn("mock-token");
+        when(mockHttpCookieOAuth2AuthorizationRequestRepository
+            .loadAuthorizationToken(mockHttpServletRequest)).thenReturn(mockToken);
+        when(
+            mockHttpCookieOAuth2AuthorizationRequestRepository.loadUsername(mockHttpServletRequest))
+                .thenReturn("test-user");
+
+        AuthenticationSuccessHandler handler = classUnderTestNoHttp.getSuccessHandler();
+
+        handler.onAuthenticationSuccess(mockHttpServletRequest, mockHttpServletResponse,
+            mockAuthentication);
+
+        verify(mockSecurityContext).setAuthentication(mockAuthentication);
+        verify(mockHttpServletResponse).sendRedirect("/dashboard/dashboard");
+        contextMocked.close();
+    }
+
+    @Test
+    void testFailureHandlerReturns401AndJsonResponse() throws Exception {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        when(mockAuthenticationException.getMessage()).thenReturn("error occurred");
+        when(mockAuthenticationException.getStackTrace()).thenReturn(new StackTraceElement[0]);
+
+        AuthenticationFailureHandler handler = classUnderTest.getFailureHandler();
+
+        handler.onAuthenticationFailure(mockHttpServletRequest, response,
+            mockAuthenticationException);
+
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus()); // line 108
+        String responseBody = response.getContentAsString();
+        assertTrue(responseBody.contains("timestamp"));
+        assertTrue(responseBody.contains("exception"));
+        assertTrue(responseBody.contains("error occurred"));
+    }
+
+
+    @Test
+    void testAuthorisationTokenExistenceFilterAddsTokenHeaderAndUsername() throws Exception {
+        try (MockedStatic<AuthorizationUtil> mockedAuthUtil = mockStatic(AuthorizationUtil.class)) {
+            when(mockHttpServletRequest.getRequestURI()).thenReturn("/dashboard/dashboard");
+            when(mockToken.getTokenValue()).thenReturn("mock-token");
+            when(mockHttpCookieOAuth2AuthorizationRequestRepository
+                .loadAuthorizationToken(mockHttpServletRequest)).thenReturn(mockToken);
+            when(mockHttpCookieOAuth2AuthorizationRequestRepository
+                .loadUsername(mockHttpServletRequest)).thenReturn("user1");
+
+            mockedAuthUtil.when(() -> AuthorizationUtil.isAuthorised(any(HttpServletRequest.class)))
+                .thenReturn(true); // or false in the redirect test
+
+            WebSecurityConfig.AuthorisationTokenExistenceFilter filter =
+                classUnderTestNoHttp.getAuthorisationTokenExistenceFilter();
+
+            filter.doFilterInternal(mockHttpServletRequest, mockHttpServletResponse,
+                mockFilterChain);
+
+            verify(mockFilterChain).doFilter(any(), eq(mockHttpServletResponse));
+        }
+
+    }
+
+
+    @Test
+    void testAuthorisationTokenExistenceFilterRedirectsWhenNotAuthorised() throws Exception {
+        try (MockedStatic<AuthorizationUtil> mockedAuthUtil = mockStatic(AuthorizationUtil.class)) {
+            when(mockHttpServletRequest.getRequestURI()).thenReturn("/dashboard/dashboard");
+            when(mockHttpCookieOAuth2AuthorizationRequestRepository
+                .loadAuthorizationToken(mockHttpServletRequest)).thenReturn(null); // No token
+            when(AuthorizationUtil.isAuthorised(any(HttpServletRequest.class))).thenReturn(false);
+
+            WebSecurityConfig.AuthorisationTokenExistenceFilter filter =
+                classUnderTestNoHttp.getAuthorisationTokenExistenceFilter();
+
+            filter.doFilterInternal(mockHttpServletRequest, mockHttpServletResponse,
+                mockFilterChain);
+
+            verify(mockHttpServletResponse).sendRedirect("/oauth2/authorization/internal-azure-ad");
+            verify(mockHttpServletResponse).setStatus(HttpStatus.UNAUTHORIZED.value());
+        }
+    }
+
+
+    @Test
+    void testIsSecureUri_withRootUri_returnsFalse() {
+        boolean result = WebSecurityConfig.isSecureUri("/");
+        assertFalse(result);
+    }
+
+    @Test
+    void testIsSecureUri_withWhitelistedUri_returnsFalse() {
+        boolean result = WebSecurityConfig.isSecureUri("/css/bootstrap.min.css");
+        assertFalse(result);
+    }
+
+    @Test
+    void testIsSecureUri_withNonWhitelistedUri_returnsTrue() {
+        boolean result = WebSecurityConfig.isSecureUri("/admin/settings");
+        assertTrue(result);
     }
 
 
