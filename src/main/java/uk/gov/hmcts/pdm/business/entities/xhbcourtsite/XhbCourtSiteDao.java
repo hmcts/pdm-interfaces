@@ -26,7 +26,8 @@ import java.util.Set;
     query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtId = :courtId AND (o.obsInd IS NULL OR o.obsInd = 'N')")
 
 @NamedQuery(name = "XHB_COURT_SITE.findByCourtSiteId",
-    query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtSiteId = :courtSiteId AND (o.obsInd IS NULL OR o.obsInd = 'N')")
+    query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtSiteId = :courtSiteId "
+        + "AND (o.obsInd IS NULL OR o.obsInd = 'N')")
 
 @NamedQuery(name = "XHB_COURT_SITE.findCourtSiteByXhibitCourtSiteId",
     query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtSiteId IN "
