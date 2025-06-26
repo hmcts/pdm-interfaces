@@ -372,6 +372,44 @@ class WebSecurityConfigTest extends AbstractJUnit {
 
 
     @Test
+    void testFailureHandlerTriggersSetStatusAndWritesJson() throws Exception {
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        ServletOutputStream outputStream = Mockito.mock(ServletOutputStream.class);
+
+        when(response.getOutputStream()).thenReturn(outputStream);
+        when(mockAuthenticationException.getStackTrace()).thenReturn(new StackTraceElement[0]);
+        when(mockAuthenticationException.getMessage()).thenReturn("fail-msg");
+
+        AuthenticationFailureHandler handler = classUnderTest.getFailureHandler();
+        handler.onAuthenticationFailure(mockHttpServletRequest, response,
+            mockAuthenticationException);
+
+        verify(response).setStatus(HttpStatus.UNAUTHORIZED.value());
+        verify(outputStream).println(Mockito.contains("fail-msg"));
+    }
+
+
+    @Test
+    void testUnauthorisedRequestTriggersRedirectAndStatus() throws Exception {
+        try (MockedStatic<AuthorizationUtil> mockedAuthUtil = mockStatic(AuthorizationUtil.class)) {
+            when(mockHttpServletRequest.getRequestURI()).thenReturn("/secure/page");
+            mockedAuthUtil.when(() -> AuthorizationUtil.isAuthorised(any(HttpServletRequest.class)))
+                .thenReturn(false);
+
+            WebSecurityConfig.AuthorisationTokenExistenceFilter filter =
+                classUnderTestNoHttp.getAuthorisationTokenExistenceFilter();
+
+            filter.doFilterInternal(mockHttpServletRequest, mockHttpServletResponse,
+                mockFilterChain);
+
+            verify(mockHttpServletResponse).setStatus(HttpStatus.UNAUTHORIZED.value());
+            verify(mockHttpServletResponse).sendRedirect("/oauth2/authorization/internal-azure-ad");
+        }
+    }
+
+
+
+    @Test
     void testAuthorisationTokenExistenceFilterAddsTokenHeaderAndUsername() throws Exception {
         try (MockedStatic<AuthorizationUtil> mockedAuthUtil = mockStatic(AuthorizationUtil.class)) {
             when(mockHttpServletRequest.getRequestURI()).thenReturn("/dashboard/dashboard");
@@ -397,6 +435,25 @@ class WebSecurityConfigTest extends AbstractJUnit {
 
 
     @Test
+    void testFailureHandlerReturns401AndJsonResponse_capturesBody() throws Exception {
+        var outputStream = Mockito.mock(ServletOutputStream.class);
+        var response = Mockito.mock(HttpServletResponse.class);
+
+        when(response.getOutputStream()).thenReturn(outputStream);
+        when(mockAuthenticationException.getMessage()).thenReturn("failure msg");
+        when(mockAuthenticationException.getStackTrace()).thenReturn(new StackTraceElement[0]);
+
+        AuthenticationFailureHandler handler = classUnderTest.getFailureHandler();
+        handler.onAuthenticationFailure(mockHttpServletRequest, response,
+            mockAuthenticationException);
+
+        verify(response).setStatus(HttpStatus.UNAUTHORIZED.value());
+        verify(outputStream).println(Mockito.contains("\"exception\":\"failure msg\""));
+    }
+
+
+
+    @Test
     void testAuthorisationTokenExistenceFilterRedirectsWhenNotAuthorised() throws Exception {
         try (MockedStatic<AuthorizationUtil> mockedAuthUtil = mockStatic(AuthorizationUtil.class)) {
             when(mockHttpServletRequest.getRequestURI()).thenReturn("/dashboard/dashboard");
@@ -414,6 +471,33 @@ class WebSecurityConfigTest extends AbstractJUnit {
             verify(mockHttpServletResponse).setStatus(HttpStatus.UNAUTHORIZED.value());
         }
     }
+
+
+    @Test
+    void testTokenAddedToRequestWrapper() throws Exception {
+        try (MockedStatic<AuthorizationUtil> mocked = mockStatic(AuthorizationUtil.class)) {
+            when(mockHttpServletRequest.getRequestURI()).thenReturn("/dashboard");
+            when(mockToken.getTokenValue()).thenReturn("token123");
+            when(mockHttpCookieOAuth2AuthorizationRequestRepository
+                .loadAuthorizationToken(mockHttpServletRequest)).thenReturn(mockToken);
+            when(mockHttpCookieOAuth2AuthorizationRequestRepository.loadUsername(any()))
+                .thenReturn("userX");
+            mocked.when(() -> AuthorizationUtil.isAuthorised(any(HttpServletRequest.class)))
+                .thenReturn(true);
+
+            WebSecurityConfig.AuthorisationTokenExistenceFilter filter =
+                classUnderTestNoHttp.getAuthorisationTokenExistenceFilter();
+
+            filter.doFilterInternal(mockHttpServletRequest, mockHttpServletResponse,
+                mockFilterChain);
+
+            verify(mockHttpCookieOAuth2AuthorizationRequestRepository)
+                .loadAuthorizationToken(mockHttpServletRequest);
+            verify(mockHttpCookieOAuth2AuthorizationRequestRepository).loadUsername(any());
+            verify(mockFilterChain).doFilter(any(), eq(mockHttpServletResponse));
+        }
+    }
+
 
 
     @Test
