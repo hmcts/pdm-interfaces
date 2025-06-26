@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
 
     private static final String NOTNULL = "Result is Null";

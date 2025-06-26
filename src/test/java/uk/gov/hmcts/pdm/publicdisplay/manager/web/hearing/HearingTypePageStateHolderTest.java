@@ -16,6 +16,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class HearingTypePageStateHolderTest extends AbstractJUnit {
 

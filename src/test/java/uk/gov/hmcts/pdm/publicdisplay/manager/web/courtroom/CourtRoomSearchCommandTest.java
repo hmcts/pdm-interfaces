@@ -5,6 +5,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.util.CommandUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("PMD")
 class CourtRoomSearchCommandTest {
 
     @Test

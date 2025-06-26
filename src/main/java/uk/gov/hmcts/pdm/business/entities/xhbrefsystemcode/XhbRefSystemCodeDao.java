@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 @NamedQuery(name = "XHB_REF_SYSTEM_CODE.findJudgeTypeByCourtId",
     query = "SELECT o FROM XHB_REF_SYSTEM_CODE o WHERE o.codeType = 'JUDGE_TYPE' and "
     + "(o.obsInd IS NULL OR o.obsInd <> 'Y') and o.courtId = :courtId")
-@SuppressWarnings({"PMD.LinguisticNaming", "PMD.TooManyFields"})
 public class XhbRefSystemCodeDao extends AbstractDao {
 
     @Id

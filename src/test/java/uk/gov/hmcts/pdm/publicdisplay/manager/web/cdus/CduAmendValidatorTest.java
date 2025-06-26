@@ -48,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CduAmendValidatorTest extends AbstractJUnit {
     /** The Constant CDUNUMBER. */

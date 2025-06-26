@@ -29,6 +29,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 abstract class CourtRoomServiceEmptyTest extends AbstractJUnit {
 

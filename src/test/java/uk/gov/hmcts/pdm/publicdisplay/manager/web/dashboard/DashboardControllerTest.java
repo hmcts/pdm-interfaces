@@ -61,7 +61,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  * @author boparaij
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 abstract class DashboardControllerTest extends AbstractJUnit {
     /** The Constant XHIBIT_COURT_SITE_ID. */
     protected static final Long XHIBIT_COURT_SITE_ID = 1L;

@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * The class EncryptDecryptUtilityTest.
  *
  */
-@SuppressWarnings("PMD.LawOfDemeter")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class EncryptDecryptUtilityTest extends AbstractJUnit {

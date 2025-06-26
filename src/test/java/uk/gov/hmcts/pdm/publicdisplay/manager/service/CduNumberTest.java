@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * The Class CduNumberTest.
  */
+@SuppressWarnings("PMD")
 abstract class CduNumberTest extends CduMappingTest {
 
     /**

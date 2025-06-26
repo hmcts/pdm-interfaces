@@ -11,7 +11,6 @@ import uk.gov.hmcts.pdm.business.entities.AbstractDao;
 
 import java.time.LocalDateTime;
 
-@SuppressWarnings("PMD.LinguisticNaming")
 @Entity(name = "XHB_ROTATION_SETS")
 @NamedQuery(name = "XHB_ROTATION_SETS.findByCourtId",
     query = "SELECT o FROM XHB_ROTATION_SETS o WHERE o.courtId = :courtId")

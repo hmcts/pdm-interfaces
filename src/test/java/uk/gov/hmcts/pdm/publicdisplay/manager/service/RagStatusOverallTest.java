@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author boparaij
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 abstract class RagStatusOverallTest extends RagStatusServiceTestBase {
 

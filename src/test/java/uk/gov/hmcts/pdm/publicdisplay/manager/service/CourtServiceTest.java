@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 class CourtServiceTest extends AbstractJUnit {
 

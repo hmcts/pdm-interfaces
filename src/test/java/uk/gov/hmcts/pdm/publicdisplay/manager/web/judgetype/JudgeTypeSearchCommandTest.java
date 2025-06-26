@@ -7,6 +7,7 @@ import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class JudgeTypeSearchCommandTest extends AbstractJUnit {
     @Test

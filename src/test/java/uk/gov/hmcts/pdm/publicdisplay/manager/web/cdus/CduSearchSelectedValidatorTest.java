@@ -51,6 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author boparaij
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CduSearchSelectedValidatorTest extends AbstractJUnit {
 

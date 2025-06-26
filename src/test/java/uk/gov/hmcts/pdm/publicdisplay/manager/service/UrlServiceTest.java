@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author pattersone
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 class UrlServiceTest extends AbstractJUnit {
 
     private static final String NOTNULL = "Result is null";

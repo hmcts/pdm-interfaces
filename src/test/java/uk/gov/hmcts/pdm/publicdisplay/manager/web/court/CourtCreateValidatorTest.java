@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CourtCreateValidatorTest extends AbstractJUnit {
     private static final String NOT_EQUAL = "Not equal";

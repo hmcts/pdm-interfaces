@@ -31,7 +31,6 @@ import static org.easymock.EasyMock.replay;
  *
  * @author harrism
  */
-@SuppressWarnings("PMD.TooManyFields")
 @ExtendWith(EasyMockExtension.class)
 abstract class LocalProxyTestInitializer extends LocalProxyControllerTestBase {
 

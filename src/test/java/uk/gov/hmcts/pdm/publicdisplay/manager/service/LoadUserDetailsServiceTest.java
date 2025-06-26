@@ -29,6 +29,7 @@ import static org.mockito.Mockito.verify;
  *
  * @author boparaij
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 abstract class LoadUserDetailsServiceTest extends UserDetailsServiceTest {

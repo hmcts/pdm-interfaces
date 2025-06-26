@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author boparaij
  */
+@SuppressWarnings("PMD")
 class DashboardControllerCourtSiteTest extends DashboardControllerTest {
 
     /**

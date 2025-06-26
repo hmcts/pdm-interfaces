@@ -57,6 +57,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {

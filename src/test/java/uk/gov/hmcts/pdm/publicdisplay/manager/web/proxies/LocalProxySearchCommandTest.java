@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class LocalProxySearchCommandTest extends AbstractJUnit {
 

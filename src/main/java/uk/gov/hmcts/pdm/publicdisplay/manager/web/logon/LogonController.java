@@ -44,7 +44,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequiredArgsConstructor
-@SuppressWarnings("PMD.LawOfDemeter")
 public class LogonController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogonController.class);
