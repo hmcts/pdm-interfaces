@@ -171,9 +171,11 @@ dependencyCheck {
 }
 
 repositories {
-  mavenLocal()
-  mavenCentral()
-  maven { url 'https://jitpack.io' }
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url 'https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1'
+    }
 }
 
 ext {
