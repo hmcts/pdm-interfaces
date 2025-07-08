@@ -199,7 +199,7 @@ dependencies {
     implementation 'javax.servlet:servlet-api:3.0-alpha-1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.18.3'
     implementation 'org.springframework.boot:spring-boot-starter-jersey:3.5.3'
-    implementation 'org.owasp.esapi:esapi:2.6.0.0'
+    implementation 'org.owasp.esapi:esapi:2.7.0.0'
     implementation 'org.jasypt:jasypt:1.9.3'
     implementation 'org.springframework:spring-context:6.2.8'
     implementation 'org.springframework:spring-context-support:6.2.8'
