@@ -21,31 +21,40 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 
-
 @Entity(name = "XHB_COURT_SITE")
 @NamedQuery(name = "XHB_COURT_SITE.findByCourtId",
-    query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtId = :courtId AND (o.obsInd IS NULL OR o.obsInd <> 'Y')")
+    query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtId = :courtId AND (o.obsInd IS NULL OR o.obsInd = 'N')")
+
 @NamedQuery(name = "XHB_COURT_SITE.findByCourtSiteId",
-    query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtSiteId = :courtSiteId ")
+    query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtSiteId = :courtSiteId "
+        + "AND (o.obsInd IS NULL OR o.obsInd = 'N')")
+
 @NamedQuery(name = "XHB_COURT_SITE.findCourtSiteByXhibitCourtSiteId",
     query = "SELECT o FROM XHB_COURT_SITE o WHERE o.courtSiteId IN "
         + "(SELECT xdmcs.xhibitCourtSiteId FROM XHB_DISP_MGR_COURT_SITE xdmcs "
-        + "WHERE xdmcs.xhibitCourtSiteId = :xhibitCourtSiteId)")
+        + "WHERE xdmcs.xhibitCourtSiteId = :xhibitCourtSiteId) "
+        + "AND (o.obsInd IS NULL OR o.obsInd = 'N')")
+
 @NamedQuery(name = "XHB_COURT_SITE.findCourtSitesWithLocalProxy",
-    query = "SELECT xcs from XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
-        + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
-        + "AND xdmcs.courtSiteId IN (SELECT xdmlp.courtSiteId FROM XHB_DISP_MGR_LOCAL_PROXY xdmlp "
-        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId)")
-@NamedQuery(name = "XHB_COURT_SITE.findCourtSitesWithoutLocalProxy",
-    query = "SELECT xcs from XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
-        + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
-        + "AND xdmcs.courtSiteId NOT IN (SELECT xdmlp.courtSiteId FROM XHB_DISP_MGR_LOCAL_PROXY xdmlp "
-        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId)")
-@NamedQuery(name = "XHB_COURT_SITE.findXhibitCourtSitesOrderedByRagStatus",
-    query = "SELECT xcs from XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
+    query = "SELECT xcs FROM XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
         + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
         + "AND xdmcs.courtSiteId IN (SELECT xdmlp.courtSiteId FROM XHB_DISP_MGR_LOCAL_PROXY xdmlp "
         + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId) "
+        + "AND (xcs.obsInd IS NULL OR xcs.obsInd = 'N')")
+
+@NamedQuery(name = "XHB_COURT_SITE.findCourtSitesWithoutLocalProxy",
+    query = "SELECT xcs FROM XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
+        + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
+        + "AND xdmcs.courtSiteId NOT IN (SELECT xdmlp.courtSiteId FROM XHB_DISP_MGR_LOCAL_PROXY xdmlp "
+        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId) "
+        + "AND (xcs.obsInd IS NULL OR xcs.obsInd = 'N')")
+
+@NamedQuery(name = "XHB_COURT_SITE.findXhibitCourtSitesOrderedByRagStatus",
+    query = "SELECT xcs FROM XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
+        + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
+        + "AND xdmcs.courtSiteId IN (SELECT xdmlp.courtSiteId FROM XHB_DISP_MGR_LOCAL_PROXY xdmlp "
+        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId) "
+        + "AND (xcs.obsInd IS NULL OR xcs.obsInd = 'N') "
         + "ORDER BY xdmcs.ragStatus DESC, xcs.courtSiteName ASC")
 @SuppressWarnings("PMD.TooManyFields")
 public class XhbCourtSiteDao extends AbstractDao implements Serializable {

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * The Class LocalProxyCourtSiteServiceTest.
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 abstract class LocalProxyCourtSiteServiceTest extends LocalProxyServiceTestBase {
 

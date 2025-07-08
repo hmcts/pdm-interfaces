@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class JudgeTypeCreateValidatorTest extends AbstractJUnit {
     private static final String JUDGE_TYPE_CREATE_VALIDATOR = "judgeTypeCreateValidator";

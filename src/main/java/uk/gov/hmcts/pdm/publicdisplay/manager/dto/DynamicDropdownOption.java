@@ -31,7 +31,6 @@ import java.io.Serializable;
  * @author harrism
  *
  */
-@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class DynamicDropdownOption implements Serializable {
 
     private static final long serialVersionUID = -8424685089303555636L;

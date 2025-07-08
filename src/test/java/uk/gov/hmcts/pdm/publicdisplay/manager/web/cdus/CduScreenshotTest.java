@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  *
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 abstract class CduScreenshotTest extends RestartCduTest {
     /**

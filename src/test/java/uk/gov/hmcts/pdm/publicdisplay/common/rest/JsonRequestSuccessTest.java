@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The Class JsonRequestSuccessTest.
  *
  */
+@SuppressWarnings({"PMD"})
 @ExtendWith(EasyMockExtension.class)
 class JsonRequestSuccessTest extends JsonRequestErrorTest {
 

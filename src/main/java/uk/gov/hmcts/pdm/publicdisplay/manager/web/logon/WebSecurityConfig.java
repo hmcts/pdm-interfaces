@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -44,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @SuppressWarnings({"PMD.SignatureDeclareThrowsException", "PMD.LawOfDemeter", "removal",
-    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "squid:S4502"})
+    "PMD.ExcessiveImports", "squid:S4502"})
 public class WebSecurityConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebSecurityConfig.class);
@@ -60,12 +59,17 @@ public class WebSecurityConfig {
     /**
      * Authorisation Server filterchain.
      */
-    @Order(Ordered.LOWEST_PRECEDENCE)
     @Bean
+    @Order(2)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
         throws Exception {
-        return getAuthServerHttp(http).build();
+        return http.securityMatcher("/api/**") // adjust to your secured API endpoints
+            .sessionManagement(
+                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())).build();
     }
+
 
     /**
      * Get the Authorisation Server HTTP.
@@ -80,12 +84,24 @@ public class WebSecurityConfig {
     /**
      * Authorisation client filterchain.
      */
-    @Order(Ordered.LOWEST_PRECEDENCE - 1)
     @Bean
+    @Order(1)
     public SecurityFilterChain authorizationClientSecurityFilterChain(HttpSecurity http)
         throws Exception {
-        return getAuthClientHttp(http).build();
+        // adjust as needed
+        return http.securityMatcher("/login/**", "/oauth2/**", "/", "/dashboard/**")
+            .authorizeHttpRequests(auth -> auth.requestMatchers(AUTH_WHITELIST).permitAll()
+                .anyRequest().authenticated())
+            .oauth2Login(
+                auth -> auth.successHandler(getSuccessHandler()).failureHandler(getFailureHandler())
+                    .authorizationEndpoint(endpoint -> endpoint
+                        .authorizationRequestRepository(cookieAuthorizationRequestRepository())))
+            .addFilterAfter(new AuthorisationTokenExistenceFilter(),
+                SecurityContextHolderFilter.class)
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(request -> getCorsConfiguration())).build();
     }
+
 
     /**
      * Get the Authorisation Client HTTP.

@@ -48,6 +48,7 @@ import static org.easymock.EasyMock.verify;
  *
  * @author boparaij
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class RagStatusSetupJobTest extends AbstractJUnit {
     /** The class under test. */

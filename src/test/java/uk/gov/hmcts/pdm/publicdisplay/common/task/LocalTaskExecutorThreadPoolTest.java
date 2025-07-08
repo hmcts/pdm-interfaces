@@ -62,7 +62,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings("PMD")
 class LocalTaskExecutorThreadPoolTest extends AbstractJUnit {
     /** Logger. */
     private static final Logger LOGGER =

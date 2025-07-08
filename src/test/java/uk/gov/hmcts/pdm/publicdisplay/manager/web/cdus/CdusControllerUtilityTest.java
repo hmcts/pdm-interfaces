@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @TestMethodOrder(OrderAnnotation.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 class CdusControllerUtilityTest extends AbstractJUnit {
 
     private static final String TRUE = "Result is False";

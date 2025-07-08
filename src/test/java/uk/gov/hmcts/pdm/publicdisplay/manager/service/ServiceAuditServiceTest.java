@@ -53,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author harrism
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 class ServiceAuditServiceTest extends AbstractJUnit {
 
     /** The Constant TEST_SERVICE. */

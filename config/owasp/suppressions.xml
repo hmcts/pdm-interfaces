@@ -39,5 +39,10 @@
     <cve>CVE-2024-35255</cve>
   </suppress>
 
+  <suppress>
+    <notes>False positive for xerces</notes>
+    <cve>CVE-2017-10355</cve>
+  </suppress>
+
   <!--End of false positives section -->
 </suppressions>

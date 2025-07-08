@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 abstract class JudgeShowControllerTest extends JudgeControllerBaseTest {
     @Test
     void showAmendJudgeTest() throws Exception {

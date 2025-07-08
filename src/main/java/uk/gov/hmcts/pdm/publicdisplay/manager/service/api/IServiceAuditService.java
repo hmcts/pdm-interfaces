@@ -30,6 +30,7 @@ import uk.gov.hmcts.pdm.publicdisplay.common.rest.JsonRequest;
  *
  * @author uphillj
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface IServiceAuditService {
 
     /**

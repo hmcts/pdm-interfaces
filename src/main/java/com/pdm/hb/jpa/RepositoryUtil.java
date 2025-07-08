@@ -2,7 +2,6 @@ package com.pdm.hb.jpa;
 
 import uk.gov.hmcts.pdm.business.entities.AbstractRepository;
 
-@SuppressWarnings("PMD.LawOfDemeter")
 public class RepositoryUtil {
 
     protected RepositoryUtil() {

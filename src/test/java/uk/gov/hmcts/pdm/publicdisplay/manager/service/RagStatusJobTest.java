@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author boparaij
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LooseCoupling")
+@SuppressWarnings("PMD")
 class RagStatusJobTest extends AbstractJUnit {
     /** The class under test. */
     private RagStatusJob classUnderTest;

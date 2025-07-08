@@ -30,6 +30,7 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.service.api;
  *
  * @author toftn
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface IHousekeepingService {
 
     /**

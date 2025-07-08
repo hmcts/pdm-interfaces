@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 abstract class JudgeControllerBaseTest extends AbstractJUnit {
     protected JudgeSelectedValidator mockJudgeSelectedValidator;
     protected JudgeCreateValidator mockJudgeCreateValidator;

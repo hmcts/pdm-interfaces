@@ -34,7 +34,6 @@ import java.time.LocalDateTime;
  * @author toftn
  *
  */
-@SuppressWarnings("PMD.TooManyFields")
 public class RefSystemCodeDto implements Serializable {
     
     /**

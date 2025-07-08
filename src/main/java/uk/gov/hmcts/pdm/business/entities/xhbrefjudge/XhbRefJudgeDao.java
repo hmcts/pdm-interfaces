@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
     query = "SELECT o FROM XHB_REF_JUDGE o WHERE o.courtId IN "
         + "(SELECT cs.courtId FROM XHB_COURT_SITE cs WHERE cs.courtSiteId = :courtSiteId) and"
         + "(o.obsInd IS NULL OR o.obsInd <> 'Y')")
-@SuppressWarnings({"PMD.LinguisticNaming", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.TooManyFields"})
 public class XhbRefJudgeDao extends AbstractDao {
 
     @Id

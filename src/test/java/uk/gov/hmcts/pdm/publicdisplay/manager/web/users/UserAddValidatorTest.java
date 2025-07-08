@@ -55,6 +55,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author harrism
  *
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class UserAddValidatorTest extends AbstractJUnit {
 

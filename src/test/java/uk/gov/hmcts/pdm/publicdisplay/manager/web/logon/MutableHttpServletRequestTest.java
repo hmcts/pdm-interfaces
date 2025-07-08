@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  *
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class MutableHttpServletRequestTest extends AbstractJUnit {

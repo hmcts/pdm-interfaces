@@ -31,6 +31,7 @@ import java.sql.Array;
  * 
  * @author Manoj Kulkarni
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface ISqlArrayDataItem {
 
     /**
