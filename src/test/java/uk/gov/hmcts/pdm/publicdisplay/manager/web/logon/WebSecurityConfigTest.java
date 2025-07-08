@@ -77,6 +77,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.eq;
@@ -525,6 +526,17 @@ class WebSecurityConfigTest extends AbstractJUnit {
         // Optionally mock specific chained methods you want to test against
         return httpSecurity;
     }
+
+    @Test
+    void testCookieAuthorizationRequestRepositoryInitialisesIfNull() {
+        WebSecurityConfig config = new WebSecurityConfig();
+        HttpCookieOAuth2AuthorizationRequestRepository result =
+            config.cookieAuthorizationRequestRepository();
+        assertNotNull(result);
+        // call again to ensure cached value is returned and not recreated
+        assertSame(result, config.cookieAuthorizationRequestRepository());
+    }
+
 
 
     class LocalWebSecurityConfig extends WebSecurityConfig {

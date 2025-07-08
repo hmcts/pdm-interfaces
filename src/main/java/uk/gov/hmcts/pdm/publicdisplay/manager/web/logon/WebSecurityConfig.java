@@ -59,13 +59,6 @@ public class WebSecurityConfig {
     /**
      * Authorisation Server filterchain.
      */
-    /*
-     * @Order(Ordered.LOWEST_PRECEDENCE)
-     * 
-     * @Bean public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
-     * throws Exception { return getAuthServerHttp(http).build(); }
-     */
-
     @Bean
     @Order(2)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -91,13 +84,6 @@ public class WebSecurityConfig {
     /**
      * Authorisation client filterchain.
      */
-    /*
-     * @Order(Ordered.LOWEST_PRECEDENCE - 1)
-     * 
-     * @Bean public SecurityFilterChain authorizationClientSecurityFilterChain(HttpSecurity http)
-     * throws Exception { return getAuthClientHttp(http).build(); }
-     */
-
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationClientSecurityFilterChain(HttpSecurity http)
