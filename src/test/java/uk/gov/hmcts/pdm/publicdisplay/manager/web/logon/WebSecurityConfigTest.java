@@ -49,10 +49,13 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -535,6 +538,135 @@ class WebSecurityConfigTest extends AbstractJUnit {
         assertNotNull(result);
         // call again to ensure cached value is returned and not recreated
         assertSame(result, config.cookieAuthorizationRequestRepository());
+    }
+
+
+    @Test
+    void testAuthorizationServerSecurityFilterChain_invokesAnyRequestAuthenticated()
+        throws Exception {
+        WebSecurityConfig config = new WebSecurityConfig();
+
+        when(mockHttpSecurity.securityMatcher(any(String.class))).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.sessionManagement(any())).thenReturn(mockHttpSecurity);
+
+        when(mockHttpSecurity.authorizeHttpRequests(any())).thenAnswer(invocation -> {
+            // Set up mocks
+            var mockRegistry = Mockito.mock(
+                AuthorizeHttpRequestsConfigurer.AuthorizationManagerRequestMatcherRegistry.class);
+            var mockAuthorizedUrl =
+                Mockito.mock(AuthorizeHttpRequestsConfigurer.AuthorizedUrl.class);
+
+            when(mockRegistry.anyRequest()).thenReturn(mockAuthorizedUrl);
+            when(mockAuthorizedUrl.authenticated()).thenReturn(mockRegistry);
+
+            Customizer<AuthorizeHttpRequestsConfigurer.AuthorizationManagerRequestMatcherRegistry> customizer =
+                invocation.getArgument(0, Customizer.class);
+            customizer.customize(mockRegistry);
+            return mockHttpSecurity;
+        });
+
+        when(mockHttpSecurity.oauth2ResourceServer(any())).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.build()).thenReturn(mockSecurityFilterChain);
+
+        SecurityFilterChain chain = config.authorizationServerSecurityFilterChain(mockHttpSecurity);
+        assertNotNull(chain);
+    }
+
+
+    @Test
+    void testAuthorizationClientSecurityFilterChain_invokesAuthorizationEndpointRepo()
+        throws Exception {
+        WebSecurityConfig config = new WebSecurityConfig();
+
+        // Set up mocks
+        when(mockHttpSecurity.securityMatcher(any(String[].class))).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.authorizeHttpRequests(any())).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.csrf(any())).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.cors(any())).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.addFilterAfter(any(), any())).thenReturn(mockHttpSecurity);
+
+        // oauth2Login stub
+        when(mockHttpSecurity.oauth2Login(any())).thenAnswer(invocation -> {
+            var oauth2Customizer = invocation.getArgument(0, Customizer.class);
+
+            // mock the configurer
+            var mockLoginConfigurer = Mockito.mock(
+                org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer.class,
+                Mockito.RETURNS_DEEP_STUBS);
+
+            var mockEndpointConfig = Mockito.mock(
+                org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer.AuthorizationEndpointConfig.class);
+
+            // Wire up nested lambda: .authorizationEndpoint(endpoint -> ...)
+            when(mockLoginConfigurer.authorizationEndpoint(any()))
+                .thenAnswer(endpointInvocation -> {
+                    var endpointConsumer = endpointInvocation.getArgument(0, Customizer.class);
+                    endpointConsumer.customize(mockEndpointConfig);
+                    return mockLoginConfigurer;
+                });
+
+            // cover .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+            when(mockEndpointConfig.authorizationRequestRepository(any()))
+                .thenReturn(mockEndpointConfig);
+
+            oauth2Customizer.customize(mockLoginConfigurer);
+            return mockHttpSecurity;
+        });
+
+        when(mockHttpSecurity.build()).thenReturn(mockSecurityFilterChain);
+
+        SecurityFilterChain chain = config.authorizationClientSecurityFilterChain(mockHttpSecurity);
+        assertNotNull(chain);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void testGetAuthClientHttp_invokesAuthorizationRequestRepository() throws Exception {
+        WebSecurityConfig config = new WebSecurityConfig();
+
+        // Chain necessary builder methods
+        when(mockHttpSecurity.addFilterAfter(any(), any())).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.csrf(any())).thenReturn(mockHttpSecurity);
+        when(mockHttpSecurity.cors(any())).thenReturn(mockHttpSecurity);
+
+        // Handle oauth2Login DSL
+        when(mockHttpSecurity.oauth2Login(any())).thenAnswer(invocation -> {
+            // Get the outer lambda passed to oauth2Login()
+            Customizer<OAuth2LoginConfigurer<HttpSecurity>> oauth2Customizer =
+                (Customizer<OAuth2LoginConfigurer<HttpSecurity>>) invocation.getArgument(0,
+                    Customizer.class);
+
+            // Create mocks for the inner config objects
+            var mockLoginConfigurer =
+                Mockito.mock(OAuth2LoginConfigurer.class, Mockito.RETURNS_DEEP_STUBS);
+            var mockAuthEndpointConfig =
+                Mockito.mock(OAuth2LoginConfigurer.AuthorizationEndpointConfig.class);
+
+            // Set up .authorizationEndpoint(endpoint -> ...)
+            when(mockLoginConfigurer.authorizationEndpoint(any()))
+                .thenAnswer(endpointInvocation -> {
+                    Customizer<OAuth2LoginConfigurer.AuthorizationEndpointConfig> endpointCustomizer =
+                        (Customizer<OAuth2LoginConfigurer.AuthorizationEndpointConfig>) endpointInvocation
+                            .getArgument(0, Customizer.class);
+
+                    endpointCustomizer.customize(mockAuthEndpointConfig);
+
+                    // Mock .authorizationRequestRepository(...)
+                    when(mockAuthEndpointConfig.authorizationRequestRepository(any()))
+                        .thenReturn(mockAuthEndpointConfig);
+
+                    return mockLoginConfigurer;
+                });
+
+            oauth2Customizer.customize(mockLoginConfigurer);
+            return mockHttpSecurity;
+        });
+
+        // Act
+        HttpSecurity result = config.getAuthClientHttp(mockHttpSecurity);
+
+        // Assert
+        assertNotNull(result); // triggers all chained DSL
     }
 
 
