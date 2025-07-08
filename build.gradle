@@ -123,12 +123,12 @@ dependencyCheck {
 
 checkstyle {
   maxWarnings = 0
-  toolVersion = '10.18.2'
+  toolVersion = '10.26.1'
   getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 pmd {
-  toolVersion = "7.14.0"
+  toolVersion = "7.15.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.smokeTest, sourceSets.functionalTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
@@ -188,7 +188,7 @@ dependencies {
 	    exclude group: 'commons-logging', module: 'commons-logging'
 	}
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    implementation 'org.springframework:spring-tx:6.1.14'
+    implementation 'org.springframework:spring-tx:6.2.8'
     implementation 'org.dbunit:dbunit:2.8.0'
     implementation 'joda-time:joda-time:2.13.1'
     implementation 'org.quartz-scheduler:quartz:2.5.0'
@@ -201,14 +201,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jersey:3.5.3'
     implementation 'org.owasp.esapi:esapi:2.6.0.0'
     implementation 'org.jasypt:jasypt:1.9.3'
-    implementation 'org.springframework:spring-context:6.1.14'
-    implementation 'org.springframework:spring-context-support:6.1.14'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:11.0.8'
+    implementation 'org.springframework:spring-context:6.2.8'
+    implementation 'org.springframework:spring-context-support:6.2.8'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:11.0.9'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.2'
     implementation 'org.yaml:snakeyaml:2.4'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.8'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-websocket:11.0.8'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.9'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-websocket:11.0.9'
     implementation 'org.apache.xmlgraphics:batik-css:1.18'
     implementation 'com.mchange:c3p0:0.11.0-pre2'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
