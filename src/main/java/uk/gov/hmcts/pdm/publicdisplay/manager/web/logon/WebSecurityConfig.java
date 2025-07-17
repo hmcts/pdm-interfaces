@@ -36,6 +36,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdm.publicdisplay.initialization.InitializationService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -64,6 +65,9 @@ public class WebSecurityConfig {
     private static final String USE_KEY_VAULT_PROPERTIES = "USE_KEY_VAULT_PROPERTIES";
     private static final String PDDA_PDM_ENVIRONMENT_URL = "PDDA_PDM_ENVIRONMENT_URL";
     private static final String TRUE = "true";
+    
+    // Key Vault value
+    private static final String AZURE_PDDA_PDM_ENVIRONMENT_URL = "pdda.pdm_url";
     
     private HttpCookieOAuth2AuthorizationRequestRepository cookie;
     
@@ -119,7 +123,7 @@ public class WebSecurityConfig {
             
     protected CorsConfiguration getCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
-        String url = "";
+        String url;
         
         // Check if the app is set to use KeyVault properties
         List<XhbConfigPropDao> xhbConfigPropDaoKeyVaultProp = 
@@ -128,7 +132,8 @@ public class WebSecurityConfig {
         if (TRUE.equals(xhbConfigPropDaoKeyVaultProp.get(0).getPropertyValue())) {
             // Fetch the url from the KeyVault
             LOG.info("Using KeyVault to fetch the PDM URL");
-            
+            url = InitializationService.getInstance()
+                .getEnvironment().getProperty(AZURE_PDDA_PDM_ENVIRONMENT_URL);
         } else {
             // Fetch the url from the database instead
             LOG.info("Using DataBase to fetch the PDM URL");
