@@ -2,6 +2,9 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.web.logon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pdm.hb.jpa.AuthorizationUtil;
+import com.pdm.hb.jpa.EntityManagerUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +34,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.OncePerRequestFilter;
+import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropDao;
+import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropRepository;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -55,8 +60,19 @@ public class WebSecurityConfig {
         {"/health/**", "/error**", "/fonts/glyph*", "/css/xhibit.css", "/css/bootstrap.min.css",
             "/js/bootstrap.min.js", "/WEB-INF/jsp/error**", "/css/**", "/js/**", "favicon.ico",
             "/login**", "/oauth2**", "/default-ui.css", "/logout**", "/WEB-INF/jsp/logon**"};
+    
+    private static final String USE_KEY_VAULT_PROPERTIES = "USE_KEY_VAULT_PROPERTIES";
+    private static final String PDDA_PDM_ENVIRONMENT_URL = "PDDA_PDM_ENVIRONMENT_URL";
+    private static final String TRUE = "true";
+    
     private HttpCookieOAuth2AuthorizationRequestRepository cookie;
-
+    
+    @PersistenceContext
+    private EntityManager entityManager;
+    
+    protected XhbConfigPropRepository xhbConfigPropRepository;
+    
+    
     /**
      * Authorisation Server filterchain.
      */
@@ -103,7 +119,25 @@ public class WebSecurityConfig {
             
     protected CorsConfiguration getCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://pdda-public-display-manager.staging.platform.hmcts.net");
+        String url = "";
+        
+        // Check if the app is set to use KeyVault properties
+        List<XhbConfigPropDao> xhbConfigPropDaoKeyVaultProp = 
+            getXhbConfigPropRepository().findByPropertyNameSafe(USE_KEY_VAULT_PROPERTIES);
+        
+        if (TRUE.equals(xhbConfigPropDaoKeyVaultProp.get(0).getPropertyValue())) {
+            // Fetch the url from the KeyVault
+            LOG.info("Using KeyVault to fetch the PDM URL");
+            
+        } else {
+            // Fetch the url from the database instead
+            LOG.info("Using DataBase to fetch the PDM URL");
+            List<XhbConfigPropDao> xhbConfigPropDaoPdmUrl = 
+                getXhbConfigPropRepository().findByPropertyNameSafe(PDDA_PDM_ENVIRONMENT_URL);
+            url = xhbConfigPropDaoPdmUrl.get(0).getPropertyValue();
+        }
+        
+        configuration.addAllowedOrigin(url);
         configuration.addAllowedMethod("*"); 
         configuration.addAllowedHeader("*"); 
         return configuration;
@@ -218,6 +252,20 @@ public class WebSecurityConfig {
             }
             return true;
         }
+    }
+    
+    private XhbConfigPropRepository getXhbConfigPropRepository() {
+        if (xhbConfigPropRepository == null) {
+            xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
+        }
+        return xhbConfigPropRepository;
+    }
+    
+    public EntityManager getEntityManager() {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            entityManager = EntityManagerUtil.getEntityManager();
+        }
+        return entityManager;
     }
 
 }

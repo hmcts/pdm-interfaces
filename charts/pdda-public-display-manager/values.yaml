@@ -30,5 +30,7 @@ java:
           alias: PDDA_AZURE_TENANT_ID
         - name: public-display-data-aggregator-authentication-redirectURI
           alias: PDDA_AZURE_REDIRECT_URI
+        - name: public-display-data-aggregator-pdm-url
+          alias: PDDA_PDM_URL
   environment:
     RUN_DB_MIGRATION_ON_STARTUP: false

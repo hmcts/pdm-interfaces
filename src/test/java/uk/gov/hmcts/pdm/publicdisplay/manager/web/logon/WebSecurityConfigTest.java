@@ -24,6 +24,7 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.logon;
 
 import com.pdm.hb.jpa.AuthorizationUtil;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
@@ -66,10 +67,13 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropDao;
+import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.fail;
@@ -158,6 +162,12 @@ class WebSecurityConfigTest extends AbstractJUnit {
 
     @Mock
     private HttpHeaders mockHttpHeaders;
+    
+    @Mock
+    private EntityManager mockEntityManager;
+    
+    @Mock
+    private XhbConfigPropRepository mockXhbConfigPropRepository;
 
     @InjectMocks
     private WebSecurityConfig classUnderTest;
@@ -283,7 +293,24 @@ class WebSecurityConfigTest extends AbstractJUnit {
     }
     
     @Test
-    void testGetCorsConfiguration() {
+    void testGetCorsConfigurationFromDB() {
+        // Setup
+        classUnderTest.xhbConfigPropRepository = mockXhbConfigPropRepository;
+        
+        XhbConfigPropDao xhbConfigPropDaoUsingDB = new XhbConfigPropDao();
+        xhbConfigPropDaoUsingDB.setPropertyValue("true");
+        
+        XhbConfigPropDao xhbConfigPropDaoPdmUrl = new XhbConfigPropDao();
+        xhbConfigPropDaoPdmUrl.setPropertyValue("https://pdm.example.com");
+        
+        // Expect
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        Mockito.when(mockXhbConfigPropRepository
+            .findByPropertyNameSafe("USE_KEY_VAULT_PROPERTIES")).thenReturn(List.of(xhbConfigPropDaoUsingDB));
+        Mockito.when(mockXhbConfigPropRepository
+            .findByPropertyNameSafe("PDDA_PDM_ENVIRONMENT_URL")).thenReturn(List.of(xhbConfigPropDaoPdmUrl));
+        
+        // Run
         CorsConfiguration result = classUnderTest.getCorsConfiguration();
         assertNotNull(result, NOTNULL);
     }
