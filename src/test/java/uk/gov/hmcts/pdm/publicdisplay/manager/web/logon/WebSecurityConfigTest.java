@@ -298,7 +298,7 @@ class WebSecurityConfigTest extends AbstractJUnit {
         classUnderTest.xhbConfigPropRepository = mockXhbConfigPropRepository;
         
         XhbConfigPropDao xhbConfigPropDaoUsingDB = new XhbConfigPropDao();
-        xhbConfigPropDaoUsingDB.setPropertyValue("true");
+        xhbConfigPropDaoUsingDB.setPropertyValue("false");
         
         XhbConfigPropDao xhbConfigPropDaoPdmUrl = new XhbConfigPropDao();
         xhbConfigPropDaoPdmUrl.setPropertyValue("https://pdm.example.com");
@@ -309,6 +309,24 @@ class WebSecurityConfigTest extends AbstractJUnit {
             .findByPropertyNameSafe("USE_KEY_VAULT_PROPERTIES")).thenReturn(List.of(xhbConfigPropDaoUsingDB));
         Mockito.when(mockXhbConfigPropRepository
             .findByPropertyNameSafe("PDDA_PDM_ENVIRONMENT_URL")).thenReturn(List.of(xhbConfigPropDaoPdmUrl));
+        
+        // Run
+        CorsConfiguration result = classUnderTest.getCorsConfiguration();
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testGetCorsConfigurationFromKeyVault() {
+        // Setup
+        classUnderTest.xhbConfigPropRepository = mockXhbConfigPropRepository;
+        
+        XhbConfigPropDao xhbConfigPropDaoUsingDB = new XhbConfigPropDao();
+        xhbConfigPropDaoUsingDB.setPropertyValue("true");
+        
+        // Expect
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        Mockito.when(mockXhbConfigPropRepository
+            .findByPropertyNameSafe("USE_KEY_VAULT_PROPERTIES")).thenReturn(List.of(xhbConfigPropDaoUsingDB));
         
         // Run
         CorsConfiguration result = classUnderTest.getCorsConfiguration();
