@@ -5,7 +5,7 @@ server:
 
 pdda:
   portal:
-    url: ${PDDA_PORTAL_URL:https://pdda-public-display-manager.staging.platform.hmcts.net}
+    url: ${PDDA_PDM_URL}
   azure:
     active-directory-justice-auth-uri: https://login.microsoftonline.com
   db_user_name: ${DB_USER_NAME}
