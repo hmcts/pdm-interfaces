@@ -14,7 +14,8 @@ def secrets = [
     secret('public-display-data-aggregator-authentication-clientID', 'PDDA_AZURE_CLIENT_ID'),
     secret('public-display-data-aggregator-authentication-clientSecret', 'PDDA_AZURE_CLIENT_SECRET'),
     secret('public-display-data-aggregator-authentication-tenantID', 'PDDA_AZURE_TENANT_ID'),
-    secret('public-display-data-aggregator-authentication-tenantID', 'PDDA_AZURE_REDIRECT_URI')
+    secret('public-display-data-aggregator-authentication-tenantID', 'PDDA_AZURE_REDIRECT_URI'),
+    secret('public-display-data-aggregator-pdm-url', 'PDDA_PDM_URL')
   ],
 ]
 
