@@ -40,20 +40,6 @@
 					</div>
 					<!-- /panel-collapse -->
 				</div>
-				
-				
-				<div class="panel panel-default sb-panel sb-panel-default">
-					<div class="panel panel-default sb-panel sb-panel-default">
-						<div class="panel-heading sb-panel-heading" id="headingProxies" role="tab">
-							<h4 class="panel-title sb-panel-title">
-								<a href="${context}/proxies/view_localproxy">  <span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;Manage Local Proxy</a>
-							</h4>
-							<!-- /h4-->
-						</div>
-						<!-- /#heading1-->
-					</div>
-					<!-- /panel panel-default-->
-				</div>
 				<!-- /panel panel-default-->
 				
 				<div class="panel panel-default sb-panel sb-panel-default">
