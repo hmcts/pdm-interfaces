@@ -62,3 +62,4 @@ README.html
 *.iml
 .idea
 .exercism
+logs/
