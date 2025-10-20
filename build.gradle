@@ -216,7 +216,7 @@ dependencies {
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.2'
     implementation 'org.yaml:snakeyaml:2.4'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.44'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.48'
     implementation 'org.apache.tomcat.embed:tomcat-embed-websocket:10.1.44'
     implementation 'org.apache.xmlgraphics:batik-css:1.18'
     implementation 'com.mchange:c3p0:0.11.2'
