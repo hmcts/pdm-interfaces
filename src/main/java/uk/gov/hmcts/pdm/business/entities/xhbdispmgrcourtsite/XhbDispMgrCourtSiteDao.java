@@ -1,8 +1,10 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -75,7 +77,7 @@ public class XhbDispMgrCourtSiteDao extends AbstractDao implements Serializable 
     @Column(name = "NOTIFICATION")
     private String notification;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH }) 
     @JoinColumn(name = "XHIBIT_COURT_SITE_ID", insertable = false, updatable = false)
     private XhbCourtSiteDao xhbCourtSiteDao;
 
