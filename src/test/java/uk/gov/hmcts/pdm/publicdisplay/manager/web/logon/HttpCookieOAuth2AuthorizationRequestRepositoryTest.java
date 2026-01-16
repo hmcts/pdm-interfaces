@@ -17,7 +17,11 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -74,11 +78,22 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
 
     @Test
     void testLoadAuthorizationRequest() {
+        OAuth2AuthorizationRequestDto mockDto = new OAuth2AuthorizationRequestDto(
+            "https://example.com/authorize",
+            "test-client-id",
+            "https://example.com/redirect",
+            Collections.singleton("openid"),
+            "test-state",
+            Collections.emptyMap(),
+            Collections.emptyMap(),
+            Instant.now().plusSeconds(600).toEpochMilli()
+        );
+        
         Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
             HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME))
             .thenReturn(Optional.of(mockCookie));
-        Mockito.when(CookieUtils.deserialize(mockCookie, OAuth2AuthorizationRequest.class))
-            .thenReturn(mockOAuth2AuthorizationRequest);
+        Mockito.when(CookieUtils.deserialize(mockCookie, OAuth2AuthorizationRequestDto.class))
+            .thenReturn(mockDto);
         OAuth2AuthorizationRequest result = classUnderTest
             .removeAuthorizationRequest(mockHttpServletRequest, mockHttpServletResponse);
         assertNotNull(result, NOTNULL);
@@ -95,6 +110,9 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
             .when(mockHttpServletRequest.getParameter(
                 HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME))
             .thenReturn(value);
+        // Mock serialize to return a test value for DTOs
+        Mockito.when(CookieUtils.serialize(Mockito.any(OAuth2AuthorizationRequestDto.class)))
+            .thenReturn("test-serialized-value");
         boolean result = false;
         try {
             classUnderTest.saveAuthorizationRequest(null, mockHttpServletRequest,
@@ -129,11 +147,23 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
     
     @Test
     void testLoadAuthorizationToken() {
+        Map<String, Object> claims = new ConcurrentHashMap<>();
+        claims.put("sub", "test-user");
+        claims.put("iss", "https://example.com");
+        claims.put("aud", "test-client");
+        
+        OidcIdTokenDto mockDto = new OidcIdTokenDto(
+            "test-token-value",
+            Instant.now().toEpochMilli(),
+            Instant.now().plusSeconds(3600).toEpochMilli(),
+            claims
+        );
+        
         Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
             HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME))
             .thenReturn(Optional.of(mockCookie));
-        Mockito.when(CookieUtils.deserialize(mockCookie, OidcIdToken.class))
-            .thenReturn(mockOidcIdToken);
+        Mockito.when(CookieUtils.deserialize(mockCookie, OidcIdTokenDto.class))
+            .thenReturn(mockDto);
         OidcIdToken result = classUnderTest
             .loadAuthorizationToken(mockHttpServletRequest);
         assertNotNull(result, NOTNULL);
@@ -150,6 +180,9 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
             .when(mockHttpServletRequest.getParameter(
                 HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME))
             .thenReturn(value);
+        // Mock serialize to return a test value for DTOs
+        Mockito.when(CookieUtils.serialize(Mockito.any(OidcIdTokenDto.class)))
+            .thenReturn("test-serialized-value");
         boolean result = false;
         try {
             classUnderTest.saveAuthorizationToken(null, mockHttpServletRequest,
