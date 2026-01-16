@@ -1,6 +1,8 @@
 package uk.gov.hmcts.pdm.publicdisplay.manager.web.logon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +22,13 @@ public class CookieUtils {
     private static final String HMAC_ALGORITHM = "HmacSHA256";
     private static final String COOKIE_SECRET_KEY_ENV = "PDDA_COOKIE_SECRET_KEY";
     private static final String DELIMITER = ":";
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER;
+
+    static {
+        OBJECT_MAPPER = new ObjectMapper();
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    }
 
     protected CookieUtils() {
         // Protected constructor
