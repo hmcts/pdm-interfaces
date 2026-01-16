@@ -15,7 +15,7 @@ import java.util.Optional;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings("PMD.tooManyMethods")
 public class CookieUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CookieUtils.class);
@@ -110,9 +110,12 @@ public class CookieUtils {
             
             LOG.info("Step 6: Serialization successful");
             return encodedValue;
+        } catch (com.fasterxml.jackson.core.JsonProcessingException ex) {
+            LOG.error("Step 6: Serialization failed - JSON processing error", ex);
+            throw new CookieSerializationException("Failed to serialize object to cookie", ex);
         } catch (Exception ex) {
             LOG.error("Step 6: Serialization failed", ex);
-            throw new RuntimeException("Failed to serialize object to cookie", ex);
+            throw new CookieSerializationException("Failed to serialize object to cookie", ex);
         }
     }
 
@@ -188,14 +191,14 @@ public class CookieUtils {
      * Compute HMAC-SHA256 signature for the given payload.
      */
     private static String computeHmac(String payload) {
+        String secretKey = System.getenv(COOKIE_SECRET_KEY_ENV);
+        if (secretKey == null || secretKey.isEmpty()) {
+            LOG.error("HMAC secret key not found in environment variable: {}", COOKIE_SECRET_KEY_ENV);
+            throw new CookieSerializationException("Cookie secret key not configured. Set "
+                    + COOKIE_SECRET_KEY_ENV + " environment variable.");
+        }
+        
         try {
-            String secretKey = System.getenv(COOKIE_SECRET_KEY_ENV);
-            if (secretKey == null || secretKey.isEmpty()) {
-                LOG.error("HMAC secret key not found in environment variable: {}", COOKIE_SECRET_KEY_ENV);
-                throw new RuntimeException("Cookie secret key not configured. Set "
-                        + COOKIE_SECRET_KEY_ENV + " environment variable.");
-            }
-            
             Mac mac = Mac.getInstance(HMAC_ALGORITHM);
             SecretKeySpec secretKeySpec = new SecretKeySpec(
                 secretKey.getBytes(StandardCharsets.UTF_8), 
@@ -205,9 +208,9 @@ public class CookieUtils {
             byte[] hmacBytes = mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
             return Base64.getUrlEncoder().withoutPadding()
                 .encodeToString(hmacBytes);
-        } catch (Exception ex) {
+        } catch (java.security.NoSuchAlgorithmException | java.security.InvalidKeyException ex) {
             LOG.error("Failed to compute HMAC", ex);
-            throw new RuntimeException("Failed to compute HMAC signature", ex);
+            throw new CookieSerializationException("Failed to compute HMAC signature", ex);
         }
     }
 

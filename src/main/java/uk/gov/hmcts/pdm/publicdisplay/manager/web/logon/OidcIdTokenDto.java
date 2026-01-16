@@ -23,4 +23,20 @@ public class OidcIdTokenDto {
         this.expiresAt = expiresAt;
         this.claims = claims;
     }
+
+    public String getTokenValue() {
+        return tokenValue;
+    }
+
+    public long getIssuedAt() {
+        return issuedAt;
+    }
+
+    public long getExpiresAt() {
+        return expiresAt;
+    }
+
+    public Map<String, Object> getClaims() {
+        return claims;
+    }
 }

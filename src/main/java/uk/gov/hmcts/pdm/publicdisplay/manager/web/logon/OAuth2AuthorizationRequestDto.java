@@ -36,4 +36,36 @@ public class OAuth2AuthorizationRequestDto {
         this.attributes = attributes;
         this.expiresAt = expiresAt;
     }
+
+    public String getAuthorizationUri() {
+        return authorizationUri;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getRedirectUri() {
+        return redirectUri;
+    }
+
+    public Set<String> getScopes() {
+        return scopes;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public Map<String, Object> getAdditionalParameters() {
+        return additionalParameters;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public long getExpiresAt() {
+        return expiresAt;
+    }
 }

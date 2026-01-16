@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Map;
+import java.util.Set;
 
 
 @Component
@@ -166,9 +168,9 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
         long expiresAt = Instant.now().plusSeconds(COOKIEEXPIRESECONDS).toEpochMilli();
         
         return new OAuth2AuthorizationRequestDto(
-            request.getAuthorizationUri() != null ? request.getAuthorizationUri().toString() : null,
+            request.getAuthorizationUri() != null ? request.getAuthorizationUri() : null,
             request.getClientId(),
-            request.getRedirectUri() != null ? request.getRedirectUri().toString() : null,
+            request.getRedirectUri() != null ? request.getRedirectUri() : null,
             request.getScopes(),
             request.getState(),
             request.getAdditionalParameters(),
@@ -185,23 +187,26 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
         LOG.info("Converting DTO to OAuth2AuthorizationRequest");
         
         OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.authorizationCode()
-            .clientId(dto.clientId)
-            .state(dto.state);
+            .clientId(dto.getClientId())
+            .state(dto.getState());
         
-        if (dto.authorizationUri != null) {
-            builder.authorizationUri(dto.authorizationUri);
+        if (dto.getAuthorizationUri() != null) {
+            builder.authorizationUri(dto.getAuthorizationUri());
         }
-        if (dto.redirectUri != null) {
-            builder.redirectUri(dto.redirectUri);
+        if (dto.getRedirectUri() != null) {
+            builder.redirectUri(dto.getRedirectUri());
         }
-        if (dto.scopes != null && !dto.scopes.isEmpty()) {
-            builder.scopes(dto.scopes);
+        Set<String> scopes = dto.getScopes();
+        if (scopes != null && !scopes.isEmpty()) {
+            builder.scopes(scopes);
         }
-        if (dto.additionalParameters != null && !dto.additionalParameters.isEmpty()) {
-            builder.additionalParameters(dto.additionalParameters);
+        Map<String, Object> additionalParameters = dto.getAdditionalParameters();
+        if (additionalParameters != null && !additionalParameters.isEmpty()) {
+            builder.additionalParameters(additionalParameters);
         }
-        if (dto.attributes != null && !dto.attributes.isEmpty()) {
-            builder.attributes(dto.attributes);
+        Map<String, Object> attributes = dto.getAttributes();
+        if (attributes != null && !attributes.isEmpty()) {
+            builder.attributes(attributes);
         }
         
         return builder.build();
@@ -227,18 +232,19 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
     private OidcIdToken convertDtoToOidcIdToken(OidcIdTokenDto dto) {
         LOG.info("Converting DTO to OidcIdToken");
         
-        Instant issuedAt = dto.issuedAt > 0 
-            ? Instant.ofEpochMilli(dto.issuedAt) 
+        Instant issuedAt = dto.getIssuedAt() > 0 
+            ? Instant.ofEpochMilli(dto.getIssuedAt()) 
             : Instant.now();
-        Instant expiresAt = dto.expiresAt > 0 
-            ? Instant.ofEpochMilli(dto.expiresAt) 
+        Instant expiresAt = dto.getExpiresAt() > 0 
+            ? Instant.ofEpochMilli(dto.getExpiresAt()) 
             : Instant.now().plusSeconds(3600);
         
+        Map<String, Object> claims = dto.getClaims();
         return new OidcIdToken(
-            dto.tokenValue,
+            dto.getTokenValue(),
             issuedAt,
             expiresAt,
-            dto.claims != null ? dto.claims : java.util.Collections.emptyMap()
+            claims != null ? claims : java.util.Collections.emptyMap()
         );
     }
 }
