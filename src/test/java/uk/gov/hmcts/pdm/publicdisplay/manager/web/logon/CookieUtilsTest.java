@@ -28,6 +28,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CookieUtilsTest extends AbstractJUnit {
 
+    static {
+        // Set PDDA_COOKIE_SECRET_KEY for test if not already set
+        if (System.getProperty("PDDA_COOKIE_SECERET_KEY") == null
+        && System.getenv("PDDA_COOKIE_SECRET_KEY") == null) {
+            System.getProperty("PDDA_COOKIE_SECRET_KEY",
+                    "test-cookie-secret-key-for-testing-only-t42312st");
+        }
+    }
+
     private static final String NAME = "NAME";
     private static final String INVALID = "INVALID";
     private static final String VALUE = "Value";
