@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -28,14 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CookieUtilsTest extends AbstractJUnit {
 
-    static {
-        // Set PDDA_COOKIE_SECRET_KEY for test if not already set
-        if (System.getProperty("PDDA_COOKIE_SECERET_KEY") == null
-            && System.getenv("PDDA_COOKIE_SECRET_KEY") == null) {
-            System.getProperty("PDDA_COOKIE_SECRET_KEY",
-                    "test-cookie-secret-key-for-testing-only-t42312st");
-        }
-    }
+    private static final String TEST_SECRET_KEY = "test-cookie-secret-key-for-testing-only-t42312st";
+    private static final String COOKIE_SECRET_KEY_ENV = "PDDA_COOKIE_SECRET_KEY";
 
     private static final String NAME = "NAME";
     private static final String INVALID = "INVALID";
@@ -118,15 +113,21 @@ class CookieUtilsTest extends AbstractJUnit {
     
     @Test
     void testSerializer() {
-        String result = CookieUtils.serialize(VALUE);
-        assertNotNull(result, NOTNULL);
+        try (MockedStatic<System> systemMock = Mockito.mockStatic(System.class)) {
+            systemMock.when(() -> System.getenv(COOKIE_SECRET_KEY_ENV)).thenReturn(TEST_SECRET_KEY);
+            String result = CookieUtils.serialize(VALUE);
+            assertNotNull(result, NOTNULL);
+        }
     }
     
     @Test
     void testDeserializer() {
-        String serialized = CookieUtils.serialize(VALUE);
-        Mockito.when(mockCookie.getValue()).thenReturn(serialized);
-        String result = CookieUtils.deserialize(mockCookie, VALUE.getClass());
-        assertNotNull(result, NOTNULL);
+        try (MockedStatic<System> systemMock = Mockito.mockStatic(System.class)) {
+            systemMock.when(() -> System.getenv(COOKIE_SECRET_KEY_ENV)).thenReturn(TEST_SECRET_KEY);
+            String serialized = CookieUtils.serialize(VALUE);
+            Mockito.when(mockCookie.getValue()).thenReturn(serialized);
+            String result = CookieUtils.deserialize(mockCookie, VALUE.getClass());
+            assertNotNull(result, NOTNULL);
+        }
     }
 }
