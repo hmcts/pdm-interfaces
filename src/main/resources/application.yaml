@@ -8,6 +8,8 @@ pdda:
     url: ${PDDA_PDM_URL}
   azure:
     active-directory-justice-auth-uri: https://login.microsoftonline.com
+  cookie:
+    secret-key: ${PDDA_COOKIE_SECRET_KEY:}
   db_user_name: ${DB_USER_NAME}
   db_password: ${DB_PASSWORD}
   db_host: ${DB_HOST}

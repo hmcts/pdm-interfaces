@@ -32,5 +32,7 @@ java:
           alias: PDDA_AZURE_REDIRECT_URI
         - name: public-display-data-aggregator-pdm-url
           alias: PDDA_PDM_URL
+        - name: public-display-cookie-secret-key
+          alias: PDDA_COOKIE_SECRET_KEY
   environment:
     RUN_DB_MIGRATION_ON_STARTUP: false
