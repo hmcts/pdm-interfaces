@@ -31,7 +31,7 @@ class CookieUtilsTest extends AbstractJUnit {
     static {
         // Set PDDA_COOKIE_SECRET_KEY for test if not already set
         if (System.getProperty("PDDA_COOKIE_SECERET_KEY") == null
-        && System.getenv("PDDA_COOKIE_SECRET_KEY") == null) {
+            && System.getenv("PDDA_COOKIE_SECRET_KEY") == null) {
             System.getProperty("PDDA_COOKIE_SECRET_KEY",
                     "test-cookie-secret-key-for-testing-only-t42312st");
         }
