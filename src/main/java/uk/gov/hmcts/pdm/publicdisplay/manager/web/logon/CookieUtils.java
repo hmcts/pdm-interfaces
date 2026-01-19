@@ -188,15 +188,24 @@ public class CookieUtils {
     }
 
     /**
-     * Compute HMAC-SHA256 signature for the given payload.
+     * Get the secret key from environment variable.
+     * Package-private for testing purposes.
      */
-    private static String computeHmac(String payload) {
+    static String getSecretKey() {
         String secretKey = System.getenv(COOKIE_SECRET_KEY_ENV);
         if (secretKey == null || secretKey.isEmpty()) {
             LOG.error("HMAC secret key not found in environment variable: {}", COOKIE_SECRET_KEY_ENV);
             throw new CookieSerializationException("Cookie secret key not configured. Set "
                     + COOKIE_SECRET_KEY_ENV + " environment variable.");
         }
+        return secretKey;
+    }
+
+    /**
+     * Compute HMAC-SHA256 signature for the given payload.
+     */
+    private static String computeHmac(String payload) {
+        String secretKey = getSecretKey();
         
         try {
             Mac mac = Mac.getInstance(HMAC_ALGORITHM);

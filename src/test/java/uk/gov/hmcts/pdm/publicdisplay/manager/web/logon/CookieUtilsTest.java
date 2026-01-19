@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -30,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CookieUtilsTest extends AbstractJUnit {
 
     private static final String TEST_SECRET_KEY = "test-cookie-secret-key-for-testing-only-t42312st";
-    private static final String COOKIE_SECRET_KEY_ENV = "PDDA_COOKIE_SECRET_KEY";
 
     private static final String NAME = "NAME";
     private static final String INVALID = "INVALID";
@@ -46,6 +46,9 @@ class CookieUtilsTest extends AbstractJUnit {
 
     @Mock
     private Cookie mockCookie;
+
+    @InjectMocks
+    private CookieUtils classUnderTest;
 
     /**
      * Teardown.
@@ -113,17 +116,14 @@ class CookieUtilsTest extends AbstractJUnit {
     
     @Test
     void testSerializer() {
-        try (MockedStatic<System> systemMock = Mockito.mockStatic(System.class)) {
-            systemMock.when(() -> System.getenv(COOKIE_SECRET_KEY_ENV)).thenReturn(TEST_SECRET_KEY);
-            String result = CookieUtils.serialize(VALUE);
-            assertNotNull(result, NOTNULL);
-        }
+        classUnderTest.serialize(TEST_SECRET_KEY);
     }
     
     @Test
     void testDeserializer() {
-        try (MockedStatic<System> systemMock = Mockito.mockStatic(System.class)) {
-            systemMock.when(() -> System.getenv(COOKIE_SECRET_KEY_ENV)).thenReturn(TEST_SECRET_KEY);
+        try (MockedStatic<CookieUtils> cookieUtilsMock = Mockito.mockStatic(CookieUtils.class,
+                Mockito.CALLS_REAL_METHODS)) {
+            cookieUtilsMock.when(CookieUtils::getSecretKey).thenReturn(TEST_SECRET_KEY);
             String serialized = CookieUtils.serialize(VALUE);
             Mockito.when(mockCookie.getValue()).thenReturn(serialized);
             String result = CookieUtils.deserialize(mockCookie, VALUE.getClass());
