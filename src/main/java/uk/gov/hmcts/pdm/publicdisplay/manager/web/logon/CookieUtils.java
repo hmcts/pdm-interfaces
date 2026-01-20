@@ -87,13 +87,8 @@ public class CookieUtils {
         try {
             // Step 2: Converting object to JSON
             LOG.info("Step 2: Converting object to JSON");
-            String jsonPayload;
-            if (object instanceof String) {
-                // For String objects, wrap in quotes to make valid JSON
-                jsonPayload = OBJECT_MAPPER.writeValueAsString(object);
-            } else {
-                jsonPayload = OBJECT_MAPPER.writeValueAsString(object);
-            }
+            // ObjectMapper handles all types including String correctly
+            String jsonPayload = OBJECT_MAPPER.writeValueAsString(object);
             LOG.info("Step 3: JSON serialization completed, length: {}", jsonPayload.length());
             
             // Step 4: HMAC signing
@@ -114,7 +109,7 @@ public class CookieUtils {
             LOG.error("Step 6: Serialization failed - JSON processing error", ex);
             throw new CookieSerializationException("Failed to serialize object to cookie", ex);
         } catch (Exception ex) {
-            LOG.error("Step 6: Serialization failed", ex);
+            LOG.error("Step 6: Serialization failed - unexpected error", ex);
             throw new CookieSerializationException("Failed to serialize object to cookie", ex);
         }
     }
@@ -167,13 +162,8 @@ public class CookieUtils {
             
             // Step 5: JSON deserialization
             LOG.info("Step 5: JSON deserialization");
-            T result;
-            if (String.class.equals(cls)) {
-                // For String, unwrap JSON string quotes
-                result = cls.cast(OBJECT_MAPPER.readValue(jsonPayload, String.class));
-            } else {
-                result = OBJECT_MAPPER.readValue(jsonPayload, cls);
-            }
+            // ObjectMapper handles all types including String correctly
+            T result = OBJECT_MAPPER.readValue(jsonPayload, cls);
             LOG.info("Step 5: JSON deserialization completed");
             
             LOG.info("Step 6: Deserialization successful");
@@ -181,8 +171,11 @@ public class CookieUtils {
         } catch (IllegalArgumentException ex) {
             LOG.error("Step 6: Deserialization failed - Base64 decode error", ex);
             return null;
+        } catch (com.fasterxml.jackson.core.JsonProcessingException ex) {
+            LOG.error("Step 6: Deserialization failed - JSON processing error", ex);
+            return null;
         } catch (Exception ex) {
-            LOG.error("Step 6: Deserialization failed", ex);
+            LOG.error("Step 6: Deserialization failed - unexpected error", ex);
             return null;
         }
     }
