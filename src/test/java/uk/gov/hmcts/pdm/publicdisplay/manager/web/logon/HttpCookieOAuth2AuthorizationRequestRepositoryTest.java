@@ -17,10 +17,15 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -74,11 +79,22 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
 
     @Test
     void testLoadAuthorizationRequest() {
+        OAuth2AuthorizationRequestDto mockDto = new OAuth2AuthorizationRequestDto(
+            "https://example.com/authorize",
+            "test-client-id",
+            "https://example.com/redirect",
+            Collections.singleton("openid"),
+            "test-state",
+            Collections.emptyMap(),
+            Collections.emptyMap(),
+            Instant.now().plusSeconds(600).toEpochMilli()
+        );
+        
         Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
             HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME))
             .thenReturn(Optional.of(mockCookie));
-        Mockito.when(CookieUtils.deserialize(mockCookie, OAuth2AuthorizationRequest.class))
-            .thenReturn(mockOAuth2AuthorizationRequest);
+        Mockito.when(CookieUtils.deserialize(mockCookie, OAuth2AuthorizationRequestDto.class))
+            .thenReturn(mockDto);
         OAuth2AuthorizationRequest result = classUnderTest
             .removeAuthorizationRequest(mockHttpServletRequest, mockHttpServletResponse);
         assertNotNull(result, NOTNULL);
@@ -95,6 +111,9 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
             .when(mockHttpServletRequest.getParameter(
                 HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME))
             .thenReturn(value);
+        // Mock serialize to return a test value for DTOs
+        Mockito.when(CookieUtils.serialize(Mockito.any(OAuth2AuthorizationRequestDto.class)))
+            .thenReturn("test-serialized-value");
         boolean result = false;
         try {
             classUnderTest.saveAuthorizationRequest(null, mockHttpServletRequest,
@@ -118,8 +137,8 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
     void testRemoveAuthorizationRequestCookies() {
         boolean result = false;
         try {
-            classUnderTest.removeAuthorizationRequestCookies(mockHttpServletRequest,
-                mockHttpServletResponse);
+            HttpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(
+                mockHttpServletRequest, mockHttpServletResponse);
             result = true;
         } catch (Exception ex) {
             fail(ex.getMessage());
@@ -129,11 +148,23 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
     
     @Test
     void testLoadAuthorizationToken() {
+        Map<String, Object> claims = new ConcurrentHashMap<>();
+        claims.put("sub", "test-user");
+        claims.put("iss", "https://example.com");
+        claims.put("aud", "test-client");
+        
+        OidcIdTokenDto mockDto = new OidcIdTokenDto(
+            "test-token-value",
+            Instant.now().toEpochMilli(),
+            Instant.now().plusSeconds(3600).toEpochMilli(),
+            claims
+        );
+        
         Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
             HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME))
             .thenReturn(Optional.of(mockCookie));
-        Mockito.when(CookieUtils.deserialize(mockCookie, OidcIdToken.class))
-            .thenReturn(mockOidcIdToken);
+        Mockito.when(CookieUtils.deserialize(mockCookie, OidcIdTokenDto.class))
+            .thenReturn(mockDto);
         OidcIdToken result = classUnderTest
             .loadAuthorizationToken(mockHttpServletRequest);
         assertNotNull(result, NOTNULL);
@@ -150,6 +181,9 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
             .when(mockHttpServletRequest.getParameter(
                 HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME))
             .thenReturn(value);
+        // Mock serialize to return a test value for DTOs
+        Mockito.when(CookieUtils.serialize(Mockito.any(OidcIdTokenDto.class)))
+            .thenReturn("test-serialized-value");
         boolean result = false;
         try {
             classUnderTest.saveAuthorizationToken(null, mockHttpServletRequest,
@@ -167,8 +201,8 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
     void testRemoveAuthorizationTokenCookies() {
         boolean result = false;
         try {
-            classUnderTest.removeAuthorizationToken(mockHttpServletRequest,
-                mockHttpServletResponse);
+            HttpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationToken(
+                mockHttpServletRequest, mockHttpServletResponse);
             result = true;
         } catch (Exception ex) {
             fail(ex.getMessage());
@@ -216,11 +250,111 @@ class HttpCookieOAuth2AuthorizationRequestRepositoryTest extends AbstractJUnit {
     void testRemoveAllCookies() {
         boolean result = false;
         try {
-            classUnderTest.removeAllCookies(mockHttpServletRequest, mockHttpServletResponse);
+            HttpCookieOAuth2AuthorizationRequestRepository.removeAllCookies(
+                mockHttpServletRequest, mockHttpServletResponse);
             result = true;
         } catch (Exception ex) {
             fail(ex.getMessage());
         }
         assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testLoadAuthorizationRequestWhenCookieNotFound() {
+        Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
+            HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME))
+            .thenReturn(Optional.empty());
+        OAuth2AuthorizationRequest result = classUnderTest
+            .loadAuthorizationRequest(mockHttpServletRequest);
+        assertNull(result, "Should return null when cookie not found");
+    }
+
+    @Test
+    void testLoadAuthorizationRequestWhenDeserializeReturnsNull() {
+        Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
+            HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME))
+            .thenReturn(Optional.of(mockCookie));
+        Mockito.when(CookieUtils.deserialize(mockCookie, OAuth2AuthorizationRequestDto.class))
+            .thenReturn(null);
+        OAuth2AuthorizationRequest result = classUnderTest
+            .loadAuthorizationRequest(mockHttpServletRequest);
+        assertNull(result, "Should return null when deserialize returns null");
+    }
+
+    @Test
+    void testSaveAuthorizationRequestWithBlankRedirectUri() {
+        Mockito.when(mockHttpServletRequest.getParameter(
+            HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME))
+            .thenReturn("");
+        Mockito.when(CookieUtils.serialize(Mockito.any(OAuth2AuthorizationRequestDto.class)))
+            .thenReturn("test-serialized-value");
+        try {
+            classUnderTest.saveAuthorizationRequest(mockOAuth2AuthorizationRequest,
+                mockHttpServletRequest, mockHttpServletResponse);
+            // Test passes if no exception is thrown
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+    }
+
+    @Test
+    void testLoadAuthorizationTokenWhenCookieNotFound() {
+        Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
+            HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME))
+            .thenReturn(Optional.empty());
+        OidcIdToken result = classUnderTest.loadAuthorizationToken(mockHttpServletRequest);
+        assertNull(result, "Should return null when cookie not found");
+    }
+
+    @Test
+    void testLoadAuthorizationTokenWhenDeserializeReturnsNull() {
+        Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
+            HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME))
+            .thenReturn(Optional.of(mockCookie));
+        Mockito.when(CookieUtils.deserialize(mockCookie, OidcIdTokenDto.class))
+            .thenReturn(null);
+        OidcIdToken result = classUnderTest.loadAuthorizationToken(mockHttpServletRequest);
+        assertNull(result, "Should return null when deserialize returns null");
+    }
+
+    @Test
+    void testLoadUsernameWhenCookieNotFound() {
+        Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
+            HttpCookieOAuth2AuthorizationRequestRepository.USERNAME_COOKIE_NAME))
+            .thenReturn(Optional.empty());
+        String result = classUnderTest.loadUsername(mockHttpServletRequest);
+        assertNull(result, "Should return null when cookie not found");
+    }
+
+    @Test
+    void testDeserializeMethodWithException() {
+        Mockito.when(CookieUtils.deserialize(mockCookie, String.class))
+            .thenThrow(new RuntimeException("Test exception"));
+        String result = HttpCookieOAuth2AuthorizationRequestRepository.deserialize(mockCookie, 
+            String.class);
+        assertNull(result, "Should return null when exception occurs");
+    }
+
+    @Test
+    void testRemoveAuthorizationRequest() {
+        OAuth2AuthorizationRequestDto mockDto = new OAuth2AuthorizationRequestDto(
+            "https://example.com/authorize",
+            "test-client-id",
+            "https://example.com/redirect",
+            Collections.singleton("openid"),
+            "test-state",
+            Collections.emptyMap(),
+            Collections.emptyMap(),
+            Instant.now().plusSeconds(600).toEpochMilli()
+        );
+        
+        Mockito.when(CookieUtils.getCookie(mockHttpServletRequest,
+            HttpCookieOAuth2AuthorizationRequestRepository.OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME))
+            .thenReturn(Optional.of(mockCookie));
+        Mockito.when(CookieUtils.deserialize(mockCookie, OAuth2AuthorizationRequestDto.class))
+            .thenReturn(mockDto);
+        OAuth2AuthorizationRequest result = classUnderTest
+            .removeAuthorizationRequest(mockHttpServletRequest, mockHttpServletResponse);
+        assertNotNull(result, NOTNULL);
     }
 }

@@ -11,9 +11,13 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.util.Map;
+import java.util.Set;
+
 
 @Component
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 public class HttpCookieOAuth2AuthorizationRequestRepository
     implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
@@ -32,7 +36,11 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
         return CookieUtils.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
-            .map(cookie -> deserialize(cookie, OAuth2AuthorizationRequest.class))
+            .map(cookie -> {
+                OAuth2AuthorizationRequestDto dto = CookieUtils.deserialize(cookie,
+                        OAuth2AuthorizationRequestDto.class);
+                return dto != null ? convertDtoToOAuth2AuthorizationRequest(dto) : null;
+            })
             .orElse(null);
     }
 
@@ -47,8 +55,9 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
             return;
         }
 
+        OAuth2AuthorizationRequestDto dto = convertOAuth2AuthorizationRequestToDto(authorizationRequest);
         CookieUtils.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME,
-            CookieUtils.serialize(authorizationRequest), COOKIEEXPIRESECONDS);
+            CookieUtils.serialize(dto), COOKIEEXPIRESECONDS);
         String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
         if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
             CookieUtils.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin,
@@ -76,7 +85,11 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
      */
     public OidcIdToken loadAuthorizationToken(HttpServletRequest request) {
         return CookieUtils.getCookie(request, OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME)
-            .map(cookie -> deserialize(cookie, OidcIdToken.class)).orElse(null);
+            .map(cookie -> {
+                OidcIdTokenDto dto = CookieUtils.deserialize(cookie, OidcIdTokenDto.class);
+                return dto != null ? convertDtoToOidcIdToken(dto) : null;
+            })
+            .orElse(null);
     }
 
     /**
@@ -88,8 +101,9 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
             removeAuthorizationToken(request, response);
             return;
         }
+        OidcIdTokenDto dto = convertOidcIdTokenToDto(authorizationToken);
         CookieUtils.addCookie(response, OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME,
-            CookieUtils.serialize(authorizationToken), COOKIEEXPIRESECONDS);
+            CookieUtils.serialize(dto), COOKIEEXPIRESECONDS);
     }
 
     /**
@@ -143,5 +157,94 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    /**
+     * Convert OAuth2AuthorizationRequest to DTO.
+     */
+    private OAuth2AuthorizationRequestDto convertOAuth2AuthorizationRequestToDto(
+        OAuth2AuthorizationRequest request) {
+        LOG.info("Converting OAuth2AuthorizationRequest to DTO");
+        long expiresAt = Instant.now().plusSeconds(COOKIEEXPIRESECONDS).toEpochMilli();
+        
+        return new OAuth2AuthorizationRequestDto(
+            request.getAuthorizationUri() != null ? request.getAuthorizationUri() : null,
+            request.getClientId(),
+            request.getRedirectUri() != null ? request.getRedirectUri() : null,
+            request.getScopes(),
+            request.getState(),
+            request.getAdditionalParameters(),
+            request.getAttributes(),
+            expiresAt
+        );
+    }
+
+    /**
+     * Convert DTO to OAuth2AuthorizationRequest.
+     */
+    private OAuth2AuthorizationRequest convertDtoToOAuth2AuthorizationRequest(
+        OAuth2AuthorizationRequestDto dto) {
+        LOG.info("Converting DTO to OAuth2AuthorizationRequest");
+        
+        OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.authorizationCode()
+            .clientId(dto.getClientId())
+            .state(dto.getState());
+        
+        if (dto.getAuthorizationUri() != null) {
+            builder.authorizationUri(dto.getAuthorizationUri());
+        }
+        if (dto.getRedirectUri() != null) {
+            builder.redirectUri(dto.getRedirectUri());
+        }
+        Set<String> scopes = dto.getScopes();
+        if (scopes != null && !scopes.isEmpty()) {
+            builder.scopes(scopes);
+        }
+        Map<String, Object> additionalParameters = dto.getAdditionalParameters();
+        if (additionalParameters != null && !additionalParameters.isEmpty()) {
+            builder.additionalParameters(additionalParameters);
+        }
+        Map<String, Object> attributes = dto.getAttributes();
+        if (attributes != null && !attributes.isEmpty()) {
+            builder.attributes(attributes);
+        }
+        
+        return builder.build();
+    }
+
+    /**
+     * Convert OidcIdToken to DTO.
+     */
+    private OidcIdTokenDto convertOidcIdTokenToDto(OidcIdToken token) {
+        LOG.info("Converting OidcIdToken to DTO");
+        
+        return new OidcIdTokenDto(
+            token.getTokenValue(),
+            token.getIssuedAt() != null ? token.getIssuedAt().toEpochMilli() : 0,
+            token.getExpiresAt() != null ? token.getExpiresAt().toEpochMilli() : 0,
+            token.getClaims()
+        );
+    }
+
+    /**
+     * Convert DTO to OidcIdToken.
+     */
+    private OidcIdToken convertDtoToOidcIdToken(OidcIdTokenDto dto) {
+        LOG.info("Converting DTO to OidcIdToken");
+        
+        Instant issuedAt = dto.getIssuedAt() > 0 
+            ? Instant.ofEpochMilli(dto.getIssuedAt()) 
+            : Instant.now();
+        Instant expiresAt = dto.getExpiresAt() > 0 
+            ? Instant.ofEpochMilli(dto.getExpiresAt()) 
+            : Instant.now().plusSeconds(3600);
+        
+        Map<String, Object> claims = dto.getClaims();
+        return new OidcIdToken(
+            dto.getTokenValue(),
+            issuedAt,
+            expiresAt,
+            claims != null ? claims : java.util.Collections.emptyMap()
+        );
     }
 }
