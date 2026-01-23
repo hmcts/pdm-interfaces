@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
+import uk.gov.hmcts.pdm.publicdisplay.initialization.InitializationService;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -15,12 +17,12 @@ import java.util.Optional;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-@SuppressWarnings("PMD.tooManyMethods")
+@SuppressWarnings("PMD")
 public class CookieUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CookieUtils.class);
     private static final String HMAC_ALGORITHM = "HmacSHA256";
-    private static final String COOKIE_SECRET_KEY_ENV = "PDDA_COOKIE_SECRET_KEY";
+    private static final String PDDA_COOKIE_SECRET_KEY = "pdda.cookie.secret-key";
     private static final String DELIMITER = ":";
     private static final ObjectMapper OBJECT_MAPPER;
 
@@ -185,11 +187,13 @@ public class CookieUtils {
      * Package-private for testing purposes.
      */
     static String getSecretKey() {
-        String secretKey = System.getenv(COOKIE_SECRET_KEY_ENV);
+        Environment env = InitializationService.getInstance().getEnvironment();
+        String secretKey = env.getProperty(PDDA_COOKIE_SECRET_KEY);
+        
         if (secretKey == null || secretKey.isEmpty()) {
-            LOG.error("HMAC secret key not found in environment variable: {}", COOKIE_SECRET_KEY_ENV);
+            LOG.error("HMAC secret key not found in environment variable: {}", PDDA_COOKIE_SECRET_KEY);
             throw new CookieSerializationException("Cookie secret key not configured. Set "
-                    + COOKIE_SECRET_KEY_ENV + " environment variable.");
+                    + PDDA_COOKIE_SECRET_KEY + " environment variable.");
         }
         return secretKey;
     }
