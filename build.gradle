@@ -212,7 +212,7 @@ dependencies {
     implementation 'org.jasypt:jasypt:1.9.3'
     implementation 'org.springframework:spring-context:6.1.14'
     implementation 'org.springframework:spring-context-support:6.1.14'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.49'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.50'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.2'
     implementation 'org.yaml:snakeyaml:2.4'
