@@ -7,7 +7,7 @@
 plugins {
 	id 'application'
 	id 'io.spring.dependency-management' version '1.1.7'
-	id 'org.springframework.boot' version '3.3.5'
+	id 'org.springframework.boot' version '3.5.10'
 	id 'com.github.ben-manes.versions' version '0.52.0'
 	id 'org.owasp.dependencycheck' version '10.0.4'
 	id 'org.sonarqube' version '5.1.0.4882'
@@ -181,9 +181,9 @@ configurations {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.3.5'
-    implementation 'org.springframework.boot:spring-boot-starter-web:3.3.5'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.5'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.5.10'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.5.10'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.5.10'
     implementation 'org.springframework.data:spring-data-commons:3.4.3'
     implementation 'org.springframework.data:spring-data-jpa:3.4.3'
     // Comment out org.hibernate:hibernate-entitymanager to work in Eclipse
@@ -207,7 +207,7 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
     implementation 'javax.servlet:servlet-api:3.0-alpha-1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.20.1'
-    implementation 'org.springframework.boot:spring-boot-starter-jersey:3.3.5'
+    implementation 'org.springframework.boot:spring-boot-starter-jersey:3.5.10'
     implementation 'org.owasp.esapi:esapi:2.6.0.0'
     implementation 'org.jasypt:jasypt:1.9.3'
     implementation 'org.springframework:spring-context:6.1.14'
@@ -225,19 +225,19 @@ dependencies {
     implementation 'ch.qos.logback:logback-core:1.5.23'
     implementation 'ch.qos.logback:logback-classic:1.5.23'
     implementation 'javax.validation:validation-api:2.0.1.Final'
-    implementation 'org.springframework.boot:spring-boot-starter-security:3.3.5'
+    implementation 'org.springframework.boot:spring-boot-starter-security:3.5.10'
     implementation 'org.owasp.antisamy:antisamy:1.7.8'
     implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory:5.23.0'
     implementation 'org.springframework.security:spring-security-oauth2-jose:6.4.3'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-authorization-server', version: '1.4.2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.5'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.5.10'
     testImplementation 'org.easymock:easymock:5.5.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.16.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.12.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.3.5'
+    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.5.10'
     implementation group: 'io.rest-assured', name: 'rest-assured'
 }
 
