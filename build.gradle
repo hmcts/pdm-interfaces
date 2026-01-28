@@ -194,7 +194,7 @@ dependencies {
     implementation ('org.apache.httpcomponents:httpclient:4.5.14') {
     exclude group: 'commons-logging', module: 'commons-logging'
   }
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'io.jsonwebtoken:jjwt:0.13.0'
     implementation 'org.springframework:spring-tx:6.1.14'
     implementation 'org.dbunit:dbunit:2.8.0'
     implementation 'joda-time:joda-time:2.13.1'
