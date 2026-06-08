@@ -3,7 +3,7 @@ java:
   readinessPath: '/health'
   livenessPath: '/health'
   startupPath: '/health'
-  image: 'sdshmctspublic.azurecr.io/pdda/public-display-manager:latest'
+  image: 'hmctsprod.azurecr.io/pdda/public-display-manager:latest'
   ingressHost: pdda-public-display-manager.{{ .Values.global.environment }}.platform.hmcts.net
   keyVaults:
     pdda:
