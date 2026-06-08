@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
  * @author uphillj
  *
  */
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.CloseResource"})
 public class AbstractJUnit {
     /** Logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJUnit.class);
