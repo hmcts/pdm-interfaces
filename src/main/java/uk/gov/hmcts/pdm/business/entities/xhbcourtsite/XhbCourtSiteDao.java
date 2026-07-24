@@ -35,12 +35,12 @@ import java.util.Set;
     query = "SELECT xcs from XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
         + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
         + "AND xdmcs.courtSiteId IN (SELECT xdmlp.courtSiteId FROM XHB_DISP_MGR_LOCAL_PROXY xdmlp "
-        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId)")
+        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId) ORDER BY xcs.courtSiteName ASC")
 @NamedQuery(name = "XHB_COURT_SITE.findCourtSitesWithoutLocalProxy",
     query = "SELECT xcs from XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
         + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
         + "AND xdmcs.courtSiteId NOT IN (SELECT xdmlp.courtSiteId FROM XHB_DISP_MGR_LOCAL_PROXY xdmlp "
-        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId)")
+        + "WHERE xdmlp.courtSiteId = xdmcs.courtSiteId) ORDER BY xcs.courtSiteName ASC")
 @NamedQuery(name = "XHB_COURT_SITE.findXhibitCourtSitesOrderedByRagStatus",
     query = "SELECT xcs from XHB_COURT_SITE xcs, XHB_DISP_MGR_COURT_SITE xdmcs "
         + "WHERE xcs.courtSiteId = xdmcs.xhibitCourtSiteId "
