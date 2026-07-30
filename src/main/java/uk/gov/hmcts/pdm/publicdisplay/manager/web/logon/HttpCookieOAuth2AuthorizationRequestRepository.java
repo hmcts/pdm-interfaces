@@ -28,7 +28,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
     public static final String OAUTH2_AUTHORIZATION_TOKEN_COOKIE_NAME = "oauth2_auth_token";
     public static final String USERNAME_COOKIE_NAME = "username";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
-    private static final int COOKIEEXPIRESECONDS = 600;
+    private static final int COOKIEEXPIRESECONDS = 1800; // 30 minutes
 
     /**
      * Load Authorization Request.
