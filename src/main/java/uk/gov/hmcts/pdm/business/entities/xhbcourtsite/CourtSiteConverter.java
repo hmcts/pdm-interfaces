@@ -149,6 +149,7 @@ public abstract class CourtSiteConverter extends XhbDispMgrCourtSiteProcessor {
         final String methodName = "findByCourtSiteId";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
         XhbCourtSiteDao dao = findDaoByCourtSiteId(id);
+        LOG.info("findDaoByCourtSiteId({}) returned: {}", id, dao);
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         return convertDaoToCourtSiteBasicValue(dao);
     }
