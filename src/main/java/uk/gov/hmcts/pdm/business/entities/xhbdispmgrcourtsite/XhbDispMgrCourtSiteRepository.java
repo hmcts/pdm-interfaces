@@ -50,6 +50,7 @@ public class XhbDispMgrCourtSiteRepository extends DispMgrCourtSiteConverter {
         final String methodName = "findByCourtSiteId";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
         Optional<XhbDispMgrCourtSiteDao> dao = findById(courtSiteId);
+        LOG.info("findById({}) returned: {}", courtSiteId, dao);
         ICourtSite courtSite = new CourtSite();
         if (!dao.isEmpty()) {
             LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
@@ -64,6 +65,7 @@ public class XhbDispMgrCourtSiteRepository extends DispMgrCourtSiteConverter {
         final String methodName = "findByXhibitCourtSiteId";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
         XhbDispMgrCourtSiteDao dao = findDaoByXhibitCourtSiteId(xhibitCourtSiteId);
+        LOG.info("findDaoByXhibitCourtSiteId({}) returned: {}", xhibitCourtSiteId, dao);
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         if (dao != null) {
             return getXhbCourtSiteRepository()

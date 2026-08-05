@@ -70,6 +70,7 @@ public class XhbCourtSiteRepository extends CourtSiteConverter {
         final String methodName = "findCourtSiteByXhibitCourtSiteId";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
         XhbCourtSiteDao dao = findDaoCourtSiteByXhibitCourtSiteId(xhibitCourtSiteId);
+        LOG.info("findDaoCourtSiteByXhibitCourtSiteId({}) returned: {}", xhibitCourtSiteId, dao);
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         return convertDaoToCourtSiteBasicValue(dao);
     }

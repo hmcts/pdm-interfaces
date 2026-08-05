@@ -180,6 +180,8 @@ public class RagStatusService extends RagStatusRepository implements IRagStatusS
         LOGGER.info(THREE_PARAMS, METHOD, methodName, STARTS);
 
         // Refresh the court site status
+        LOGGER.info("Fetching court site to refresh rag status with xhibitCourtSiteId: {}",
+            xhibitCourtSiteId);
         final ICourtSite courtSite = getXhbDispMgrCourtSiteRepository()
             .findByXhibitCourtSiteId(xhibitCourtSiteId.intValue());
         LOGGER.info("refreshing rag status for {}",
