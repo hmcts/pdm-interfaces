@@ -66,8 +66,9 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
     }
 
     protected void processLocalProxy(ICourtSite courtSite, XhbDispMgrCourtSiteDao courtSiteDao) {
-        XhbDispMgrLocalProxyDao localProxyDao =
-            getXhbDispMgrLocalProxyRepository().findByCourtSiteId(courtSiteDao.getId());
+        XhbDispMgrLocalProxyDao localProxyDao = courtSiteDao.getXhbDispMgrLocalProxyDao();
+        LOG.info("processLocalProxy() - XhbLocalProxyDao: {}", localProxyDao);
+        LOG.info("processLocalProxy() - xhbCourtSiteDao: {}", courtSiteDao.getXhbCourtSiteDao());
 
         if (localProxyDao != null) {
             ILocalProxy localProxy =
