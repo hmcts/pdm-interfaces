@@ -83,10 +83,12 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
         if (courtSiteDao.getXhbDispMgrCduDao() != null) {
             Set<ICduModel> cdus = createICduSet();
             Set<XhbDispMgrCduDao> cduDaos = courtSiteDao.getXhbDispMgrCduDao();
+            
+            LOG.info("processCdus() - cduDaos: {}", cduDaos.size());
 
             for (XhbDispMgrCduDao cduDao : cduDaos) {
                 ICduModel cdu = XhbDispMgrCduRepository.getCduFromDao(cduDao);
-                processUrls(cdu, methodName);
+                processUrls(cduDao, cdu, methodName);
                 cdu.setCourtSite(courtSite);
                 cdus.add(cdu);
             }
@@ -95,10 +97,11 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
         }
     }
 
-    private void processUrls(ICduModel cdu, String methodName) {
-        List<XhbDispMgrMappingDao> mappingDaos =
-            getXhbDispMgrMappingRepository().findDaoByCduId(cdu.getId().intValue());
+    private void processUrls(XhbDispMgrCduDao cduDao, ICduModel cdu, String methodName) {
+        Set<XhbDispMgrMappingDao> mappingDaos = cduDao.getXhbDispMgrMappingDaos();
 
+        LOG.info("processUrls() - mappingDaos: {}", mappingDaos.size());
+        
         if (mappingDaos != null) {
             List<IUrlModel> urls = createIUrlList();
 
@@ -108,6 +111,8 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
                 IUrlModel url = getXhbDispMgrMappingRepository().getUrlFromMappingDao(mappingDao);
                 urls.add(url);
             }
+            
+            LOG.info("processUrls() - urls: {}", urls.size());
 
             cdu.setUrls(urls);
         }

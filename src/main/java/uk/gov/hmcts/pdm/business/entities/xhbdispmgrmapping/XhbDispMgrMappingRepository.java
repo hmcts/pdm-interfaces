@@ -71,8 +71,7 @@ public class XhbDispMgrMappingRepository extends AbstractRepository<XhbDispMgrMa
     public IUrlModel getUrlFromMappingDao(XhbDispMgrMappingDao xhbDispMgrMappingDao) {
         final String methodName = "getUrlFromMappingDao";
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
-        IUrlModel url = getXhbDispMgrUrlRepository().findByUrlId(xhbDispMgrMappingDao.getUrlId());
-
+        IUrlModel url = getXhbDispMgrUrlRepository().findUrlFromMappingDao(xhbDispMgrMappingDao);
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         return url;
     }

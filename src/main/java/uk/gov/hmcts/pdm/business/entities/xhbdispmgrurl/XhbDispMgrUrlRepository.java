@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite.XhbDispMgrCourtSit
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite.XhbDispMgrCourtSiteRepository;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy.XhbDispMgrLocalProxyDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy.XhbDispMgrLocalProxyRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrmapping.XhbDispMgrMappingDao;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.UrlModel;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICourtSite;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ILocalProxy;
@@ -30,7 +31,6 @@ public class XhbDispMgrUrlRepository extends AbstractRepository<XhbDispMgrUrlDao
     private static final String STARTS = " - starts";
     private static final String ENDS = " - ends";
 
-    private XhbDispMgrLocalProxyRepository xhbDispMgrLocalProxyRepository;
 
     public XhbDispMgrUrlRepository(EntityManager em) {
         super(em);
@@ -66,6 +66,20 @@ public class XhbDispMgrUrlRepository extends AbstractRepository<XhbDispMgrUrlDao
         LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
 
         XhbDispMgrUrlDao dao = findDaoByUrlId(id);
+        if (dao != null) {
+            LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
+            return convertDaoToUrlBasicValue(dao);
+        } else {
+            LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
+            return null;
+        }
+    }
+    
+    public IUrlModel findUrlFromMappingDao(XhbDispMgrMappingDao xhbDispMgrMappingDao) {
+        final String methodName = "findByUrlId";
+        LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
+
+        XhbDispMgrUrlDao dao = xhbDispMgrMappingDao.getXhbDispMgrUrlDao();
         if (dao != null) {
             LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
             return convertDaoToUrlBasicValue(dao);
@@ -127,10 +141,10 @@ public class XhbDispMgrUrlRepository extends AbstractRepository<XhbDispMgrUrlDao
                 for (XhbDispMgrCourtSiteDao xhbDispMgrCourtSiteDao : xhbDispMgrCourtSiteDaos) {
                     courtSite =
                         XhbDispMgrCourtSiteRepository.getCourtSiteFromDao(xhbDispMgrCourtSiteDao);
-                    // Setting Local Proxy Separately through a findByCourtSite query
+                    // Get the Local Proxy from the disp mgr court site object
                     XhbDispMgrLocalProxyDao xhbDispMgrLocalProxyDao =
-                        getXhbDispMgrLocalProxyRepository()
-                            .findByCourtSiteId(xhbDispMgrCourtSiteDao.getId());
+                        xhbDispMgrCourtSiteDao.getXhbDispMgrLocalProxyDao();
+                    
                     if (xhbDispMgrLocalProxyDao != null) {
                         ILocalProxy localProxy = XhbDispMgrLocalProxyRepository
                             .getLocalProxyFromDao(xhbDispMgrLocalProxyDao);
@@ -157,16 +171,6 @@ public class XhbDispMgrUrlRepository extends AbstractRepository<XhbDispMgrUrlDao
         url.setDescription(xhbDispMgrUrlDao.getDescription());
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
         return url;
-    }
-
-    private XhbDispMgrLocalProxyRepository getXhbDispMgrLocalProxyRepository() {
-        final String methodName = "getXhbDispMgrLocalProxyRepository";
-        LOG.debug(THREE_PARAMS, METHOD, methodName, STARTS);
-        if (xhbDispMgrLocalProxyRepository == null) {
-            xhbDispMgrLocalProxyRepository = new XhbDispMgrLocalProxyRepository(getEntityManager());
-        }
-        LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
-        return xhbDispMgrLocalProxyRepository;
     }
 
 }
