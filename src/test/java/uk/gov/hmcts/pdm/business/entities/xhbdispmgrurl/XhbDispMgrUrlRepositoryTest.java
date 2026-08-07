@@ -46,6 +46,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Unit test for XhbDispMgrUrlRepositoryTest.
@@ -58,6 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class XhbDispMgrUrlRepositoryTest extends AbstractJUnit {
 
     private static final String NULL = "Result is Null";
+    private static final String NOT_NULL = "Result is Not Null";
     private static final String IPADDRESS = "192.168.1.";
 
 
@@ -123,6 +125,18 @@ class XhbDispMgrUrlRepositoryTest extends AbstractJUnit {
         
         // Verify
         assertNotNull(urlModel, NULL);
+    }
+    
+    @Test
+    void testFindUrlFromMappingDaoFail() {
+        // Setup
+        XhbDispMgrMappingDao mappingDao = new XhbDispMgrMappingDao();
+        
+        // Run
+        IUrlModel urlModel = classUnderTest.findUrlFromMappingDao(mappingDao);
+        
+        // Verify
+        assertNull(urlModel, NOT_NULL);
     }
     
     @Test
