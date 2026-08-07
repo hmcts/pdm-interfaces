@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 
-
+@SuppressWarnings("squid:S2589")
 public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtSiteRepository.class);
@@ -66,8 +66,9 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
     }
 
     protected void processLocalProxy(ICourtSite courtSite, XhbDispMgrCourtSiteDao courtSiteDao) {
-        XhbDispMgrLocalProxyDao localProxyDao =
-            getXhbDispMgrLocalProxyRepository().findByCourtSiteId(courtSiteDao.getId());
+        XhbDispMgrLocalProxyDao localProxyDao = courtSiteDao.getXhbDispMgrLocalProxyDao();
+        LOG.info("processLocalProxy() - XhbLocalProxyDao: {}", localProxyDao);
+        LOG.info("processLocalProxy() - xhbCourtSiteDao: {}", courtSiteDao.getXhbCourtSiteDao());
 
         if (localProxyDao != null) {
             ILocalProxy localProxy =
@@ -82,10 +83,12 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
         if (courtSiteDao.getXhbDispMgrCduDao() != null) {
             Set<ICduModel> cdus = createICduSet();
             Set<XhbDispMgrCduDao> cduDaos = courtSiteDao.getXhbDispMgrCduDao();
+            
+            LOG.info("processCdus() - cduDaos: {}", cduDaos.size());
 
             for (XhbDispMgrCduDao cduDao : cduDaos) {
                 ICduModel cdu = XhbDispMgrCduRepository.getCduFromDao(cduDao);
-                processUrls(cdu, methodName);
+                processUrls(cduDao, cdu, methodName);
                 cdu.setCourtSite(courtSite);
                 cdus.add(cdu);
             }
@@ -94,10 +97,11 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
         }
     }
 
-    private void processUrls(ICduModel cdu, String methodName) {
-        List<XhbDispMgrMappingDao> mappingDaos =
-            getXhbDispMgrMappingRepository().findDaoByCduId(cdu.getId().intValue());
+    private void processUrls(XhbDispMgrCduDao cduDao, ICduModel cdu, String methodName) {
+        Set<XhbDispMgrMappingDao> mappingDaos = cduDao.getXhbDispMgrMappingDaos();
 
+        LOG.info("processUrls() - mappingDaos: {}", mappingDaos.size());
+        
         if (mappingDaos != null) {
             List<IUrlModel> urls = createIUrlList();
 
@@ -107,6 +111,8 @@ public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
                 IUrlModel url = getXhbDispMgrMappingRepository().getUrlFromMappingDao(mappingDao);
                 urls.add(url);
             }
+            
+            LOG.info("processUrls() - urls: {}", urls.size());
 
             cdu.setUrls(urls);
         }

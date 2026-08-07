@@ -2,9 +2,15 @@ package uk.gov.hmcts.pdm.business.entities.xhbdispmgrmapping;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToOne;
 import uk.gov.hmcts.pdm.business.entities.AbstractDao;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu.XhbDispMgrCduDao;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrurl.XhbDispMgrUrlDao;
 
 import java.time.LocalDateTime;
 
@@ -28,8 +34,16 @@ public class XhbDispMgrMappingDao extends AbstractDao {
 
     @Column(name = "CREATED_BY")
     private String createdBy;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CDU_ID", insertable = false, updatable = false)
+    private XhbDispMgrCduDao xhbDispMgrCduDao;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "URL_ID", insertable = false, updatable = false)
+    private XhbDispMgrUrlDao xhbDispMgrUrlDao;
 
-
+    
     public Integer getUrlId() {
         return urlId;
     }
@@ -60,6 +74,22 @@ public class XhbDispMgrMappingDao extends AbstractDao {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public XhbDispMgrCduDao getXhbDispMgrCduDao() {
+        return xhbDispMgrCduDao;
+    }
+
+    public void setXhbDispMgrCduDao(XhbDispMgrCduDao xhbDispMgrCduDao) {
+        this.xhbDispMgrCduDao = xhbDispMgrCduDao;
+    }
+    
+    public XhbDispMgrUrlDao getXhbDispMgrUrlDao() {
+        return xhbDispMgrUrlDao;
+    }
+
+    public void setXhbDispMgrUrlDao(XhbDispMgrUrlDao xhbDispMgrUrlDao) {
+        this.xhbDispMgrUrlDao = xhbDispMgrUrlDao;
     }
 
     @Override

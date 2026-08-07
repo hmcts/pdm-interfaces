@@ -2,17 +2,21 @@ package uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdm.business.entities.AbstractDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite.XhbDispMgrCourtSiteDao;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrmapping.XhbDispMgrMappingDao;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 
 
@@ -99,6 +103,9 @@ public class XhbDispMgrCduDao extends AbstractDao {
     @ManyToOne
     @JoinColumn(name = "COURT_SITE_ID", insertable = false, updatable = false)
     private XhbDispMgrCourtSiteDao xhbDispMgrCourtSiteDao;
+    
+    @OneToMany(mappedBy = "xhbDispMgrCduDao", fetch = FetchType.LAZY)
+    private Set<XhbDispMgrMappingDao> xhbDispMgrMappingDaos;
 
     /*
      * @Column(name = "CDU_ID") XHB_DISP_MGR_MAPPING?? Might not need this private XhbDispMgrUrlDao
@@ -266,4 +273,13 @@ public class XhbDispMgrCduDao extends AbstractDao {
     public void setXhbDispMgrCourtSiteDao(XhbDispMgrCourtSiteDao xhbDispMgrCourtSiteDao) {
         this.xhbDispMgrCourtSiteDao = xhbDispMgrCourtSiteDao;
     }
+
+    public Set<XhbDispMgrMappingDao> getXhbDispMgrMappingDaos() {
+        return xhbDispMgrMappingDaos;
+    }
+
+    public void setXhbDispMgrMappingDaos(Set<XhbDispMgrMappingDao> xhbDispMgrMappingDaos) {
+        this.xhbDispMgrMappingDaos = xhbDispMgrMappingDaos;
+    }
+    
 }

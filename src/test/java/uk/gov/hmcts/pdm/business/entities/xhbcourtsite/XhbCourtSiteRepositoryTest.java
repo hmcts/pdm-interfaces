@@ -37,9 +37,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu.XhbDispMgrCduDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcourtsite.XhbDispMgrCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy.XhbDispMgrLocalProxyDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy.XhbDispMgrLocalProxyRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrmapping.XhbDispMgrMappingDao;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrmapping.XhbDispMgrMappingRepository;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrurl.XhbDispMgrUrlDao;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CourtSite;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.XhibitCourtSite;
@@ -49,6 +53,7 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IXhibitCourtSite;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -75,6 +80,9 @@ class XhbCourtSiteRepositoryTest extends AbstractJUnit {
 
     @Mock
     private XhbDispMgrLocalProxyRepository mockXhbDispMgrLocalProxyRepository;
+    
+    @Mock
+    private XhbDispMgrMappingRepository mockXhbDispMgrMappingRepository;
 
     @InjectMocks
     private XhbCourtSiteRepository classUnderTest = new XhbCourtSiteRepository(mockEntityManager);
@@ -86,10 +94,13 @@ class XhbCourtSiteRepositoryTest extends AbstractJUnit {
     public void setup() {
         mockEntityManager = Mockito.mock(EntityManager.class);
         mockXhbDispMgrLocalProxyRepository = Mockito.mock(XhbDispMgrLocalProxyRepository.class);
+        mockXhbDispMgrMappingRepository = Mockito.mock(XhbDispMgrMappingRepository.class);
         classUnderTest = new XhbCourtSiteRepository(mockEntityManager);
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrLocalProxyRepository",
             mockXhbDispMgrLocalProxyRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbDispMgrMappingRepository",
+            mockXhbDispMgrMappingRepository);
     }
 
     /**
@@ -146,6 +157,50 @@ class XhbCourtSiteRepositoryTest extends AbstractJUnit {
         assertTrue(result, TRUE);
     }
 
+    @Test
+    void testProcessCdus() {
+        // Setup
+        XhbDispMgrCduDao cduDao1 = new XhbDispMgrCduDao();
+        cduDao1.setId(1);
+        cduDao1.setCduNumber("CDU001");
+        cduDao1.setMacAddress("00:11:22:33:44:55");
+        cduDao1.setIpAddress("1.2.3.4");
+        cduDao1.setTitle("CDU Title");
+        cduDao1.setDescription("CDU Description");
+        cduDao1.setLocation("CDU Location");
+        cduDao1.setRefresh(30L);
+        cduDao1.setWeighting(1L);
+        cduDao1.setNotification("CDU Notification");
+        cduDao1.setOfflineInd('F');
+        cduDao1.setRagStatus('G');
+        cduDao1.setRagStatusDate(LocalDateTime.now());
+        
+        XhbDispMgrMappingDao mappingDao = new XhbDispMgrMappingDao();
+        mappingDao.setUrlId(1);
+        mappingDao.setCduId(1);
+        
+        XhbDispMgrUrlDao urlDao = new XhbDispMgrUrlDao();
+        urlDao.setId(1);
+        urlDao.setUrl("http://example.com");
+        urlDao.setDescription("Example URL");
+        
+        // Set up relationships
+        mappingDao.setXhbDispMgrUrlDao(urlDao);
+        cduDao1.setXhbDispMgrMappingDaos(Set.of(mappingDao));
+        Set<XhbDispMgrCduDao> cduDaos = Set.of(cduDao1);
+        XhbDispMgrCourtSiteDao courtSiteDao = new XhbDispMgrCourtSiteDao();
+        courtSiteDao.setXhbDispMgrCduDao(cduDaos);
+        ICourtSite courtSite = new CourtSite();
+        String methodName = "testProcessCdus";
+        
+        boolean result = true;
+        
+        // Run
+        classUnderTest.processCdus(courtSite, courtSiteDao, methodName);
+        
+        // Verify
+        assertTrue(result, TRUE);
+    }
 
     @Test
     void testFindAllReturnsNonObsoleteCourtSites() {
@@ -188,7 +243,6 @@ class XhbCourtSiteRepositoryTest extends AbstractJUnit {
             assertEquals("CourtSite B", result.get(1).getCourtSiteName(), EQUAL);
         }
     }
-
 
     private XhbCourtSiteDao getDummyXhbCourtSiteDao() {
         XhbCourtSiteDao xhbCourtSiteDao = new XhbCourtSiteDao();

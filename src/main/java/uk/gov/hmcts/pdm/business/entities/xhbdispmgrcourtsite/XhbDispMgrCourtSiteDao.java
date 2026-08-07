@@ -12,8 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Transient;
 import uk.gov.hmcts.pdm.business.entities.AbstractDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu.XhbDispMgrCduDao;
@@ -89,7 +89,7 @@ public class XhbDispMgrCourtSiteDao extends AbstractDao implements Serializable 
     @JoinColumn(name = "COURT_SITE_ID", insertable = false, updatable = false)
     private Set<XhbDispMgrCduDao> xhbDispMgrCduDao;
 
-    @Transient
+    @OneToOne(mappedBy = "xhbDispMgrCourtSiteDao", fetch = FetchType.LAZY)
     private XhbDispMgrLocalProxyDao xhbDispMgrLocalProxyDao;
 
     public Integer getId() {

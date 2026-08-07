@@ -2,15 +2,18 @@ package uk.gov.hmcts.pdm.business.entities.xhbdispmgrurl;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdm.business.entities.AbstractDao;
 import uk.gov.hmcts.pdm.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdm.business.entities.xhbdispmgrmapping.XhbDispMgrMappingDao;
 
 import java.time.LocalDateTime;
 
@@ -54,6 +57,9 @@ public class XhbDispMgrUrlDao extends AbstractDao {
     @ManyToOne
     @JoinColumn(name = "COURT_SITE_ID", insertable = false, updatable = false)
     private XhbCourtSiteDao xhbCourtSiteDao;
+    
+    @OneToOne(mappedBy = "xhbDispMgrUrlDao", fetch = FetchType.LAZY)
+    private XhbDispMgrMappingDao xhbDispMgrMappingDao;
 
     /*
      * @ManyToMany CDU_ID?? XHB_DISP_MGR_MAPPING? Not sure we need this private XhbDispMgrCduDao
@@ -141,4 +147,13 @@ public class XhbDispMgrUrlDao extends AbstractDao {
     public void setXhbCourtSiteDao(XhbCourtSiteDao xhbCourtSiteDao) {
         this.xhbCourtSiteDao = xhbCourtSiteDao;
     }
+
+    public XhbDispMgrMappingDao getXhbDispMgrMappingDao() {
+        return xhbDispMgrMappingDao;
+    }
+
+    public void setXhbDispMgrMappingDao(XhbDispMgrMappingDao xhbDispMgrMappingDao) {
+        this.xhbDispMgrMappingDao = xhbDispMgrMappingDao;
+    }
+    
 }
