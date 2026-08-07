@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 
-
+@SuppressWarnings("squid:S2589")
 public abstract class XhbDispMgrCourtSiteProcessor extends XhbDispMgrConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtSiteRepository.class);
