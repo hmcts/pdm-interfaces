@@ -26,6 +26,8 @@ package uk.gov.hmcts.pdm.publicdisplay.manager.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.pdm.publicdisplay.common.json.CduJson;
 import uk.gov.hmcts.pdm.publicdisplay.common.json.CourtSiteJson;
 import uk.gov.hmcts.pdm.publicdisplay.common.json.CourtSiteStatusJson;
@@ -333,6 +335,7 @@ public class LocalProxyRestClient extends LocalProxyRestCduFinder
      * getCourtSiteStatus()
      */
     @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public CourtSiteStatusJson getCourtSiteStatus(final ILocalProxy localProxy) {
         LOGGER.info("getCourtSiteStatus method starts");
         final ICourtSite courtSite = localProxy.getCourtSite();
