@@ -175,11 +175,10 @@ public class XhbDispMgrCduRepository extends CduFinder {
 
         XhbDispMgrCduDao dao = findDaoByCduId(cdu.getId().intValue());
 
-        populateDaoFromBasicValue(dao, cdu);
-
-        update(dao);
-
-        clearEntityManager();
+        if (dao != null) {
+            populateDaoFromBasicValue(dao, cdu);
+            getEntityManager().flush();
+        }
 
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
     }

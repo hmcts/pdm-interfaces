@@ -31,9 +31,10 @@ public abstract class CduFinder extends CduConverter {
         Query query = getEntityManager().createNamedQuery("XHB_DISP_MGR_CDU.findByCduId");
         query.setParameter("cduId", id);
 
+        List<XhbDispMgrCduDao> results = query.getResultList();
+
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
-        return query.getResultList().isEmpty() ? null
-            : (XhbDispMgrCduDao) query.getResultList().get(0);
+        return results.isEmpty() ? null : results.get(0);
     }
 
     // Wrapper Method to Return a ICdu from findDaoByCduId
