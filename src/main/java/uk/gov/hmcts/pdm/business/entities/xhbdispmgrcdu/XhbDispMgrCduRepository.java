@@ -177,7 +177,6 @@ public class XhbDispMgrCduRepository extends CduFinder {
 
         if (dao != null) {
             populateDaoFromBasicValue(dao, cdu);
-            getEntityManager().flush();
         }
 
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
