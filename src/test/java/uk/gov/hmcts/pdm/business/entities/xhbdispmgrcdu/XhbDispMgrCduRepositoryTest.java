@@ -24,6 +24,7 @@
 package uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,6 +72,9 @@ class XhbDispMgrCduRepositoryTest extends AbstractJUnit {
 
     @Mock
     private Query mockQuery;
+    
+    @Mock
+    private EntityTransaction mockEntityTransaction;
 
     @InjectMocks
     private XhbDispMgrCduRepository classUnderTest = new XhbDispMgrCduRepository(mockEntityManager);
@@ -154,6 +158,9 @@ class XhbDispMgrCduRepositoryTest extends AbstractJUnit {
         Mockito.when(mockEntityManager.createNamedQuery("XHB_DISP_MGR_CDU.findByCduId"))
             .thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(expectedResults);
+        
+        Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockEntityTransaction);
+        Mockito.when(mockEntityManager.merge(dao)).thenReturn(dao);
         
         // Run
         boolean result = true;
