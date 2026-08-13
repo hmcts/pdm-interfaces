@@ -35,6 +35,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.pdm.publicdisplay.common.test.AbstractJUnit;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CduModel;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.CourtSite;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICduModel;
+import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ICourtSite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for XhbDispMgrCduRepositoryTest.
@@ -57,6 +62,7 @@ class XhbDispMgrCduRepositoryTest extends AbstractJUnit {
     private static final String EQUAL = "Result is not equal";
     private static final String NOT_NULL = "Result is Null";
     private static final String NULL = "Result is not Null";
+    private static final String TRUE = "Result is not True";
     private static final String IPADDRESS = "192.168.1.";
 
 
@@ -129,5 +135,31 @@ class XhbDispMgrCduRepositoryTest extends AbstractJUnit {
             // Check
             assertEquals(result, entry.getValue() == -1 ? null : entry.getValue(), EQUAL);
         }
+    }
+    
+    @Test
+    void testUpdateDaoFromBasicValue() {
+        // Setup
+        ICourtSite courtSiteModel = new CourtSite();
+        courtSiteModel.setId(1L);
+        ICduModel cduModel = new CduModel();
+        cduModel.setId(1L);
+        cduModel.setCourtSite(courtSiteModel);
+        
+        XhbDispMgrCduDao dao = new XhbDispMgrCduDao();
+        List<XhbDispMgrCduDao> expectedResults = new ArrayList<>();
+        expectedResults.add(dao);
+        
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        Mockito.when(mockEntityManager.createNamedQuery("XHB_DISP_MGR_CDU.findByCduId"))
+            .thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(expectedResults);
+        
+        // Run
+        boolean result = true;
+        classUnderTest.updateDaoFromBasicValue(cduModel);
+        
+        // Assert
+        assertTrue(result, TRUE);
     }
 }
