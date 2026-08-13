@@ -146,13 +146,13 @@ class XhbDispMgrUrlRepositoryTest extends AbstractJUnit {
         urlDao.setId(1);
         urlDao.setUrl("http://example.com");
         urlDao.setDescription("Example URL");
-        urlDao.setXhbDispMgrMappingDao(new XhbDispMgrMappingDao());
+        urlDao.setXhbDispMgrMappingDaos(Set.of(new XhbDispMgrMappingDao()));
         
         // Run
         IUrlModel urlModel = classUnderTest.getUrlFromDao(urlDao);
         
         // Verify
         assertNotNull(urlModel, NULL);
-        assertNotNull(urlDao.getXhbDispMgrMappingDao(), NULL);
+        assertNotNull(urlDao.getXhbDispMgrMappingDaos(), NULL);
     }
 }
