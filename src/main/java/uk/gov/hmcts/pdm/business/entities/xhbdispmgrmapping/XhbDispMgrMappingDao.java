@@ -4,10 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToOne;
 import uk.gov.hmcts.pdm.business.entities.AbstractDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrcdu.XhbDispMgrCduDao;
 import uk.gov.hmcts.pdm.business.entities.xhbdispmgrurl.XhbDispMgrUrlDao;
@@ -20,12 +20,14 @@ import java.time.LocalDateTime;
     query = "SELECT o FROM XHB_DISP_MGR_MAPPING o WHERE o.cduId = :cduId")
 @NamedQuery(name = "XHB_DISP_MGR_MAPPING.findByCompositeId",
     query = "SELECT o FROM XHB_DISP_MGR_MAPPING o WHERE o.urlId = :urlId " + "and o.cduId = :cduId")
+@IdClass(XhbDispMgrMappingId.class)
 public class XhbDispMgrMappingDao extends AbstractDao {
 
     @Id
     @Column(name = "URL_ID")
     private Integer urlId;
 
+    @Id
     @Column(name = "CDU_ID")
     private Integer cduId;
 
@@ -39,7 +41,7 @@ public class XhbDispMgrMappingDao extends AbstractDao {
     @JoinColumn(name = "CDU_ID", insertable = false, updatable = false)
     private XhbDispMgrCduDao xhbDispMgrCduDao;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "URL_ID", insertable = false, updatable = false)
     private XhbDispMgrUrlDao xhbDispMgrUrlDao;
 
