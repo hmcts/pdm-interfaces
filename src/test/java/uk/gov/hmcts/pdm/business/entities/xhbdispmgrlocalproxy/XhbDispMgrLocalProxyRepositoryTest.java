@@ -26,6 +26,7 @@ package uk.gov.hmcts.pdm.business.entities.xhbdispmgrlocalproxy;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,9 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ILocalProxy;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.IXhibitCourtSite;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -62,6 +65,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {
 
     private static final String TRUE = "Result is not True";
+    private static final String NOT_NULL = "Result is Null";
 
     @Mock
     private EntityManagerFactory mockEntityManagerFactory;
@@ -71,6 +75,9 @@ class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {
 
     @Mock
     private EntityTransaction mockTransaction;
+    
+    @Mock
+    private Query mockQuery;
 
     @Mock
     private XhbDispMgrCourtSiteRepository mockXhbDispMgrCourtSiteRepository;
@@ -125,6 +132,36 @@ class XhbDispMgrLocalProxyRepositoryTest extends AbstractJUnit {
 
         // Verify
         assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testFindByLocalProxyId() {
+        // Setup
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        Mockito.when(mockEntityManager.createNamedQuery("XHB_DISP_MGR_LOCAL_PROXY.findByLocalProxyId"))
+            .thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(List.of(new XhbDispMgrLocalProxyDao()));
+        
+        // Run
+        XhbDispMgrLocalProxyDao result = classUnderTest.findByLocalProxyId(1);
+        
+        // Assert
+        assertNotNull(result, NOT_NULL);
+    }
+    
+    @Test
+    void testFinByCourtSiteId() {
+        // Setup
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        Mockito.when(mockEntityManager.createNamedQuery("XHB_DISP_MGR_LOCAL_PROXY.findByCourtSiteId"))
+            .thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(List.of(new XhbDispMgrLocalProxyDao()));
+        
+        // Run
+        XhbDispMgrLocalProxyDao result = classUnderTest.findByCourtSiteId(1);
+        
+        // Assert
+        assertNotNull(result, NOT_NULL);
     }
 
     private ILocalProxy getDummyLocalProxy() {
