@@ -12,8 +12,9 @@ import uk.gov.hmcts.pdm.publicdisplay.manager.domain.LocalProxy;
 import uk.gov.hmcts.pdm.publicdisplay.manager.domain.api.ILocalProxy;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "unchecked"})
 public class XhbDispMgrLocalProxyRepository extends AbstractRepository<XhbDispMgrLocalProxyDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbDispMgrLocalProxyRepository.class);
@@ -55,8 +56,8 @@ public class XhbDispMgrLocalProxyRepository extends AbstractRepository<XhbDispMg
             getEntityManager().createNamedQuery("XHB_DISP_MGR_LOCAL_PROXY.findByLocalProxyId");
         query.setParameter("localProxyId", id);
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
-        return query.getResultList().isEmpty() ? null
-            : (XhbDispMgrLocalProxyDao) query.getResultList().get(0);
+        List<XhbDispMgrLocalProxyDao> results = query.getResultList();
+        return results.isEmpty() ? null : results.get(0);
     }
 
     /**
@@ -88,8 +89,8 @@ public class XhbDispMgrLocalProxyRepository extends AbstractRepository<XhbDispMg
             getEntityManager().createNamedQuery("XHB_DISP_MGR_LOCAL_PROXY.findByCourtSiteId");
         query.setParameter("courtSiteId", courtSiteId);
         LOG.debug(THREE_PARAMS, METHOD, methodName, ENDS);
-        return query.getResultList().isEmpty() ? null
-            : (XhbDispMgrLocalProxyDao) query.getResultList().get(0);
+        List<XhbDispMgrLocalProxyDao> results = query.getResultList();
+        return results.isEmpty() ? null : results.get(0);
     }
 
     // Save method to take in ILocalProxy convert to Dao and call save
