@@ -46,6 +46,8 @@ public abstract class DispMgrCourtSiteConverter extends AbstractRepository<XhbDi
             findDaoByXhibitCourtSiteId(courtSite.getXhibitCourtSite().getId().intValue());
 
         if (dao != null) {
+            LOG.info("Updating XhbDispMgrCourtSiteDao with xhibitCourtSiteId: {}",
+                dao.getXhibitCourtSiteId());
             dao.setRagStatus(courtSite.getRagStatus());
             dao.setRagStatusDate(courtSite.getRagStatusDate());
             dao.setPageUrl(courtSite.getPageUrl());
