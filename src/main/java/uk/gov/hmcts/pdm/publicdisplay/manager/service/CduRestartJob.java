@@ -9,8 +9,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdm.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdm.publicdisplay.manager.dto.CduDto;
+import uk.gov.hmcts.pdm.publicdisplay.manager.service.api.ICduService;
 
 import java.util.List;
 
@@ -32,6 +35,10 @@ public class CduRestartJob implements Job {
     
     private XhbConfigPropRepository xhbConfigPropRepository;
 
+    /** The cdu service. */
+    @Autowired
+    private ICduService cduService;
+
     /*
      * (non-Javadoc)
      * 
@@ -42,23 +49,28 @@ public class CduRestartJob implements Job {
         LOGGER.info("execute() starts ...");
         
         // 1) Get the list of court sites to restart cdu's
-        String[] dispMgrCourtSiteIds = getDispMgrCourtSiteIds();
+        String[] courtSiteIds = getCourtSiteIds();
         
-        // 2) Loop through the string[] of dispMgrCourtSiteIds
-        for (String dispMgrCourtSiteId : dispMgrCourtSiteIds) {
-            LOGGER.info("Fetching Cdu's for dispMgrCourtSiteId: {}", dispMgrCourtSiteId);
+        // 2) Loop through the string[] of courtSiteIds
+        for (String courtSiteId : courtSiteIds) {
+            LOGGER.info("Fetching Cdu's for courtSiteId: {}", courtSiteId);
             
-            // 3) Get the list of cdu's for this site
-            // cduService.getCdusByCourtSiteId(dispMgrCourtSiteId);
+            // 3) Get the list of cdu's for this court site id
+            List<CduDto> cdusForSite =
+                cduService.getCdusBySiteID(Long.valueOf(courtSiteId.trim()));
             
-            // 4) Restart the cdu's for this site
-            // cduService.restartCdus()
+            if (!cdusForSite.isEmpty()) {
+                LOGGER.info("Cdu's populated for site: {}, total: {}",
+                    courtSiteId, cdusForSite.size());
+                
+                // 4) Restart the cdu's for this site
+                // cduService.restartCdus()
+            }
         }
-        
         LOGGER.info("execute() ends ...");
     }
     
-    private String[] getDispMgrCourtSiteIds() {
+    private String[] getCourtSiteIds() {
         List<XhbConfigPropDao> sitesToRestartCdus = 
             getXhbConfigPropRepository().findByPropertyNameSafe(SITES_TO_RESTART_CDUS);
         
