@@ -66,6 +66,7 @@ class QuartzSubmitJobsTest extends AbstractJUnit {
         // Set the class variables
         ReflectionTestUtils.setField(classUnderTest, "ragStatusUpdateCron", "dummyRagStatusUpdateCron");
         ReflectionTestUtils.setField(classUnderTest, "housekeepingPkgJobCron", "dummyHousekeepingPkgJobCron");
+        ReflectionTestUtils.setField(classUnderTest, "cduRestartJobCron", "dummyCduRestartJobCron");
     }
     
     @Test
@@ -85,6 +86,14 @@ class QuartzSubmitJobsTest extends AbstractJUnit {
     }
     
     @Test
+    void testCduRestartJob() {
+        // Run
+        JobDetailFactoryBean result = classUnderTest.cduRestartJob();
+        // Checks
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
     void testTriggerRagStatusSetup() {
         // Run
         CronTriggerFactoryBean result = classUnderTest.triggerRagStatusSetup(mockJobDetail);
@@ -96,6 +105,14 @@ class QuartzSubmitJobsTest extends AbstractJUnit {
     void testTriggerHousekeeping() {
         // Run
         CronTriggerFactoryBean result = classUnderTest.triggerHousekeeping(mockJobDetail);
+        // Checks
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testTriggerCduRestart() {
+        // Run
+        CronTriggerFactoryBean result = classUnderTest.triggerCduRestart(mockJobDetail);
         // Checks
         assertNotNull(result, NOTNULL);
     }
