@@ -52,20 +52,23 @@ public class CduRestartJob implements Job {
         String[] courtSiteIds = getCourtSiteIds();
         
         // 2) Loop through the string[] of courtSiteIds
-        for (String courtSiteId : courtSiteIds) {
-            LOGGER.info("Fetching Cdu's for courtSiteId: {}", courtSiteId);
-            
-            // 3) Get the list of cdu's for this court site id
-            List<CduDto> cdusForSite =
-                cduService.getCdusBySiteID(Long.valueOf(courtSiteId.trim()));
-            
-            if (!cdusForSite.isEmpty()) {
-                LOGGER.info("Cdu's populated for site: {}, total: {}",
-                    courtSiteId, cdusForSite.size());
+        if (courtSiteIds.length > 0) {
+            for (String courtSiteId : courtSiteIds) {
+                LOGGER.info("Fetching Cdu's for courtSiteId: {}", courtSiteId);
+                
+                // 3) Get the list of cdu's for this court site id
+                List<CduDto> cdusForSite =
+                    cduService.getCdusBySiteID(Long.valueOf(courtSiteId.trim()));
                 
                 // 4) Restart the cdu's for this site
-                // cduService.restartCdus()
+                if (!cdusForSite.isEmpty()) {
+                    LOGGER.info("Restarting {} Cdu(s) for site: {}",
+                        cdusForSite.size(), courtSiteId);
+                    cduService.restartCdu(cdusForSite);
+                }
             }
+        } else {
+            LOGGER.info("No court site id's set in XHB_CONFIG_PROP to restart cdu's");
         }
         LOGGER.info("execute() ends ...");
     }
@@ -74,7 +77,8 @@ public class CduRestartJob implements Job {
         List<XhbConfigPropDao> sitesToRestartCdus = 
             getXhbConfigPropRepository().findByPropertyNameSafe(SITES_TO_RESTART_CDUS);
         
-        if (sitesToRestartCdus != null) {
+        if (!sitesToRestartCdus.isEmpty() 
+            && !"".equals(sitesToRestartCdus.get(0).getPropertyValue().trim())) {
             return sitesToRestartCdus.get(0).getPropertyValue().split(",");
         }
         return new String[0];
