@@ -230,4 +230,13 @@ public class ApplicationConfiguration {
     public String getHousekeepingPkgJobCron() {
         return propertyService.getPropertyValueByName("housekeeping.pkg.job.cron");
     }
+    
+    /**
+     * Gets the cdu restart job cron.
+     *
+     * @return the cdu restart job cron
+     */
+    public String getCduRestartJobCron() {
+        return propertyService.getPropertyValueByName("cdu.restart.job.cron");
+    }
 }
